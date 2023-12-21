@@ -9,6 +9,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 `
+const CustomTinderCard = styled(TinderCard)`
+  /* top: ${props => props.top + 'px'}; */
+`
 const Title = styled.div`
   background: darkslategrey;
   color: white;
@@ -109,7 +112,7 @@ const TinderCards = (props) => {
   return (
     <Container>
       {dbReversed.map((item, i) => (
-        <TinderCard
+        <CustomTinderCard
           key={item.id}
           className='swipe' 
           swipeRequirementType='velocity'
@@ -118,6 +121,7 @@ const TinderCards = (props) => {
           onSwipeRequirementFulfilled={onSwipeRequirementFulfilled}
           onSwipeRequirementUnfulfilled={onSwipeRequirementUnFulfilled}
           ref={el => tinderRef.current[item.id] = el}
+          top={i*60}
         >
           <Title>{item.title}</Title>
           <Item
@@ -135,7 +139,7 @@ const TinderCards = (props) => {
             onClick={onClickRestore(item.id)}
             className='pressable'
           >restore</RestoreButton>
-        </TinderCard>
+        </CustomTinderCard>
       ))}
     </Container>
   )
