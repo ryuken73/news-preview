@@ -10,14 +10,17 @@ const Container = styled.div`
   justify-content: center;
 `
 const Title = styled.div`
-  background: black;
+  background: darkslategrey;
   color: white;
   padding: 10px;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
   border-radius: 22px 22px 0 0;
+  border: 1px solid black;
   width: 20vw;  
   font-size: 1.2em;
   font-weight: bold;
+  box-sizing: border-box;
+  box-shadow: 0px 3px 17px -3px rgba(0,0,0,0.36); -webkit-box-shadow: 0px 3px 17px -3px rgba(0,0,0,0.36); -moz-box-shadow: 0px 3px 17px -3px rgba(0,0,0,0.36);
 `
 const Item = styled.video`
   /* width: 70vw; */
@@ -34,10 +37,12 @@ const RestoreButton = styled.button`
   right: -100px;
   bottom: 20px;
 `
-const NextButton = styled.button`
+const NextButton = styled.div`
   position: absolute;
-  right: -100px;
-  bottom: 60px;
+  right: -40%;
+  top: 0px;
+  width: 40%;
+  height: 100%;
 `
 
 const db = [
@@ -125,7 +130,7 @@ const TinderCards = (props) => {
           <NextButton
             onClick={onClickNext(item.id)}
             className='pressable'
-          >Next</NextButton>
+          ></NextButton>
           <RestoreButton
             onClick={onClickRestore(item.id)}
             className='pressable'
