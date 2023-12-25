@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import Slide3D from  './Components/Slide3D';
+import Slide3D from './Components/Slide3D';
 import TinderCards from './Components/TinderCards';
 import styled from 'styled-components';
 

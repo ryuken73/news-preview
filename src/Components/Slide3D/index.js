@@ -25,13 +25,16 @@ const Container = styled.div`
   margin: auto;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-transform: rotateX(-10deg);
-  transform: rotateX(-10deg);
+  -webkit-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+  width: 100%;
+  height: 100%;
 `
 const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
   height: ${props => `${props.height}px`};
   ${props => props.autoRotate && spinStyle};
+  animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
 `
 const Item = styled.video`
   -webkit-transform-style: preserve-3d;
@@ -74,35 +77,143 @@ const Ground = styled.div`
 const radius = 600; // how big of the radius
 const autoRotate = true; // auto rotate or not
 const rotateSpeed = 60; // unit: seconds/360 degrees
-const imgWidth = 450; // width of images (unit: px)
-const imgHeight = 280; // height of images (unit: px)
+const imgWidth = 600; // width of images (unit: px)
+const imgHeight = 350; // height of images (unit: px)
 
 function Slide3D(props) {
   const {db} = props;
-  const [autoRotate, setAutoRotate] = React.useState(true);
+  const [autoRotate, setAutoRotate] = React.useState(false);
+  const [animationPaused, setAnimationPaused] = React.useState(false);
+  const dragRef = React.useRef(null);
   const itemsRef = React.useRef([]);
+  const timerRef = React.useRef();
+  const startXY = React.useRef({x:0, y:0});
+  const destXY = React.useRef({x:0, y:0});
+  const targetXY = React.useRef({x:0, y:0});
+
   React.useEffect(() => {
     itemsRef.current.forEach((itemRef,i) => {
       itemRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
       itemRef.style.transition = `transform 1s`;
       itemRef.style.transitionDelay = `${(db.length - i)/4}s`
     })
-
   }, [db.length, itemsRef])
+
   const onClickPlay = React.useCallback((id) => {
     return () => {
       try {
         const currentPlayer = itemsRef.current[id];
-        currentPlayer?.play();
+        const isPaused = currentPlayer?.paused;
+        if(isPaused){
+          currentPlayer.style.transition = '0.5s';
+          currentPlayer.style.transform += 'scale(2.0)';
+          currentPlayer?.play();
+          setAnimationPaused(true)
+        } else {
+          currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+          currentPlayer?.pause();
+          setAnimationPaused(false)
+        }
       } catch(err) {
         console.log(err)
       }
     }
   }, [])
+
+  const applyTransform = React.useCallback(() => {
+    if(targetXY.current.y > 180) targetXY.current.y = 180;
+    if(targetXY.current.y < 0) targetXY.current.y = 0;
+    const ty = targetXY.current.y
+    const tx = targetXY.current.x
+    dragRef.current.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
+  }, [])
+
+  React.useEffect(() => {
+    document.onpointerdown = (e) => {
+      clearInterval(timerRef.current);
+      e = e || window.event; 
+      startXY.current.x = e.clientX;
+      startXY.current.y = e.clientY;
+      document.onpointermove = (e) => {
+        e = e || window.event;
+        const nX = e.clientX;
+        const nY = e.clientY;
+        destXY.current.x = nX - startXY.current.x;
+        destXY.current.y = nY - startXY.current.y;
+        targetXY.current.x += destXY.current.x * 0.1;
+        targetXY.current.y += destXY.current.y * 0.1;
+        applyTransform()
+        startXY.current.x = nX;
+        startXY.current.y = nY;
+      }
+      document.onpointerup = (e) => {
+        timerRef.current = setInterval(() => {
+          destXY.current.x *= 0.95;
+          destXY.current.y *= 0.95;
+          targetXY.current.x += destXY.current.x * 0.1;
+          targetXY.current.y += destXY.current.y * 0.1;
+          applyTransform();
+          setAnimationPaused(true);
+          if(Math.abs(destXY.current.x) < 0.5 && Math.abs(destXY.current.y) < 0.5) {
+            clearInterval(timerRef.current);
+            setAnimationPaused(false);
+          }
+        }, 17)
+        document.onpointermove = document.onpointerup = null
+      }
+    }
+    return () => {
+      clearInterval(timerRef.current);
+      document.onpointerdown = null;
+    }
+  }, [applyTransform])
+
+  const onPointerDown = React.useCallback((e) => {
+    clearInterval(timerRef.current);
+    e = e || window.event; 
+    startXY.current.x = e.clientX;
+    startXY.current.y = e.clientY;
+  }, [])
+
+
+  const onPointerMove = React.useCallback((e) => {
+    e = e || window.event;
+    const nX = e.clientX;
+    const nY = e.clientY;
+    destXY.current.x = nX - startXY.current.x;
+    destXY.current.y = nY - startXY.current.y;
+    targetXY.current.x += destXY.current.x * 0.1;
+    targetXY.current.y += destXY.current.y * 0.1;
+    applyTransform()
+    startXY.current.x = nX;
+    startXY.current.y = nY;
+  }, [applyTransform])
+
+  const onPointerUp = React.useCallback((e) => {
+    timerRef.current = setInterval(() => {
+      destXY.current.x *= 0.95;
+      destXY.current.y *= 0.95;
+      targetXY.current.x += destXY.current.x * 0.1;
+      targetXY.current.y += destXY.current.y * 0.1;
+      applyTransform();
+      setAnimationPaused(true);
+      if(Math.abs(destXY.current.x) < 0.5 && Math.abs(destXY.current.y) < 0.5) {
+        clearInterval(timerRef.current);
+        setAnimationPaused(false);
+      }
+    }, 17)
+  }, [applyTransform])
+
   return (
-    <Container> 
+    <Container
+      ref={dragRef}
+      // onPointerDown={onPointerDown}
+      // onPointerMove={onPointerMove}
+      // onPointerUp={onPointerUp}
+    > 
       <SpinContainer 
         autoRotate={autoRotate}
+        animationPaused={animationPaused}
         width={imgWidth} 
         height={imgHeight}
       >
