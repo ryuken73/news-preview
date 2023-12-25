@@ -3,7 +3,7 @@ import TinderCard from 'react-tinder-card';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  margin-top: 10%;
+  margin-top: 5%;
   width: 70vw;
   height: 300px;
   display: flex;
@@ -29,6 +29,8 @@ const Item = styled.video`
   /* width: 70vw; */
   height: 70vh;
   max-height: 70vh;
+  aspect-ratio: 16/9;
+  object-fit: cover;
   border-radius: 0 22px 22px 22px;
   overflow: hidden;
   -webkit-transform: translateZ(0);
@@ -48,18 +50,13 @@ const NextButton = styled.div`
   height: 100%;
 `
 
-const db = [
-  {id: 0, title: '한파', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
-  {id: 1, title: '겨울', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'},
-  {id: 2, title: '원석진', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'},
-  {id: 3, title: '무장', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'},
-]
-
-const dbReversed = db.reverse();
-
 const TinderCards = (props) => {
+  const {db} = props;
   const tinderRef = React.useRef([]);
   const itemsRef = React.useRef([]);
+  const dbReversed = React.useMemo(() => {
+    return [...db].reverse();
+  }, [db]); 
   const onSwipe = React.useCallback((id) => {
     return (dir) => {
       try {
