@@ -80,8 +80,15 @@ const rotateSpeed = 60; // unit: seconds/360 degrees
 const imgWidth = 600; // width of images (unit: px)
 const imgHeight = 350; // height of images (unit: px)
 
+const makePlayerFront = (element, degree) => {
+  element.style.transform = `rotateX(0deg) rotateY(${degree * -1}deg)`
+}
+const removeTransition = element => {
+  element.style.transition = 'none';
+}
+
 function Slide3D(props) {
-  const {db} = props;
+  const {db, parentRef, eventByClickBtn, active3DPlayerIndex} = props;
   const [autoRotate, setAutoRotate] = React.useState(false);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const dragRef = React.useRef(null);
@@ -90,6 +97,7 @@ function Slide3D(props) {
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
+  console.log(startXY, destXY, targetXY)
 
   React.useEffect(() => {
     itemsRef.current.forEach((itemRef,i) => {
@@ -120,6 +128,28 @@ function Slide3D(props) {
     }
   }, [])
 
+  React.useEffect(() => {
+    // console.log('attach event')
+    const container = dragRef.current;
+    container.style.transition = `transform 1s`;
+    const ty = 10;
+    const tx = active3DPlayerIndex * (360/db.length) * -1;
+    container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
+    targetXY.current.y = ty;
+    targetXY.current.x = tx;
+    const transitionEndHandler = (e) => {
+      const isTransitionFromVideo = e.target.tagName === 'VIDEO'
+      if(eventByClickBtn && !isTransitionFromVideo){
+        onClickPlay(active3DPlayerIndex)()
+      }
+      removeTransition(container);
+    }
+    container.addEventListener('transitionend', transitionEndHandler);
+    return ()  => {
+      container.removeEventListener('transitionend', transitionEndHandler)
+    }
+  }, [active3DPlayerIndex, db.length, eventByClickBtn, onClickPlay])
+
   const applyTransform = React.useCallback(() => {
     if(targetXY.current.y > 180) targetXY.current.y = 180;
     if(targetXY.current.y < 0) targetXY.current.y = 0;
@@ -129,12 +159,12 @@ function Slide3D(props) {
   }, [])
 
   React.useEffect(() => {
-    document.onpointerdown = (e) => {
+    parentRef.current.onpointerdown = (e) => {
       clearInterval(timerRef.current);
       e = e || window.event; 
       startXY.current.x = e.clientX;
       startXY.current.y = e.clientY;
-      document.onpointermove = (e) => {
+      parentRef.current.onpointermove = (e) => {
         e = e || window.event;
         const nX = e.clientX;
         const nY = e.clientY;
@@ -146,7 +176,7 @@ function Slide3D(props) {
         startXY.current.x = nX;
         startXY.current.y = nY;
       }
-      document.onpointerup = (e) => {
+      parentRef.current.onpointerup = (e) => {
         timerRef.current = setInterval(() => {
           destXY.current.x *= 0.95;
           destXY.current.y *= 0.95;
@@ -159,14 +189,19 @@ function Slide3D(props) {
             setAnimationPaused(false);
           }
         }, 17)
-        document.onpointermove = document.onpointerup = null
+        parentRef.current.onpointermove = parentRef.current.onpointerup = null
       }
     }
     return () => {
       clearInterval(timerRef.current);
-      document.onpointerdown = null;
+      parentRef.current.onpointerdown = null;
     }
-  }, [applyTransform])
+  }, [applyTransform, parentRef])
+
+  const moveCenter = React.useCallback((event) => {
+    const container = dragRef.current;
+    container.style.transform = `rotateX(0deg)`;
+  }, [])
 
   const onPointerDown = React.useCallback((e) => {
     clearInterval(timerRef.current);
