@@ -35,6 +35,7 @@ const SpinContainer = styled(Container)`
   height: ${props => `${props.height}px`};
   ${props => props.autoRotate && spinStyle};
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
+  margin-bottom: 100px;
 `
 const Item = styled.video`
   -webkit-transform-style: preserve-3d;
@@ -113,6 +114,9 @@ function Slide3D(props) {
         const currentPlayer = itemsRef.current[id];
         const isPaused = currentPlayer?.paused;
         if(isPaused){
+          currentPlayer.addEventListener('ended', () => {
+            currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+          }, 'once')
           currentPlayer.style.transition = '0.5s';
           currentPlayer.style.transform += 'scale(2.0)';
           currentPlayer?.play();
@@ -132,7 +136,7 @@ function Slide3D(props) {
     // console.log('attach event')
     const container = dragRef.current;
     container.style.transition = `transform 1s`;
-    const ty = 10;
+    const ty = 0;
     const tx = active3DPlayerIndex * (360/db.length) * -1;
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     targetXY.current.y = ty;
