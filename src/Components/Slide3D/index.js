@@ -90,9 +90,10 @@ const removeTransition = element => {
 
 function Slide3D(props) {
   const {db, parentRef, eventByClickBtn, active3DPlayerIndex} = props;
-  const [autoRotate, setAutoRotate] = React.useState(false);
+  const [autoRotate, setAutoRotate] = React.useState(true);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const dragRef = React.useRef(null);
+  const spinRef = React.useRef(null);
   const itemsRef = React.useRef([]);
   const timerRef = React.useRef();
   const startXY = React.useRef({x:0, y:0});
@@ -116,15 +117,21 @@ function Slide3D(props) {
         if(isPaused){
           currentPlayer.addEventListener('ended', () => {
             currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+            currentPlayer.currentTime = 0;
+            setAnimationPaused(false)
+            setAutoRotate(true)
           }, 'once')
           currentPlayer.style.transition = '0.5s';
           currentPlayer.style.transform += 'scale(2.0)';
-          currentPlayer?.play();
           setAnimationPaused(true)
+          setAutoRotate(false)
+          // void spinRef.current.offsetWidth;
+          currentPlayer?.play();
         } else {
           currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
           currentPlayer?.pause();
           setAnimationPaused(false)
+          setAutoRotate(true)
         }
       } catch(err) {
         console.log(err)
@@ -145,6 +152,7 @@ function Slide3D(props) {
       const isTransitionFromVideo = e.target.tagName === 'VIDEO'
       if(eventByClickBtn && !isTransitionFromVideo){
         onClickPlay(active3DPlayerIndex)()
+        setAutoRotate(false)
       }
       removeTransition(container);
     }
@@ -251,6 +259,7 @@ function Slide3D(props) {
       // onPointerUp={onPointerUp}
     > 
       <SpinContainer 
+        ref={spinRef}
         autoRotate={autoRotate}
         animationPaused={animationPaused}
         width={imgWidth} 
