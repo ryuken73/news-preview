@@ -99,7 +99,7 @@ function Slide3D(props) {
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
-  console.log(startXY, destXY, targetXY)
+  // console.log(startXY, destXY, targetXY)
 
   React.useEffect(() => {
     itemsRef.current.forEach((itemRef,i) => {
@@ -176,7 +176,13 @@ function Slide3D(props) {
       e = e || window.event; 
       startXY.current.x = e.clientX;
       startXY.current.y = e.clientY;
+      const startTime = Date.now();
       parentRef.current.onpointermove = (e) => {
+        const moveTime = Date.now();
+        console.log('move:', moveTime-startTime)
+        if(moveTime - startTime < 100){
+          return
+        }
         e = e || window.event;
         const nX = e.clientX;
         const nY = e.clientY;
@@ -189,6 +195,12 @@ function Slide3D(props) {
         startXY.current.y = nY;
       }
       parentRef.current.onpointerup = (e) => {
+        const upTime = Date.now();
+        console.log('up:', upTime-startTime)
+        if(upTime - startTime < 100){
+          parentRef.current.onpointermove = parentRef.current.onpointerup = null
+          return
+        }
         timerRef.current = setInterval(() => {
           destXY.current.x *= 0.95;
           destXY.current.y *= 0.95;
