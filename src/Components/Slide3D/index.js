@@ -118,7 +118,6 @@ function Slide3D(props) {
   const spinRef = React.useRef(null);
   const itemsRef = React.useRef([]);
   const timerRef = React.useRef();
-  const nonRotateRef1 = React.useRef(null);
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
@@ -132,19 +131,23 @@ function Slide3D(props) {
     })
   }, [db.length, itemsRef])
 
-  const onClickPlay = React.useCallback((id) => {
+  const restorePlayer = React.useCallback((event) => {
+    const currentPlayer = event.target;
+    currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+    setAnimationPaused(false)
+    setAutoRotate(true)
+    currentPlayer.currentTime = 0;
+    currentPlayer.removeEventListener('ended', restorePlayer);
+  }, [])
+
+  const playerHandler = React.useCallback((id) => {
     return () => {
       try {
         const currentPlayer = itemsRef.current[id];
         const isPaused = currentPlayer?.paused;
         if(isPaused){
-          console.log('onClickPlay:', isPaused, id)
-          currentPlayer.addEventListener('ended', () => {
-            currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
-            currentPlayer.currentTime = 0;
-            setAnimationPaused(false)
-            setAutoRotate(true)
-          }, 'once')
+          console.log('playerHandler:', isPaused, id)
+          currentPlayer.addEventListener('ended', restorePlayer, 'once')
           currentPlayer.style.transition = '0.5s';
           currentPlayer.style.transform += 'scale(2.0)';
           setAnimationPaused(true)
@@ -153,15 +156,15 @@ function Slide3D(props) {
           currentPlayer?.play();
         } else {
           currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
-          currentPlayer?.pause();
           setAnimationPaused(false)
           setAutoRotate(true)
+          currentPlayer?.pause();
         }
       } catch(err) {
         console.log(err)
       }
     }
-  }, [])
+  }, [restorePlayer])
 
   const onClickButton = React.useCallback((event) => {
     const clickedPlayerId = event.target.id;
@@ -174,7 +177,7 @@ function Slide3D(props) {
       const isTransitionFromVideo = e.target.tagName === 'VIDEO'
       console.log('transitionEnd:', isTransitionFromVideo)
       if(!isTransitionFromVideo){
-        onClickPlay(clickedPlayerId)()
+        playerHandler(clickedPlayerId)()
         setAutoRotate(false)
       }
       removeTransition(container);
@@ -217,7 +220,7 @@ function Slide3D(props) {
     return ()  => {
       container.removeEventListener('transitionend', transitionEndHandler)
     }
-  }, [activeIdState, db.length, onClickPlay])
+  }, [activeIdState, db.length, playerHandler])
 
   const toggleAutoRotate = React.useCallback(() => {
     setAutoRotate(autoRotate => {
@@ -310,7 +313,7 @@ function Slide3D(props) {
             <Item
               key={item.id}
               className={CLASS_FOR_POINTER_EVENT_FREE}
-              onClick={onClickPlay(item.id)}
+              onClick={playerHandler(item.id)}
               src={item.src}
               ref={el => itemsRef.current[item.id] = el}
               itemIndex={i}
@@ -323,9 +326,7 @@ function Slide3D(props) {
         <Ground width={radius*3} height={radius*3}></Ground>
       </Container>
       <ControlContainer>
-        <Buttons
-          ref={nonRotateRef1}
-        >
+        <Buttons>
           <Button onClick={toggleAutoRotate}>{autoRotate ? "Stop Rotate" : "Start Rotate"}</Button>
           {db.map((item, i) => (
             <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton} >{i}</Button>
