@@ -49,6 +49,11 @@ const Buttons = styled.div`
 `
 const Button = styled.div`
   margin: 10px;
+  opacity: ${props => props.onTransition && '0.1'};
+  color: ${props => props.isPlaying ? 'yellow' : 'darkslategrey'};
+  font-weight: ${props => props.isPlaying && 'bold'};
+  transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'};
+  transition: transform 0.5s;
 `
 const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
@@ -109,15 +114,21 @@ const removeTransition = element => {
   element.style.transition = 'none';
 }
 
+const AUTO_PLAY = true;
+const USE_STATIC_TY = false;
+const TY = 10;
+
 function Slide3D(props) {
   const {db, parentRef} = props;
   const [autoRotate, setAutoRotate] = React.useState(true);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
+  const [onTransition, setOnTransition] = React.useState(false);
   const dragRef = React.useRef(null);
   const spinRef = React.useRef(null);
   const itemsRef = React.useRef([]);
+  const buttonsRef = React.useRef([]);
   const timerRef = React.useRef();
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
@@ -127,7 +138,7 @@ function Slide3D(props) {
   React.useEffect(() => {
     itemsRef.current.forEach((itemRef,i) => {
       itemRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
-      itemRef.style.transition = `transform 1s`;
+      itemRef.style.transition = `transform 0.5s`;
       itemRef.style.transitionDelay = `${(db.length - i)/4}s`
       itemRef.addEventListener('play', () => {
         setCurrentPlayingId(i)
@@ -152,7 +163,7 @@ function Slide3D(props) {
   const restorePlayer = React.useCallback((event) => {
     const container = dragRef.current;
     setActiveIdState(null);
-    const ty = 0;
+    const ty = USE_STATIC_TY ? TY : targetXY.current.y;
     const tx = (event.target.id * (360/db.length) * -1) - 5;
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     const currentPlayer = event.target;
@@ -162,6 +173,17 @@ function Slide3D(props) {
     removeTransition(container);
     currentPlayer.currentTime = 0;
     currentPlayer.removeEventListener('ended', restorePlayer);
+    if(AUTO_PLAY){
+      const currentId = currentPlayer.id;
+      if(currentId < db.length - 1){
+        const nextId = parseInt(currentId) + 1;
+        console.log(currentId, nextId, itemsRef.current)
+        setTimeout(() => {
+          buttonsRef.current[nextId].click();
+
+        }, 500)
+      }
+    }
   }, [db.length])
 
   const playerHandler = React.useCallback((id) => {
@@ -177,7 +199,7 @@ function Slide3D(props) {
             stopPlayerById(currentPlayingId);
           }
           currentPlayer.addEventListener('ended', restorePlayer, 'once')
-          currentPlayer.style.transition = '0.5s';
+          currentPlayer.style.transition = '0.3s';
           currentPlayer.style.transform += 'scale(2.0)';
           setAnimationPaused(true)
           void spinRef.current.offsetWidth;
@@ -189,6 +211,7 @@ function Slide3D(props) {
           setAnimationPaused(false)
           setAutoRotate(true)
         }
+        setOnTransition(false);
       } catch(err) {
         console.log(err)
       }
@@ -196,10 +219,14 @@ function Slide3D(props) {
   }, [currentPlayingId, restorePlayer, stopPlayerById])
 
   const onClickButton = React.useCallback((event) => {
+    if(onTransition){
+      return;
+    }
     const clickedPlayerId = event.target.id;
     const container = dragRef.current;
     const currentPlayer = itemsRef.current[clickedPlayerId];
     const isPaused = currentPlayer?.paused;
+    setOnTransition(true);
 
     const transitionEndHandler = (e) => {
       setActiveIdState(clickedPlayerId);
@@ -216,7 +243,7 @@ function Slide3D(props) {
     if(activeIdState === clickedPlayerId && !isPaused){
       console.log('### clicked Same player under playing:', activeIdState, clickedPlayerId)
       setActiveIdState(null);
-      const ty = 0;
+      const ty = USE_STATIC_TY ? TY : targetXY.current.y;
       const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
@@ -224,13 +251,13 @@ function Slide3D(props) {
       setAnimationPaused(false)
       setAutoRotate(true)
       removeTransition(container);
+      setOnTransition(false);
       container.removeEventListener('transitionend', transitionEndHandler)
       return;
     }
     if(activeIdState === clickedPlayerId && isPaused){
       console.log('### clicked Same player which inactive:', activeIdState, clickedPlayerId)
       container.addEventListener('transitionend', transitionEndHandler);
-      const ty = 0;
       const tx = clickedPlayerId * (360/db.length) * -1;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       targetXY.current.y = ty;
@@ -240,8 +267,8 @@ function Slide3D(props) {
     console.log('### clicked new player:', activeIdState, clickedPlayerId)
     setAutoRotate(false)
     container.addEventListener('transitionend', transitionEndHandler);
-    container.style.transition = `transform 0.5s`;
-    const ty = 0;
+    container.style.transition = `transform 0.3s`;
+    const ty = USE_STATIC_TY ? TY : targetXY.current.y;
     const tx = clickedPlayerId * (360/db.length) * -1;
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     targetXY.current.y = ty;
@@ -249,7 +276,7 @@ function Slide3D(props) {
     return ()  => {
       container.removeEventListener('transitionend', transitionEndHandler)
     }
-  }, [activeIdState, db.length, playerHandler])
+  }, [activeIdState, db.length, onTransition, playerHandler])
 
   const toggleAutoRotate = React.useCallback(() => {
     setAutoRotate(autoRotate => {
@@ -360,9 +387,20 @@ function Slide3D(props) {
         <Buttons>
           <Button onClick={toggleAutoRotate}>{autoRotate ? "Stop Rotate" : "Start Rotate"}</Button>
           {db.map((item, i) => (
-            <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton}>{item.title}</Button>
+            <Button 
+              key={item.id} 
+              id={i} 
+              className={CLASS_FOR_POINTER_EVENT_FREE} 
+              ref={el => buttonsRef.current[i] = el}
+              onClick={onClickButton}
+              onTransition={onTransition}
+              isPlaying={currentPlayingId === i}
+            >
+              {item.title}
+            </Button>
           ))}
           <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
+          <Button>{onTransition ? 'T':'F'}</Button>
         </Buttons>
       </ControlContainer>
     </TopContainer>
