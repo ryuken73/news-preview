@@ -150,13 +150,19 @@ function Slide3D(props) {
   }, [])
 
   const restorePlayer = React.useCallback((event) => {
+    const container = dragRef.current;
+    setActiveIdState(null);
+    const ty = 0;
+    const tx = (event.target.id * (360/db.length) * -1) - 5;
+    container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     const currentPlayer = event.target;
     currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
     setAnimationPaused(false)
     setAutoRotate(true)
+    removeTransition(container);
     currentPlayer.currentTime = 0;
     currentPlayer.removeEventListener('ended', restorePlayer);
-  }, [])
+  }, [db.length])
 
   const playerHandler = React.useCallback((id) => {
     return () => {
@@ -354,7 +360,7 @@ function Slide3D(props) {
         <Buttons>
           <Button onClick={toggleAutoRotate}>{autoRotate ? "Stop Rotate" : "Start Rotate"}</Button>
           {db.map((item, i) => (
-            <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton}>{i}</Button>
+            <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton}>{item.title}</Button>
           ))}
           <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
         </Buttons>
