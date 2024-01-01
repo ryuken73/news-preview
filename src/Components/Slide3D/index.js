@@ -53,7 +53,7 @@ const Button = styled.div`
   color: ${props => props.isPlaying ? 'yellow' : 'darkslategrey'};
   font-weight: ${props => props.isPlaying && 'bold'};
   transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'};
-  transition: transform 0.5s;
+  transition: all 0.3s;
 `
 const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
