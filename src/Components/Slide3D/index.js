@@ -111,7 +111,7 @@ const removeTransition = element => {
 
 function Slide3D(props) {
   const {db, parentRef} = props;
-  const [autoRotate, setAutoRotate] = React.useState(false);
+  const [autoRotate, setAutoRotate] = React.useState(true);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
@@ -335,10 +335,12 @@ function Slide3D(props) {
           {db.map((item, i) => (
             <Item
               key={item.id}
-              className={CLASS_FOR_POINTER_EVENT_FREE}
-              onClick={playerHandler(item.id)}
+              id={i}
+              // className={CLASS_FOR_POINTER_EVENT_FREE}
+              // onClick={playerHandler(i)}
+              // onClick={onClickButton}
               src={item.src}
-              ref={el => itemsRef.current[item.id] = el}
+              ref={el => itemsRef.current[i] = el}
               itemIndex={i}
               itemLength={db.length}
               radius={radius}
@@ -352,7 +354,7 @@ function Slide3D(props) {
         <Buttons>
           <Button onClick={toggleAutoRotate}>{autoRotate ? "Stop Rotate" : "Start Rotate"}</Button>
           {db.map((item, i) => (
-            <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton} >{i}</Button>
+            <Button key={item.id} id={i} className={CLASS_FOR_POINTER_EVENT_FREE} onClick={onClickButton}>{i}</Button>
           ))}
           <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
         </Buttons>
