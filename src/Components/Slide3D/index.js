@@ -114,6 +114,7 @@ function Slide3D(props) {
   const [autoRotate, setAutoRotate] = React.useState(false);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
+  const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
   const dragRef = React.useRef(null);
   const spinRef = React.useRef(null);
   const itemsRef = React.useRef([]);
@@ -128,8 +129,25 @@ function Slide3D(props) {
       itemRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
       itemRef.style.transition = `transform 1s`;
       itemRef.style.transitionDelay = `${(db.length - i)/4}s`
+      itemRef.addEventListener('play', () => {
+        setCurrentPlayingId(i)
+      })
+      itemRef.addEventListener('pause', () => {
+        setCurrentPlayingId(null)
+      })
+      itemRef.addEventListener('end', () => {
+        setCurrentPlayingId(null)
+      })
     })
   }, [db.length, itemsRef])
+
+  console.log('current playing Id = ', currentPlayingId)
+
+  const stopPlayerById = React.useCallback((playerId) => {
+    const player = itemsRef.current[playerId];
+    player.style.transform = player.style.transform.replace(/scale(.*)/, '');
+    player?.pause();
+  }, [])
 
   const restorePlayer = React.useCallback((event) => {
     const currentPlayer = event.target;
@@ -146,7 +164,12 @@ function Slide3D(props) {
         const currentPlayer = itemsRef.current[id];
         const isPaused = currentPlayer?.paused;
         if(isPaused){
-          console.log('playerHandler:', isPaused, id)
+          // console.log('playerHandler:', isPaused, id)
+          if(currentPlayingId !== null){
+            // other player is running
+            // console.log('other player is now playing. stop first!');
+            stopPlayerById(currentPlayingId);
+          }
           currentPlayer.addEventListener('ended', restorePlayer, 'once')
           currentPlayer.style.transition = '0.5s';
           currentPlayer.style.transform += 'scale(2.0)';
@@ -154,17 +177,17 @@ function Slide3D(props) {
           void spinRef.current.offsetWidth;
           setAutoRotate(false)
           currentPlayer?.play();
+          setCurrentPlayingId(id);
         } else {
-          currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+          stopPlayerById(id);
           setAnimationPaused(false)
           setAutoRotate(true)
-          currentPlayer?.pause();
         }
       } catch(err) {
         console.log(err)
       }
     }
-  }, [restorePlayer])
+  }, [currentPlayingId, restorePlayer, stopPlayerById])
 
   const onClickButton = React.useCallback((event) => {
     const clickedPlayerId = event.target.id;
