@@ -110,7 +110,7 @@ const removeTransition = element => {
 }
 
 function Slide3D(props) {
-  const {db, parentRef, eventByClickBtn, active3DPlayerIndex} = props;
+  const {db, parentRef} = props;
   const [autoRotate, setAutoRotate] = React.useState(false);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
@@ -162,29 +162,6 @@ function Slide3D(props) {
       }
     }
   }, [])
-
-  // React.useEffect(() => {
-  //   // console.log('attach event')
-  //   const container = dragRef.current;
-  //   container.style.transition = `transform 1s`;
-  //   const ty = 0;
-  //   const tx = active3DPlayerIndex * (360/db.length) * -1;
-  //   container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //   targetXY.current.y = ty;
-  //   targetXY.current.x = tx;
-  //   const transitionEndHandler = (e) => {
-  //     const isTransitionFromVideo = e.target.tagName === 'VIDEO'
-  //     if(eventByClickBtn && !isTransitionFromVideo){
-  //       onClickPlay(active3DPlayerIndex)()
-  //       setAutoRotate(false)
-  //     }
-  //     removeTransition(container);
-  //   }
-  //   container.addEventListener('transitionend', transitionEndHandler);
-  //   return ()  => {
-  //     container.removeEventListener('transitionend', transitionEndHandler)
-  //   }
-  // }, [active3DPlayerIndex, db.length, eventByClickBtn, onClickPlay])
 
   const onClickButton = React.useCallback((event) => {
     const clickedPlayerId = event.target.id;
@@ -260,7 +237,6 @@ function Slide3D(props) {
     const ty = targetXY.current.y
     const tx = targetXY.current.x
     dragRef.current.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-    // nonRotateRef1.current.style.transform = `rotateY(${-tx}deg) rotateX(${ty}deg)`;
   }, [])
 
   React.useEffect(() => {
@@ -318,62 +294,11 @@ function Slide3D(props) {
     }
   }, [applyTransform, parentRef])
 
-  // const moveCenter = React.useCallback((event) => {
-  //   const container = dragRef.current;
-  //   container.style.transform = `rotateX(0deg)`;
-  // }, [])
-
-  // const onPointerDown = React.useCallback((e) => {
-  //   clearInterval(timerRef.current);
-  //   e = e || window.event; 
-  //   startXY.current.x = e.clientX;
-  //   startXY.current.y = e.clientY;
-  // }, [])
-
-
-  // const onPointerMove = React.useCallback((e) => {
-  //   e = e || window.event;
-  //   const nX = e.clientX;
-  //   const nY = e.clientY;
-  //   destXY.current.x = nX - startXY.current.x;
-  //   destXY.current.y = nY - startXY.current.y;
-  //   targetXY.current.x += destXY.current.x * 0.1;
-  //   targetXY.current.y += destXY.current.y * 0.1;
-  //   applyTransform()
-  //   startXY.current.x = nX;
-  //   startXY.current.y = nY;
-  // }, [applyTransform])
-
-  // const onPointerUp = React.useCallback((e) => {
-  //   timerRef.current = setInterval(() => {
-  //     destXY.current.x *= 0.95;
-  //     destXY.current.y *= 0.95;
-  //     targetXY.current.x += destXY.current.x * 0.1;
-  //     targetXY.current.y += destXY.current.y * 0.1;
-  //     applyTransform();
-  //     setAnimationPaused(true);
-  //     if(Math.abs(destXY.current.x) < 0.5 && Math.abs(destXY.current.y) < 0.5) {
-  //       clearInterval(timerRef.current);
-  //       setAnimationPaused(false);
-  //     }
-  //   }, 17)
-  // }, [applyTransform])
-
   return (
     <TopContainer>
       <Container
         ref={dragRef}
-        // onPointerDown={onPointerDown}
-        // onPointerMove={onPointerMove}
-        // onPointerUp={onPointerUp}
       > 
-        {/* <Buttons
-          ref={nonRotateRef1}
-        >
-          {db.map((item, i) => (
-            <button key={item.id} id={i} >{i}</button>
-          ))}
-        </Buttons> */}
         <SpinContainer 
           ref={spinRef}
           autoRotate={autoRotate}
