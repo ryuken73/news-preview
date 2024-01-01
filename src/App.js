@@ -3,6 +3,7 @@ import React from 'react';
 import Slide3D from './Components/Slide3D';
 import TinderCards from './Components/TinderCards';
 import styled from 'styled-components';
+import { useSearchParams } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: #111;
@@ -19,7 +20,7 @@ const ModeSelectBtn = styled.button`
   top: 20px;
   right: 20px;
 `
-const db = [
+const DEFAULT_DB = [
   {id: 9, title: '한파', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
   {id: 8, title: '겨울', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'},
   {id: 7, title: '원석진', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'},
@@ -28,9 +29,38 @@ const db = [
   // {id: 5, title: 'BB', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'}
 ]
 
+const mode = process.env.NODE_ENV === 'development' ? 'dev' : 'prd';
+const ASSET_INFO_URL = mode === 'dev' ? 'http://localhost' : 'http://10.10.104.246';
+
 function App() {
   const [mode, setMode] = React.useState('slide');
   const containerRef = React.useRef();
+  const [searchParams] = useSearchParams();
+  const assetId = searchParams.get('assetId') || null;
+  const [db, setDB ] = React.useState(DEFAULT_DB)
+  console.log(assetId)
+
+  React.useEffect(() => {
+    if(assetId === null){
+      return;
+    }
+    fetch(`${ASSET_INFO_URL}/asset/${assetId}`)
+    .then(result => {
+      return result.json()
+    })
+    .then(data => {
+      const {sources} = data;
+      const dbFromServer = sources.map(source => {
+        return {
+          id: source.srcId,
+          title: source.srcTitle,
+          src: source.srcRemote
+        }
+      })
+      console.log(dbFromServer)
+      setDB(dbFromServer)
+    })
+  }, [assetId])
 
   const onClickModeSelectBtn = React.useCallback(() => {
     setMode(mode => {

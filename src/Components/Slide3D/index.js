@@ -136,7 +136,9 @@ function Slide3D(props) {
   // console.log(startXY, destXY, targetXY)
 
   React.useEffect(() => {
+    console.log('db.length=', db.length, itemsRef.current);
     itemsRef.current.forEach((itemRef,i) => {
+      if(itemRef === null) return;
       itemRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
       itemRef.style.transition = `transform 0.5s`;
       itemRef.style.transitionDelay = `${(db.length - i)/4}s`
