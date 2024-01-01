@@ -62,7 +62,7 @@ const TinderCards = (props) => {
       try {
         console.log('onSwipe:', id, dir)
         const currentPlayer = itemsRef.current[id];
-        const nextPlayer = itemsRef.current[id+1];
+        const nextPlayer = itemsRef.current[id-1];
         currentPlayer?.pause();
         nextPlayer?.play();
       } catch (err) {
@@ -113,27 +113,27 @@ const TinderCards = (props) => {
           key={item.id}
           className='swipe' 
           swipeRequirementType='velocity'
-          onSwipe={onSwipe(item.id)}
-          onCardLeftScreen={onCardLeftScreen(item.id)}
+          onSwipe={onSwipe(i)}
+          onCardLeftScreen={onCardLeftScreen(i)}
           onSwipeRequirementFulfilled={onSwipeRequirementFulfilled}
           onSwipeRequirementUnfulfilled={onSwipeRequirementUnFulfilled}
-          ref={el => tinderRef.current[item.id] = el}
+          ref={el => tinderRef.current[i] = el}
           top={i*60}
         >
           <Title>{item.title}</Title>
           <Item
-            onClick={onClickPlay(item.id)}
+            onClick={onClickPlay(i)}
             className='pressable'
             src={item.src}
-            ref={el => itemsRef.current[item.id] = el}
+            ref={el => itemsRef.current[i] = el}
           >
           </Item>
           <NextButton
-            onClick={onClickNext(item.id)}
+            onClick={onClickNext(i)}
             className='pressable'
           ></NextButton>
           <RestoreButton
-            onClick={onClickRestore(item.id)}
+            onClick={onClickRestore(i)}
             className='pressable'
           >restore</RestoreButton>
         </CustomTinderCard>
