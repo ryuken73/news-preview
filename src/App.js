@@ -33,7 +33,7 @@ const mode = process.env.NODE_ENV === 'development' ? 'dev' : 'prd';
 const ASSET_INFO_URL = mode === 'dev' ? 'http://localhost' : 'http://10.10.104.246';
 
 function App() {
-  const [mode, setMode] = React.useState('tinder');
+  const [mode, setMode] = React.useState('slide');
   const containerRef = React.useRef();
   const [searchParams] = useSearchParams();
   const assetId = searchParams.get('assetId') || null;

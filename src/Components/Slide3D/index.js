@@ -62,15 +62,61 @@ const SpinContainer = styled(Container)`
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
   /* margin-bottom: 100px; */
 `
+const VideoContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+`
+const Backface = styled.div`
+  display: flex;
+  width: 120%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: black;
+  opacity: 0.5;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  transform: rotateY( 180deg );
+  -webkit-box-shadow: 0 0 8px #fff;
+  box-shadow: 0 0 8px #fff;
+  -webkit-box-reflect: below 10px
+    linear-gradient(transparent, transparent, #0005);
+`
+const VideoTitle = styled.div`
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background: black;
+  opacity: 0.7;
+  font-size: 50px;
+  font-weight: bold;
+  backface-visibility: hidden;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`
+const LogContainer = styled.div`
+  margin: auto;
+`
+const LogoText = styled.div`
+  font-size: 100px;
+  font-weight: bold;
+`
 const Item = styled.video`
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  backface-visibility: hidden;
   position: absolute;
   object-fit: cover;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
+  border-radius: 10px;
   line-height: 200px;
   font-size: 50px;
   text-align: center;
@@ -117,6 +163,7 @@ const removeTransition = element => {
 const AUTO_PLAY = true;
 const USE_STATIC_TY = false;
 const TY = 10;
+const ANIMATION_SECONDS = 0.6;
 
 function Slide3D(props) {
   const {db, parentRef} = props;
@@ -127,6 +174,8 @@ function Slide3D(props) {
   const [onTransition, setOnTransition] = React.useState(false);
   const dragRef = React.useRef(null);
   const spinRef = React.useRef(null);
+  const videoContaiersRef = React.useRef([])
+  const videoTitleRef = React.useRef([]);
   const itemsRef = React.useRef([]);
   const buttonsRef = React.useRef([]);
   const timerRef = React.useRef();
@@ -136,12 +185,14 @@ function Slide3D(props) {
   // console.log(startXY, destXY, targetXY)
 
   React.useEffect(() => {
-    console.log('db.length=', db.length, itemsRef.current);
-    itemsRef.current.forEach((itemRef,i) => {
-      if(itemRef === null) return;
-      itemRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
-      itemRef.style.transition = `transform 0.5s`;
-      itemRef.style.transitionDelay = `${(db.length - i)/4}s`
+    console.log('db.length=', db.length, videoContaiersRef.current);
+    videoContaiersRef.current.forEach((videoContainerRef,i) => {
+      if(videoContainerRef === null) return;
+      videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
+      videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
+      videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
+    })
+    itemsRef.current.forEach((itemRef, i) => {
       itemRef.addEventListener('play', () => {
         setCurrentPlayingId(i)
       })
@@ -158,17 +209,24 @@ function Slide3D(props) {
 
   const stopPlayerById = React.useCallback((playerId) => {
     const player = itemsRef.current[playerId];
+    const currentVideoTitle = videoTitleRef.current[playerId];
     player.style.transform = player.style.transform.replace(/scale(.*)/, '');
     player?.pause();
+    setTimeout(() => {
+      currentVideoTitle.style.display = 'block';
+    }, ANIMATION_SECONDS * 1000)
   }, [])
 
   const restorePlayer = React.useCallback((event) => {
     const container = dragRef.current;
     setActiveIdState(null);
     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-    const tx = (event.target.id * (360/db.length) * -1) - 5;
+    const tx = (event.target.id * (360/db.length) * -1);
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     const currentPlayer = event.target;
+    setTimeout(() => {
+      videoTitleRef.current[event.target.id].style.display = 'block';
+    }, ANIMATION_SECONDS * 1000);
     currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
     setAnimationPaused(false)
     setAutoRotate(true)
@@ -183,7 +241,7 @@ function Slide3D(props) {
         setTimeout(() => {
           buttonsRef.current[nextId].click();
 
-        }, 500)
+        }, 700)
       }
     }
   }, [db.length])
@@ -201,7 +259,7 @@ function Slide3D(props) {
             stopPlayerById(currentPlayingId);
           }
           currentPlayer.addEventListener('ended', restorePlayer, 'once')
-          currentPlayer.style.transition = '0.3s';
+          currentPlayer.style.transition = `${ANIMATION_SECONDS}s`;
           currentPlayer.style.transform += 'scale(2.0)';
           setAnimationPaused(true)
           void spinRef.current.offsetWidth;
@@ -227,8 +285,12 @@ function Slide3D(props) {
     const clickedPlayerId = event.target.id;
     const container = dragRef.current;
     const currentPlayer = itemsRef.current[clickedPlayerId];
+    const currentVideoTitle = videoTitleRef.current[clickedPlayerId];
     const isPaused = currentPlayer?.paused;
     setOnTransition(true);
+    setTimeout(() => {
+      currentVideoTitle.style.display = 'none';
+    }, ANIMATION_SECONDS * 1000)
 
     const transitionEndHandler = (e) => {
       setActiveIdState(clickedPlayerId);
@@ -249,6 +311,9 @@ function Slide3D(props) {
       const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
+      setTimeout(() => {
+        currentVideoTitle.style.display = 'block';
+      }, ANIMATION_SECONDS * 1000);
       currentPlayer?.pause();
       setAnimationPaused(false)
       setAutoRotate(true)
@@ -261,6 +326,7 @@ function Slide3D(props) {
       console.log('### clicked Same player which inactive:', activeIdState, clickedPlayerId)
       container.addEventListener('transitionend', transitionEndHandler);
       const tx = clickedPlayerId * (360/db.length) * -1;
+      const ty = USE_STATIC_TY ? TY : targetXY.current.y;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       targetXY.current.y = ty;
       targetXY.current.x = tx;
@@ -269,7 +335,7 @@ function Slide3D(props) {
     console.log('### clicked new player:', activeIdState, clickedPlayerId)
     setAutoRotate(false)
     container.addEventListener('transitionend', transitionEndHandler);
-    container.style.transition = `transform 0.3s`;
+    container.style.transition = `transform ${ANIMATION_SECONDS}s`;
     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
     const tx = clickedPlayerId * (360/db.length) * -1;
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
@@ -368,19 +434,33 @@ function Slide3D(props) {
           height={imgHeight}
         >
           {db.map((item, i) => (
-            <Item
+            <VideoContainer
               key={item.id}
-              id={i}
-              // className={CLASS_FOR_POINTER_EVENT_FREE}
-              // onClick={playerHandler(i)}
-              // onClick={onClickButton}
-              src={item.src}
-              ref={el => itemsRef.current[i] = el}
-              itemIndex={i}
-              itemLength={db.length}
-              radius={radius}
+              ref={el => videoContaiersRef.current[i] = el}
             >
-            </Item>
+              <Item
+                id={i}
+                // className={CLASS_FOR_POINTER_EVENT_FREE}
+                // onClick={playerHandler(i)}
+                // onClick={onClickButton}
+                src={item.src}
+                ref={el => itemsRef.current[i] = el}
+                itemIndex={i}
+                itemLength={db.length}
+                radius={radius}
+              >
+              </Item>
+              <VideoTitle
+                ref={el => videoTitleRef.current[i] = el}
+              >
+                {item.title}
+              </VideoTitle>
+              <Backface>
+                <LogContainer>
+                  <LogoText>SBS</LogoText>
+                </LogContainer>
+              </Backface>
+            </VideoContainer>
           ))}
         </SpinContainer>
         <Ground width={radius*3} height={radius*3}></Ground>
