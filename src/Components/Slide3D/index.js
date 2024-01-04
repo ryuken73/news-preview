@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
+import backgroundImage from '../../assets/images/BACK.jpg'
 
 const spin = keyframes`
   from {
@@ -72,32 +73,36 @@ const VideoContainer = styled.div`
 `
 const Backface = styled.div`
   display: flex;
-  width: 120%;
+  width: 100%;
   height: 100%;
   position: absolute;
   left: 0;
   top: 0;
-  background: black;
-  opacity: 0.5;
+  /* background: black; */
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  opacity: 1;
   border-radius: 10px;
   backface-visibility: hidden;
   transform: rotateY( 180deg );
-  -webkit-box-shadow: 0 0 8px #fff;
-  box-shadow: 0 0 8px #fff;
+  /* -webkit-box-shadow: 0 0 8px #fff; */
+  /* box-shadow: 0 0 8px #fff; */
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
 `
 const VideoTitle = styled.div`
   position: absolute;
-  bottom: 0px;
+  top: 0px;
   width: 100%;
-  background: black;
+  background: white;
+  color: black;
   opacity: 0.7;
-  font-size: 50px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 500;
+  text-align: left;
   backface-visibility: hidden;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `
 const LogContainer = styled.div`
   margin: auto;
@@ -210,7 +215,7 @@ function Slide3D(props) {
   const stopPlayerById = React.useCallback((playerId) => {
     const player = itemsRef.current[playerId];
     const videoContainer = videoContaiersRef.current[playerId]
-    videoContainer.style.transform = player.style.transform.replace(/scale(.*)/, '');
+    videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
     player?.pause();
   }, [])
 
@@ -251,7 +256,7 @@ function Slide3D(props) {
           // console.log('playerHandler:', isPaused, id)
           if(currentPlayingId !== null){
             // other player is running
-            // console.log('other player is now playing. stop first!');
+            console.log('other player is now playing. stop first!');
             stopPlayerById(currentPlayingId);
           }
           currentPlayer.addEventListener('ended', restorePlayer, 'once')
@@ -446,9 +451,9 @@ function Slide3D(props) {
                 {item.title}
               </VideoTitle>
               <Backface>
-                <LogContainer>
+                {/* <LogContainer>
                   <LogoText>SBS</LogoText>
-                </LogContainer>
+                </LogContainer> */}
               </Backface>
             </VideoContainer>
           ))}
