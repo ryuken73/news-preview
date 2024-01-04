@@ -209,12 +209,8 @@ function Slide3D(props) {
 
   const stopPlayerById = React.useCallback((playerId) => {
     const player = itemsRef.current[playerId];
-    const currentVideoTitle = videoTitleRef.current[playerId];
     player.style.transform = player.style.transform.replace(/scale(.*)/, '');
     player?.pause();
-    setTimeout(() => {
-      currentVideoTitle.style.display = 'block';
-    }, ANIMATION_SECONDS * 1000)
   }, [])
 
   const restorePlayer = React.useCallback((event) => {
@@ -224,9 +220,6 @@ function Slide3D(props) {
     const tx = (event.target.id * (360/db.length) * -1);
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     const currentPlayer = event.target;
-    setTimeout(() => {
-      videoTitleRef.current[event.target.id].style.display = 'block';
-    }, ANIMATION_SECONDS * 1000);
     currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
     setAnimationPaused(false)
     setAutoRotate(true)
@@ -285,12 +278,8 @@ function Slide3D(props) {
     const clickedPlayerId = event.target.id;
     const container = dragRef.current;
     const currentPlayer = itemsRef.current[clickedPlayerId];
-    const currentVideoTitle = videoTitleRef.current[clickedPlayerId];
     const isPaused = currentPlayer?.paused;
     setOnTransition(true);
-    setTimeout(() => {
-      currentVideoTitle.style.display = 'none';
-    }, ANIMATION_SECONDS * 1000)
 
     const transitionEndHandler = (e) => {
       setActiveIdState(clickedPlayerId);
@@ -311,9 +300,6 @@ function Slide3D(props) {
       const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       currentPlayer.style.transform = currentPlayer.style.transform.replace(/scale(.*)/, '');
-      setTimeout(() => {
-        currentVideoTitle.style.display = 'block';
-      }, ANIMATION_SECONDS * 1000);
       currentPlayer?.pause();
       setAnimationPaused(false)
       setAutoRotate(true)
