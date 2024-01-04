@@ -96,7 +96,7 @@ const VideoTitle = styled.div`
   width: 100%;
   background: white;
   color: black;
-  opacity: 0.7;
+  opacity: 1;
   font-size: 30px;
   font-weight: 500;
   text-align: left;
