@@ -259,7 +259,7 @@ function Slide3D(props) {
             console.log('other player is now playing. stop first!');
             stopPlayerById(currentPlayingId);
           }
-          currentPlayer.addEventListener('ended', restorePlayer, 'once')
+          currentPlayer.addEventListener('ended', restorePlayer, {once: true})
           videoContainer.style.transition = `${ANIMATION_SECONDS}s`;
           videoContainer.style.transform += 'scale(2.0)';
           setAnimationPaused(true)
