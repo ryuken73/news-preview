@@ -228,9 +228,11 @@ function Slide3D(props) {
     const currentPlayer = event.target;
     const videoContainer = videoContaiersRef.current[event.target.id]
     videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-    setAnimationPaused(false)
-    setAutoRotate(true)
-    removeTransition(container);
+    setTimeout(() => {
+      setAnimationPaused(false)
+      // setAutoRotate(true)
+      removeTransition(container);
+    }, ANIMATION_SECONDS * 110)
     currentPlayer.currentTime = 0;
     currentPlayer.removeEventListener('ended', restorePlayer);
     if(AUTO_PLAY){
@@ -240,8 +242,7 @@ function Slide3D(props) {
         console.log(currentId, nextId, itemsRef.current)
         setTimeout(() => {
           buttonsRef.current[nextId].click();
-
-        }, 700)
+        }, 200)
       }
     }
   }, [db.length])
