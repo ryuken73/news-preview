@@ -436,9 +436,9 @@ function Slide3D(props) {
             >
               <Item
                 id={i}
-                // className={CLASS_FOR_POINTER_EVENT_FREE}
+                className={CLASS_FOR_POINTER_EVENT_FREE}
                 // onClick={playerHandler(i)}
-                // onClick={onClickButton}
+                onClick={onClickButton}
                 src={item.src}
                 ref={el => itemsRef.current[i] = el}
                 itemIndex={i}
