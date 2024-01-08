@@ -101,10 +101,10 @@ const VideoTitle = styled.div`
   background: white;
   color: black;
   opacity: 1;
-  font-size: 20px;
+  font-size: ${props => `${props.titleFontSize}px` || '20px'};
+  opacity: ${props => props.titleOpacity === undefined ? 0.7 : props.titleOpacity};
   padding: 5px;
   padding-left: 20px;
-  opacity: 0.7;
   box-sizing: border-box;
   font-weight: 500;
   text-align: left;
@@ -168,13 +168,17 @@ const CustomSettingIcon = styled(SettingsIcon)`
   opacity: 0.8;
 `
 const radius = 600; // how big of the radius
-const autoRotate = true; // auto rotate or not
 const rotateSpeed = 60; // unit: seconds/360 degrees
 const imgWidth = 600; // width of images (unit: px)
 const imgHeight = 350; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
 const INITIAL_CONFIG = {
-  useTitleBar: true
+  autoRotate: true,
+  autoRotateInSetting: true,
+  useTitleBar: true,
+  seekZeroOnPlayEnd: false,
+  titleFontSize: 20,
+  titleOpacity: 0.7
 }
 
 const makePlayerFront = (element, degree) => {
@@ -191,7 +195,7 @@ const ANIMATION_SECONDS = 0.6;
 
 function Slide3D(props) {
   const {db, parentRef} = props;
-  const [autoRotate, setAutoRotate] = React.useState(true);
+  // const [autoRotateCurrent, setAutoRotateCurrent] = React.useState(true);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
@@ -224,6 +228,20 @@ function Slide3D(props) {
       }
     })
   }, [])
+
+  const setAutoRotate = React.useCallback((autoRotate) => {
+    if(!config.autoRotateInSetting){
+      // if autoRotate is disable by setting, skip action
+      return;
+    }
+    console.log('### enable autoRotate')
+    setConfig(config => {
+      return {
+        ...config,
+        autoRotate
+      }
+    })
+  }, [config.autoRotateInSetting])
 
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
@@ -274,7 +292,9 @@ function Slide3D(props) {
       setAutoRotate(true)
       removeTransition(container);
     // }, ANIMATION_SECONDS * 110)
-    currentPlayer.currentTime = 0;
+    if(config.seekZeroOnPlayEnd){
+      currentPlayer.currentTime = 0;
+    }
     currentPlayer.removeEventListener('ended', restorePlayer);
     if(AUTO_PLAY){
       const currentId = currentPlayer.id;
@@ -286,7 +306,7 @@ function Slide3D(props) {
         }, 700)
       }
     }
-  }, [db.length])
+  }, [config.seekZeroOnPlayEnd, db.length, setAutoRotate])
 
   const playerHandler = React.useCallback((id) => {
     return () => {
@@ -319,7 +339,7 @@ function Slide3D(props) {
         console.log(err)
       }
     }
-  }, [currentPlayingId, restorePlayer, stopPlayerById])
+  }, [currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
 
   const onClickButton = React.useCallback((event) => {
     if(onTransition){
@@ -394,13 +414,8 @@ function Slide3D(props) {
     return ()  => {
       container.removeEventListener('transitionend', transitionEndHandler)
     }
-  }, [activeIdState, db.length, onTransition, playerHandler])
+  }, [activeIdState, db.length, onTransition, playerHandler, setAutoRotate])
 
-  const toggleAutoRotate = React.useCallback(() => {
-    setAutoRotate(autoRotate => {
-      return !autoRotate
-    })
-  }, [])
   const toggleAnimationPaused = React.useCallback(() => {
     setAnimationPaused(animationPaused => {
       return !animationPaused
@@ -479,7 +494,7 @@ function Slide3D(props) {
       > 
         <SpinContainer 
           ref={spinRef}
-          autoRotate={autoRotate}
+          autoRotate={config.autoRotate}
           animationPaused={animationPaused}
           width={imgWidth} 
           height={imgHeight}
@@ -504,6 +519,8 @@ function Slide3D(props) {
               </Item>
               <VideoTitle
                 ref={el => videoTitleRef.current[i] = el}
+                titleFontSize={config.titleFontSize}
+                titleOpacity={config.titleOpacity}
               >
                 {item.title}
               </VideoTitle>
@@ -519,7 +536,6 @@ function Slide3D(props) {
       </Container>
       <ControlContainer>
         <Buttons>
-          <Button onClick={toggleAutoRotate}>{autoRotate ? "Stop Rotate" : "Start Rotate"}</Button>
           {db.map((item, i) => (
             <Button 
               key={item.id} 
