@@ -117,6 +117,26 @@ const VideoTitle = styled.div`
   left: ${props => props.titleType === 'center' && '50%'};
   transform: ${props => props.titleType === 'center' && 'translate(-50%, 0)'};
 `
+const TitleContainer = styled.div`
+  position: absolute;
+  top: 0px;
+  background: transparent;
+  color: white;
+  opacity: 1;
+  width: 100%;
+`
+const TransparentTitle = styled.div`
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+  padding-left: 20px;
+  font-weight: 100;
+  font-size: ${props => `${props.titleFontSize}px` || '20px'};
+`
+const StyledHr = styled.hr`
+  margin-top: 0px;
+  width: 95%;
+`
 const LogContainer = styled.div`
   margin: auto;
 `
@@ -532,6 +552,18 @@ function Slide3D(props) {
                 >
                   {item.title}
                 </VideoTitle>
+              )}
+              {config.titleType === 'transparent' && (
+                <TitleContainer>
+                  <TransparentTitle
+                    ref={el => videoTitleRef.current[i] = el}
+                    titleFontSize={config.titleFontSize}
+                    titleOpacity={config.titleOpacity}
+                  >
+                    {item.title}
+                  </TransparentTitle>
+                  <StyledHr></StyledHr>
+                </TitleContainer>
               )}
               <Backface>
                 {/* <LogContainer>
