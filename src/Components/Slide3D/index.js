@@ -247,7 +247,7 @@ function Slide3D(props) {
         console.log(currentId, nextId, itemsRef.current)
         setTimeout(() => {
           buttonsRef.current[nextId].click();
-        }, 200)
+        }, 700)
       }
     }
   }, [db.length])
@@ -298,18 +298,31 @@ function Slide3D(props) {
 
     const transitionEndHandler = (e) => {
       setActiveIdState(clickedPlayerId);
-      const isTransitionFromVideo = e.target.tagName === 'VIDEO'
-      console.log('transitionEnd:', isTransitionFromVideo)
-      if(!isTransitionFromVideo){
+      const transitionType = e.target.getAttribute('transitionType');
+      if(transitionType === 'rotate'){
+        console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
         playerHandler(clickedPlayerId)()
         setAutoRotate(false)
+        console.log('remove transitionend (in handler)')
+        container.removeEventListener('transitionend', transitionEndHandler)
       }
-      removeTransition(container);
-      container.removeEventListener('transitionend', transitionEndHandler)
+      if(transitionType === 'scale'){
+        console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
+        // removeTransition(container);
+      }
+      // const isTransitionFromVideo = e.target.tagName === 'VIDEO'
+      // console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
+      // if(!isTransitionFromVideo){
+      //   playerHandler(clickedPlayerId)()
+      //   setAutoRotate(false)
+      // }
+      // removeTransition(container);
+      // console.log('remove transitionend (in handler)')
+      // container.removeEventListener('transitionend', transitionEndHandler)
     }
 
     if(activeIdState === clickedPlayerId && !isPaused){
-      console.log('### clicked Same player under playing:', activeIdState, clickedPlayerId)
+      console.log('### clicked Same player under playing (add transitionend):', activeIdState, clickedPlayerId)
       setActiveIdState(null);
       const ty = USE_STATIC_TY ? TY : targetXY.current.y;
       const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
@@ -324,7 +337,7 @@ function Slide3D(props) {
       return;
     }
     if(activeIdState === clickedPlayerId && isPaused){
-      console.log('### clicked Same player which inactive:', activeIdState, clickedPlayerId)
+      console.log('### clicked Same player which inactive (add transitionend):', activeIdState, clickedPlayerId)
       container.addEventListener('transitionend', transitionEndHandler);
       const tx = clickedPlayerId * (360/db.length) * -1;
       const ty = USE_STATIC_TY ? TY : targetXY.current.y;
@@ -333,7 +346,7 @@ function Slide3D(props) {
       targetXY.current.x = tx;
       return;
     }
-    console.log('### clicked new player:', activeIdState, clickedPlayerId)
+    console.log('### clicked new player (add transitionend):', activeIdState, clickedPlayerId)
     setAutoRotate(false)
     container.addEventListener('transitionend', transitionEndHandler);
     container.style.transition = `transform ${ANIMATION_SECONDS}s`;
@@ -426,6 +439,7 @@ function Slide3D(props) {
     <TopContainer>
       <Container
         ref={dragRef}
+        transitionType="rotate"
       > 
         <SpinContainer 
           ref={spinRef}
@@ -438,6 +452,7 @@ function Slide3D(props) {
             <VideoContainer
               key={item.id}
               ref={el => videoContaiersRef.current[i] = el}
+              transitionType="scale"
             >
               <Item
                 id={i}
