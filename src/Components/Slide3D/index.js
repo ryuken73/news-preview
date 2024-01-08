@@ -55,6 +55,7 @@ const Button = styled.div`
   font-weight: ${props => props.isPlaying && 'bold'};
   transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'};
   transition: all 0.3s;
+  word-break: keep-all;
 `
 const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
@@ -97,7 +98,11 @@ const VideoTitle = styled.div`
   background: white;
   color: black;
   opacity: 1;
-  font-size: 30px;
+  font-size: 20px;
+  padding: 5px;
+  padding-left: 20px;
+  opacity: 0.7;
+  box-sizing: border-box;
   font-weight: 500;
   text-align: left;
   backface-visibility: hidden;
