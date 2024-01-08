@@ -97,20 +97,25 @@ const Backface = styled.div`
 const VideoTitle = styled.div`
   position: absolute;
   top: 0px;
-  width: 100%;
   background: white;
   color: black;
   opacity: 1;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
   opacity: ${props => props.titleOpacity === undefined ? 0.7 : props.titleOpacity};
   padding: 5px;
-  padding-left: 20px;
   box-sizing: border-box;
   font-weight: 500;
-  text-align: left;
   backface-visibility: hidden;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  width: ${props => props.titleType === 'fullWidth' ? '100%' : 'auto'};
+  padding-left: ${props => props.titleType === 'fullWidth' ? '20px' : '30px'};
+  padding-right: ${props => props.titleType === 'center' && '30px'};
+  text-align: ${props => props.titleType === 'fullWidth' ? 'left':'center'};
+  border-top-left-radius: ${props => props.titleType === 'fullWidth' && '10px'};
+  border-top-right-radius: ${props => props.titleType === 'fullWidth' && '10px'};
+  border-bottom-left-radius: ${props => props.titleType === 'center' && '10px'};
+  border-bottom-right-radius: ${props => props.titleType === 'center' && '10px'};
+  left: ${props => props.titleType === 'center' && '50%'};
+  transform: ${props => props.titleType === 'center' && 'translate(-50%, 0)'};
 `
 const LogContainer = styled.div`
   margin: auto;
@@ -177,6 +182,7 @@ const INITIAL_CONFIG = {
   autoRotateInSetting: true,
   useTitleBar: true,
   seekZeroOnPlayEnd: false,
+  titleType: 'fullWidth',
   titleFontSize: 20,
   titleOpacity: 0.7
 }
@@ -517,13 +523,16 @@ function Slide3D(props) {
                 radius={radius}
               >
               </Item>
-              <VideoTitle
-                ref={el => videoTitleRef.current[i] = el}
-                titleFontSize={config.titleFontSize}
-                titleOpacity={config.titleOpacity}
-              >
-                {item.title}
-              </VideoTitle>
+              {config.titleType !== 'transparent' && (
+                <VideoTitle
+                  ref={el => videoTitleRef.current[i] = el}
+                  titleFontSize={config.titleFontSize}
+                  titleOpacity={config.titleOpacity}
+                  titleType={config.titleType}
+                >
+                  {item.title}
+                </VideoTitle>
+              )}
               <Backface>
                 {/* <LogContainer>
                   <LogoText>SBS</LogoText>
