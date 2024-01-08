@@ -5,6 +5,7 @@ import SetTitleType from './SetTitleType';
 import SetTitleFontSize from './SetTitleFontSize';
 import SetTitleFontWeight from './SetTitleFontWeight';
 import SetTitleOpacity from './SetTitleOpacity';
+import SetItemRadius from './SetItemRadius';
 
 function RightSide(props) {
   const {config, updateConfig} = props;
@@ -22,6 +23,9 @@ function RightSide(props) {
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetTitleOpacity config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetItemRadius config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <p></p>
     </DialogContent>

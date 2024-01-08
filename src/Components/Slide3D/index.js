@@ -161,6 +161,7 @@ const Item = styled.video`
   text-align: center;
   -webkit-box-shadow: 0 0 8px #fff;
   box-shadow: 0 0 8px #fff;
+  box-sizing: border-box;
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
   &:hover {
@@ -193,15 +194,17 @@ const CustomSettingIcon = styled(SettingsIcon)`
   z-index: 9999;
   opacity: 0.8;
 `
-const radius = 600; // how big of the radius
+// const radius = 800; // how big of the radius
 const rotateSpeed = 60; // unit: seconds/360 degrees
 const imgWidth = 600; // width of images (unit: px)
 const imgHeight = 350; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
 const INITIAL_CONFIG = {
+  radius: 600,
   autoRotate: true,
   autoRotateInSetting: true,
   useTitleBar: true,
+  autoPlay: true,
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
   titleFontSize: 20,
@@ -216,7 +219,7 @@ const removeTransition = element => {
   element.style.transition = 'none';
 }
 
-const AUTO_PLAY = true;
+// const AUTO_PLAY = true;
 const USE_STATIC_TY = false;
 const TY = 10;
 const ANIMATION_SECONDS = 0.6;
@@ -275,7 +278,7 @@ function Slide3D(props) {
     console.log('db.length=', db.length, videoContaiersRef.current);
     videoContaiersRef.current.forEach((videoContainerRef,i) => {
       if(videoContainerRef === null) return;
-      videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${radius}px)`;
+      videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
       videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
       videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
     })
@@ -290,7 +293,7 @@ function Slide3D(props) {
         setCurrentPlayingId(null)
       })
     })
-  }, [db.length, itemsRef])
+  }, [config.radius, db.length, itemsRef])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -324,7 +327,7 @@ function Slide3D(props) {
       currentPlayer.currentTime = 0;
     }
     currentPlayer.removeEventListener('ended', restorePlayer);
-    if(AUTO_PLAY){
+    if(config.autoPlay){
       const currentId = currentPlayer.id;
       if(currentId < db.length - 1){
         const nextId = parseInt(currentId) + 1;
@@ -334,7 +337,7 @@ function Slide3D(props) {
         }, 700)
       }
     }
-  }, [config.seekZeroOnPlayEnd, db.length, setAutoRotate])
+  }, [config.autoPlay, config.seekZeroOnPlayEnd, db.length, setAutoRotate])
 
   const playerHandler = React.useCallback((id) => {
     return () => {
@@ -542,7 +545,7 @@ function Slide3D(props) {
                 ref={el => itemsRef.current[i] = el}
                 itemIndex={i}
                 itemLength={db.length}
-                radius={radius}
+                radius={config.radius}
               >
               </Item>
               {config.titleType !== 'transparent' && (
@@ -577,7 +580,7 @@ function Slide3D(props) {
             </VideoContainer>
           ))}
         </SpinContainer>
-        <Ground width={radius*3} height={radius*3}></Ground>
+        <Ground width={config.radius*3} height={config.radius*3}></Ground>
       </Container>
       <ControlContainer>
         <Buttons>
