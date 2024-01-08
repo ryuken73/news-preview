@@ -168,7 +168,9 @@ const removeTransition = element => {
 const AUTO_PLAY = true;
 const USE_STATIC_TY = false;
 const TY = 10;
-const ANIMATION_SECONDS = 0.6;
+// const ANIMATION_SECONDS = 0.6;
+const ANIMATION_SECONDS = 1;
+const NO_ROTATE_BETWEEN_AUTO_PLAY = true;
 
 function Slide3D(props) {
   const {db, parentRef} = props;
@@ -228,11 +230,13 @@ function Slide3D(props) {
     const currentPlayer = event.target;
     const videoContainer = videoContaiersRef.current[event.target.id]
     videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-    // setTimeout(() => {
-      setAnimationPaused(false)
-      setAutoRotate(true)
-      removeTransition(container);
-    // }, ANIMATION_SECONDS * 110)
+    if(!NO_ROTATE_BETWEEN_AUTO_PLAY){
+      setTimeout(() => {
+        setAnimationPaused(false)
+        setAutoRotate(true)
+        removeTransition(container);
+      }, ANIMATION_SECONDS * 110)
+    }
     currentPlayer.currentTime = 0;
     currentPlayer.removeEventListener('ended', restorePlayer);
     if(AUTO_PLAY){
@@ -242,7 +246,7 @@ function Slide3D(props) {
         console.log(currentId, nextId, itemsRef.current)
         setTimeout(() => {
           buttonsRef.current[nextId].click();
-        }, 200)
+        }, 700)
       }
     }
   }, [db.length])
@@ -293,14 +297,15 @@ function Slide3D(props) {
 
     const transitionEndHandler = (e) => {
       setActiveIdState(clickedPlayerId);
-      const isTransitionFromVideo = e.target.tagName === 'VIDEO'
-      console.log('transitionEnd:', isTransitionFromVideo)
+      const isTransitionFromVideo = e.target.tagName === 'VIDEO' || e.target.getAttribute('type') === 'videoContainer';
+      console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('type'))
       if(!isTransitionFromVideo){
         playerHandler(clickedPlayerId)()
         setAutoRotate(false)
+        console.log('remove transitionend in transitionHandler')
+        container.removeEventListener('transitionend', transitionEndHandler)
       }
       removeTransition(container);
-      container.removeEventListener('transitionend', transitionEndHandler)
     }
 
     if(activeIdState === clickedPlayerId && !isPaused){
@@ -315,11 +320,13 @@ function Slide3D(props) {
       setAutoRotate(true)
       removeTransition(container);
       setOnTransition(false);
+      console.log('remove transitionend in same player under playing')
       container.removeEventListener('transitionend', transitionEndHandler)
       return;
     }
     if(activeIdState === clickedPlayerId && isPaused){
       console.log('### clicked Same player which inactive:', activeIdState, clickedPlayerId)
+      console.log('add transitionend in same player with inactive')
       container.addEventListener('transitionend', transitionEndHandler);
       const tx = clickedPlayerId * (360/db.length) * -1;
       const ty = USE_STATIC_TY ? TY : targetXY.current.y;
@@ -330,6 +337,7 @@ function Slide3D(props) {
     }
     console.log('### clicked new player:', activeIdState, clickedPlayerId)
     setAutoRotate(false)
+    console.log('add transitionend in new Player')
     container.addEventListener('transitionend', transitionEndHandler);
     container.style.transition = `transform ${ANIMATION_SECONDS}s`;
     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
@@ -338,6 +346,7 @@ function Slide3D(props) {
     targetXY.current.y = ty;
     targetXY.current.x = tx;
     return ()  => {
+      console.log('remove transitionend in return')
       container.removeEventListener('transitionend', transitionEndHandler)
     }
   }, [activeIdState, db.length, onTransition, playerHandler])
@@ -433,12 +442,13 @@ function Slide3D(props) {
             <VideoContainer
               key={item.id}
               ref={el => videoContaiersRef.current[i] = el}
+              type="videoContainer"
             >
               <Item
                 id={i}
-                // className={CLASS_FOR_POINTER_EVENT_FREE}
+                className={CLASS_FOR_POINTER_EVENT_FREE}
                 // onClick={playerHandler(i)}
-                // onClick={onClickButton}
+                onClick={onClickButton}
                 src={item.src}
                 ref={el => itemsRef.current[i] = el}
                 itemIndex={i}
