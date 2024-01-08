@@ -36,6 +36,7 @@ const Container = styled.div`
   transform-style: preserve-3d;
   -webkit-transform: rotateX(-0.1deg) rotateY(0deg);
   transform: rotateX(-0.1deg) rotateY(0deg);
+  transition: transform 0.6s;
   width: 100%;
   height: 100%;
 `
@@ -232,9 +233,14 @@ function Slide3D(props) {
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
     const currentPlayer = event.target;
     const videoContainer = videoContaiersRef.current[event.target.id]
+    const resumeAnimation = (e) => {
+      setAnimationPaused(false)
+      videoContainer.removeEventListener('transitionend', resumeAnimation);
+    }
+    videoContainer.addEventListener('transitionend', resumeAnimation);
     videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
     // setTimeout(() => {
-      setAnimationPaused(false)
+      // setAnimationPaused(false)
       setAutoRotate(true)
       removeTransition(container);
     // }, ANIMATION_SECONDS * 110)
