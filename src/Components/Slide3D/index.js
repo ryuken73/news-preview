@@ -1,6 +1,8 @@
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 import backgroundImage from '../../assets/images/BACK.jpg'
+import SettingsIcon from '@mui/icons-material/Settings';
+import ConfigDialog from './Config/ConfigDialog';
 
 const spin = keyframes`
   from {
@@ -157,12 +159,23 @@ const Ground = styled.div`
     transparent
   );
 `
+const CustomSettingIcon = styled(SettingsIcon)`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  margin: 10px;
+  z-index: 9999;
+  opacity: 0.8;
+`
 const radius = 600; // how big of the radius
 const autoRotate = true; // auto rotate or not
 const rotateSpeed = 60; // unit: seconds/360 degrees
 const imgWidth = 600; // width of images (unit: px)
 const imgHeight = 350; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
+const INITIAL_CONFIG = {
+  useTitleBar: true
+}
 
 const makePlayerFront = (element, degree) => {
   element.style.transform = `rotateX(0deg) rotateY(${degree * -1}deg)`
@@ -183,6 +196,10 @@ function Slide3D(props) {
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
   const [onTransition, setOnTransition] = React.useState(false);
+
+  const [configDialogOpen, setConfigDialogOpen] = React.useState(false);
+  const [config, setConfig] = React.useState(INITIAL_CONFIG);
+
   const dragRef = React.useRef(null);
   const spinRef = React.useRef(null);
   const videoContaiersRef = React.useRef([])
@@ -194,6 +211,19 @@ function Slide3D(props) {
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
   // console.log(startXY, destXY, targetXY)
+
+  const toggleDialogOpen = React.useCallback(() => {
+    setConfigDialogOpen(configDialogOpen => !configDialogOpen);
+  }, [])
+
+  const updateConfig = React.useCallback((key, value) => {
+    setConfig(config => {
+      return {
+        ...config,
+        [key]: value
+      }
+    })
+  }, [])
 
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
@@ -507,6 +537,15 @@ function Slide3D(props) {
           <Button>{onTransition ? 'T':'F'}</Button>
         </Buttons>
       </ControlContainer>
+      <CustomSettingIcon
+        onClick={toggleDialogOpen}
+      ></CustomSettingIcon>
+      <ConfigDialog
+        configDialogOpen={configDialogOpen}
+        toggleDialogOpen={toggleDialogOpen}
+        config={config}
+        updateConfig={updateConfig}
+      ></ConfigDialog>
     </TopContainer>
   )
 }
