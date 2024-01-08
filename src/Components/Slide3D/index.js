@@ -101,10 +101,10 @@ const VideoTitle = styled.div`
   color: black;
   opacity: 1;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
+  font-weight: ${props => props.titleFontWeight || 100};
   opacity: ${props => props.titleOpacity === undefined ? 0.7 : props.titleOpacity};
   padding: 5px;
   box-sizing: border-box;
-  font-weight: 500;
   backface-visibility: hidden;
   width: ${props => props.titleType === 'fullWidth' ? '100%' : 'auto'};
   padding-left: ${props => props.titleType === 'fullWidth' ? '20px' : '30px'};
@@ -132,6 +132,7 @@ const TransparentTitle = styled.div`
   padding-left: 20px;
   font-weight: 100;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
+  font-weight: ${props => props.titleFontWeight || 100};
 `
 const StyledHr = styled.hr`
   margin-top: 0px;
@@ -204,6 +205,7 @@ const INITIAL_CONFIG = {
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
   titleFontSize: 20,
+  titleFontWeight: 500,
   titleOpacity: 0.7
 }
 
@@ -547,6 +549,7 @@ function Slide3D(props) {
                 <VideoTitle
                   ref={el => videoTitleRef.current[i] = el}
                   titleFontSize={config.titleFontSize}
+                  titleFontWeight={config.titleFontWeight}
                   titleOpacity={config.titleOpacity}
                   titleType={config.titleType}
                 >
@@ -558,6 +561,7 @@ function Slide3D(props) {
                   <TransparentTitle
                     ref={el => videoTitleRef.current[i] = el}
                     titleFontSize={config.titleFontSize}
+                    titleFontWeight={config.titleFontWeight}
                     titleOpacity={config.titleOpacity}
                   >
                     {item.title}
