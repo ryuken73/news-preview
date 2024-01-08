@@ -3,6 +3,9 @@ import styled, {keyframes, css} from 'styled-components';
 import backgroundImage from '../../assets/images/BACK.jpg'
 import SettingsIcon from '@mui/icons-material/Settings';
 import ConfigDialog from './Config/ConfigDialog';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const spin = keyframes`
   from {
@@ -48,6 +51,7 @@ const ControlContainer = styled.div`
   max-width: 150px;
 `
 const Buttons = styled.div`
+  display: ${props => !props.show && 'none'};
   min-width: 100px;
   margin: auto;
 `
@@ -192,7 +196,25 @@ const CustomSettingIcon = styled(SettingsIcon)`
   right: 10px;
   margin: 10px;
   z-index: 9999;
-  opacity: 0.8;
+  opacity: 0.2;
+`
+const CustomPlayIcon = styled(PlayCircleFilledIcon)`
+  display: ${props => !props.show && 'none !important'};
+  position: absolute;
+  bottom: 40%;
+  right: 10px;
+  margin: 5px;
+  z-index: 9999;
+  opacity: 0.2;
+`
+const CustomPauseIcon = styled(PauseCircleFilledIcon)`
+  display: ${props => !props.show && 'none !important'};
+  position: absolute;
+  bottom: 40%;
+  right: 10px;
+  margin: 5px;
+  z-index: 9999;
+  opacity: 0.2;
 `
 // const radius = 800; // how big of the radius
 const rotateSpeed = 60; // unit: seconds/360 degrees
@@ -227,6 +249,7 @@ const ANIMATION_SECONDS = 0.6;
 function Slide3D(props) {
   const {db, parentRef} = props;
   // const [autoRotateCurrent, setAutoRotateCurrent] = React.useState(true);
+  const [storedValue, saveToLocalStorage] = useLocalStorage('slide3D', INITIAL_CONFIG);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
@@ -253,10 +276,12 @@ function Slide3D(props) {
 
   const updateConfig = React.useCallback((key, value) => {
     setConfig(config => {
-      return {
+      const newConfig = {
         ...config,
         [key]: value
       }
+      saveToLocalStorage(newConfig);
+      return newConfig;
     })
   }, [])
 
@@ -273,6 +298,11 @@ function Slide3D(props) {
       }
     })
   }, [config.autoRotateInSetting])
+
+  // initialize config from localStorage
+  React.useEffect(() => {
+    setConfig(storedValue)
+  }, [storedValue])
 
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
@@ -462,6 +492,15 @@ function Slide3D(props) {
     dragRef.current.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
   }, [])
 
+  const startPlayFromFirst = React.useCallback(() => {
+    console.log('start play first:',buttonsRef.current);
+    buttonsRef.current[0].click();
+  }, [])
+
+  const stopPlayerCurrent = React.useCallback(() => {
+    stopPlayerById(currentPlayingId)
+  }, [currentPlayingId, stopPlayerById])
+
   React.useEffect(() => {
     parentRef.current.onpointerdown = (e) => {
       clearInterval(timerRef.current);
@@ -489,6 +528,7 @@ function Slide3D(props) {
       }
       parentRef.current.onpointerup = (e) => {
         const upElement = document.elementFromPoint(e.clientX, e.clientY);
+        console.log('upElement:', upElement)
         const ignoreEvent = upElement.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
         if(ignoreEvent) {
           parentRef.current.onpointermove = parentRef.current.onpointerup = null
@@ -583,23 +623,38 @@ function Slide3D(props) {
         <Ground width={config.radius*3} height={config.radius*3}></Ground>
       </Container>
       <ControlContainer>
-        <Buttons>
-          {db.map((item, i) => (
-            <Button 
-              key={item.id} 
-              id={i} 
-              className={CLASS_FOR_POINTER_EVENT_FREE} 
-              ref={el => buttonsRef.current[i] = el}
-              onClick={onClickButton}
-              onTransition={onTransition}
-              isPlaying={currentPlayingId === i}
-            >
-              {item.title}
-            </Button>
-          ))}
-          <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
-          <Button>{onTransition ? 'T':'F'}</Button>
-        </Buttons>
+          <Buttons show={config.useTitleBar}>
+            {db.map((item, i) => (
+              <Button 
+                key={item.id} 
+                id={i} 
+                className={CLASS_FOR_POINTER_EVENT_FREE} 
+                ref={el => buttonsRef.current[i] = el}
+                onClick={onClickButton}
+                onTransition={onTransition}
+                isPlaying={currentPlayingId === i}
+              >
+                {item.title}
+              </Button>
+            ))}
+            {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
+            <Button>{onTransition ? 'T':'F'}</Button> */}
+          </Buttons>
+          {currentPlayingId === null ? (
+            <CustomPlayIcon
+              fontSize="large"
+              onClick={startPlayFromFirst}
+              show={!config.useTitleBar}
+              className={CLASS_FOR_POINTER_EVENT_FREE}
+            ></CustomPlayIcon>
+           ):( 
+            <CustomPauseIcon
+              fontSize="large"
+              show={!config.useTitleBar}
+              onClick={stopPlayerCurrent}
+              className={CLASS_FOR_POINTER_EVENT_FREE}
+            ></CustomPauseIcon>
+          )}
       </ControlContainer>
       <CustomSettingIcon
         onClick={toggleDialogOpen}
