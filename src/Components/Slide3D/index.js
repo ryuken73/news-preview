@@ -314,7 +314,8 @@ function Slide3D(props) {
     videoContaiersRef.current.forEach((videoContainerRef,i) => {
       if(videoContainerRef === null) return;
       videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
-      videoContainerRef.style.transition = `transform ${config.animationTime}s`;
+      // videoContainerRef.style.transition = `transform ${config.animationTime}s`;
+      videoContainerRef.style.transition = `transform 0.6s`;
       videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
     })
     itemsRef.current.forEach((itemRef, i) => {
