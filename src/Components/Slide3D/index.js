@@ -419,7 +419,7 @@ function Slide3D(props) {
         console.log(err)
       }
     }
-  }, [currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
+  }, [config.animationTime, currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
 
   const onClickButton = React.useCallback((event) => {
     if(onTransition){
