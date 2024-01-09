@@ -47,8 +47,7 @@ const Container = styled.div`
 `
 const ControlContainer = styled.div`
   display: flex;
-  min-width: 150px;
-  max-width: 150px;
+  width: ${props => `${props.width}px`};
 `
 const Buttons = styled.div`
   display: ${props => !props.show && 'none'};
@@ -59,6 +58,7 @@ const Button = styled.div`
   margin: 10px;
   opacity: ${props => props.onTransition && '0.1'};
   color: ${props => props.isPlaying ? 'yellow' : 'darkslategrey'};
+  font-size: ${props => `${props.fontSize}px`};
   font-weight: ${props => props.isPlaying && 'bold'};
   transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'};
   transition: all 0.3s;
@@ -227,6 +227,8 @@ const INITIAL_CONFIG = {
   autoRotate: true,
   autoRotateInSetting: true,
   useTitleBar: true,
+  buttonFontSize: 30,
+  buttonWidth: 200,
   autoPlay: true,
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
@@ -270,6 +272,7 @@ function Slide3D(props) {
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
   // console.log(startXY, destXY, targetXY)
+  console.log('##', config)
 
   const toggleDialogOpen = React.useCallback(() => {
     setConfigDialogOpen(configDialogOpen => !configDialogOpen);
@@ -625,13 +628,14 @@ function Slide3D(props) {
         </SpinContainer>
         <Ground width={config.radius*3} height={config.radius*3}></Ground>
       </Container>
-      <ControlContainer>
+      <ControlContainer width={config.buttonWidth}>
           <Buttons show={config.useTitleBar}>
             {db.map((item, i) => (
               <Button 
                 key={item.id} 
                 id={i} 
                 className={CLASS_FOR_POINTER_EVENT_FREE} 
+                fontSize={config.buttonFontSize}
                 ref={el => buttonsRef.current[i] = el}
                 onClick={onClickButton}
                 onTransition={onTransition}
