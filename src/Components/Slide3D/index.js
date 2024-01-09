@@ -234,7 +234,8 @@ const INITIAL_CONFIG = {
   titleType: 'fullWidth',
   titleFontSize: 20,
   titleFontWeight: 500,
-  titleOpacity: 0.7
+  titleOpacity: 0.7,
+  animationTime: 0.6
 }
 
 const makePlayerFront = (element, degree) => {
@@ -313,7 +314,7 @@ function Slide3D(props) {
     videoContaiersRef.current.forEach((videoContainerRef,i) => {
       if(videoContainerRef === null) return;
       videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
-      videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
+      videoContainerRef.style.transition = `transform ${config.animationTime}s`;
       videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
     })
     itemsRef.current.forEach((itemRef, i) => {
@@ -327,7 +328,7 @@ function Slide3D(props) {
         setCurrentPlayingId(null)
       })
     })
-  }, [config.radius, db.length, itemsRef])
+  }, [config.animationTime, config.radius, db.length, itemsRef])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -356,7 +357,7 @@ function Slide3D(props) {
       // setAnimationPaused(false)
       setAutoRotate(true)
       removeTransition(container);
-    // }, ANIMATION_SECONDS * 110)
+    // }, config.animationTime * 110)
     if(config.seekZeroOnPlayEnd){
       currentPlayer.currentTime = 0;
     }
@@ -368,6 +369,7 @@ function Slide3D(props) {
         console.log(currentId, nextId, itemsRef.current)
         setTimeout(() => {
           buttonsRef.current[nextId].click();
+        // }, parseInt(config.animationTime*100*1.5))
         }, 700)
       }
     }
@@ -387,7 +389,7 @@ function Slide3D(props) {
             stopPlayerById(currentPlayingId);
           }
           currentPlayer.addEventListener('ended', restorePlayer, {once: true})
-          videoContainer.style.transition = `${ANIMATION_SECONDS}s`;
+          videoContainer.style.transition = `${config.animationTime}s`;
           videoContainer.style.transform += 'scale(2.0)';
           setAnimationPaused(true)
           void spinRef.current.offsetWidth;
@@ -470,7 +472,7 @@ function Slide3D(props) {
     console.log('### clicked new player (add transitionend):', activeIdState, clickedPlayerId)
     setAutoRotate(false)
     container.addEventListener('transitionend', transitionEndHandler);
-    container.style.transition = `transform ${ANIMATION_SECONDS}s`;
+    container.style.transition = `transform ${config.animationTime}s`;
     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
     const tx = clickedPlayerId * (360/db.length) * -1;
     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;

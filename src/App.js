@@ -15,10 +15,13 @@ const Container = styled.div`
   color: white;
   perspective: 4000px;
 `
-const ModeSelectBtn = styled.button`
+const ModeSelectBtn = styled.div`
   position: absolute;
   top: 20px;
   right: 20px;
+  font-size: 20px;
+  color: white;
+  opacity: 0.2;
 `
 const DEFAULT_DB = [
   {id: 9, title: '한파', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
@@ -90,7 +93,7 @@ function App() {
         <ModeSelectBtn
           onClick={onClickModeSelectBtn}
         >
-          change mode
+          Mode
         </ModeSelectBtn>
       </Container>
     </div>
