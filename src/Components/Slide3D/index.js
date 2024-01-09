@@ -311,14 +311,17 @@ function Slide3D(props) {
 
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
-    videoContaiersRef.current.forEach((videoContainerRef,i) => {
-      if(videoContainerRef === null) return;
-      videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
-      // videoContainerRef.style.transition = `transform ${config.animationTime}s`;
-      videoContainerRef.style.transition = `transform 0.6s`;
-      videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
-    })
+    setTimeout(() =>{
+      videoContaiersRef.current.forEach((videoContainerRef,i) => {
+        console.log('apply animation', videoContainerRef)
+        if(videoContainerRef === null) return;
+        videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
+        videoContainerRef.style.transition = `transform ${config.animationTime}s`;
+        videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
+      })
+    }, 1000)
     itemsRef.current.forEach((itemRef, i) => {
+      if(itemRef === null) return;
       itemRef.addEventListener('play', () => {
         setCurrentPlayingId(i)
       })
@@ -329,7 +332,16 @@ function Slide3D(props) {
         setCurrentPlayingId(null)
       })
     })
-  }, [config.animationTime, config.radius, db.length, itemsRef])
+    return () => {
+      videoContaiersRef.current.forEach((videoContainerRef,i) => {
+        console.log('remove animation', videoContainerRef)
+        if(videoContainerRef === null) return;
+        videoContainerRef.style.transform = `none`
+        videoContainerRef.style.transition = ``
+        console.log('removed animation', videoContainerRef)
+      })
+    }
+  }, [config.animationTime, config.radius, db, itemsRef])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -432,17 +444,7 @@ function Slide3D(props) {
       }
       if(transitionType === 'scale'){
         console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-        // removeTransition(container);
       }
-      // const isTransitionFromVideo = e.target.tagName === 'VIDEO'
-      // console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-      // if(!isTransitionFromVideo){
-      //   playerHandler(clickedPlayerId)()
-      //   setAutoRotate(false)
-      // }
-      // removeTransition(container);
-      // console.log('remove transitionend (in handler)')
-      // container.removeEventListener('transitionend', transitionEndHandler)
     }
 
     if(activeIdState === clickedPlayerId && !isPaused){
@@ -482,7 +484,7 @@ function Slide3D(props) {
     return ()  => {
       container.removeEventListener('transitionend', transitionEndHandler)
     }
-  }, [activeIdState, db.length, onTransition, playerHandler, setAutoRotate])
+  }, [activeIdState, config.animationTime, db.length, onTransition, playerHandler, setAutoRotate])
 
   const toggleAnimationPaused = React.useCallback(() => {
     setAnimationPaused(animationPaused => {
