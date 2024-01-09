@@ -113,6 +113,7 @@ const VideoTitle = styled.div`
   width: ${props => props.titleType === 'fullWidth' ? '100%' : 'auto'};
   padding-left: ${props => props.titleType === 'fullWidth' ? '20px' : '30px'};
   padding-right: ${props => props.titleType === 'center' && '30px'};
+  min-width: ${props => props.titleType === 'center' && '30%'};
   text-align: ${props => props.titleType === 'fullWidth' ? 'left':'center'};
   border-top-left-radius: ${props => props.titleType === 'fullWidth' && '10px'};
   border-top-right-radius: ${props => props.titleType === 'fullWidth' && '10px'};
@@ -163,8 +164,8 @@ const Item = styled.video`
   line-height: 200px;
   font-size: 50px;
   text-align: center;
-  -webkit-box-shadow: 0 0 8px #fff;
-  box-shadow: 0 0 8px #fff;
+  -webkit-box-shadow: 0 0 1px #fff;
+  box-shadow: 0 0 1px #fff;
   box-sizing: border-box;
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
@@ -499,7 +500,9 @@ function Slide3D(props) {
 
   const stopPlayerCurrent = React.useCallback(() => {
     stopPlayerById(currentPlayingId)
-  }, [currentPlayingId, stopPlayerById])
+    setAnimationPaused(false)
+    setAutoRotate(true)
+  }, [currentPlayingId, setAutoRotate, stopPlayerById])
 
   React.useEffect(() => {
     parentRef.current.onpointerdown = (e) => {
