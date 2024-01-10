@@ -61,11 +61,12 @@ const Buttons = styled.div`
 `
 const Button = styled.div`
   margin: 10px;
+  margin-top: 20px;
   opacity: ${props => props.onTransition && '0.1'};
   color: ${props => props.isPlaying ? 'yellow' : 'darkslategrey'};
   font-size: ${props => `${props.fontSize}px`};
-  font-weight: ${props => props.isPlaying && 'bold'};
-  transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'};
+  font-weight: ${props => props.isPlaying ? 200 : 200};
+  /* transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'}; */
   transition: all 0.3s;
   word-break: keep-all;
 `
@@ -331,6 +332,34 @@ function Slide3D(props) {
     setConfig(storedValue)
   }, [storedValue])
 
+  const onPlay = React.useCallback((event) => {
+    console.log('event: play start',event.target.id)
+    const id = event.target.id;
+    setCurrentPlayingId(id)
+  }, [])
+  
+  const onPause = React.useCallback((event) => {
+    console.log('event: play paused', event.target.id);
+    setCurrentPlayingId(null)
+  }, [])
+  
+  const onEnded = React.useCallback((event) => {
+    console.log('event: play end',event.target.id)
+    const playEndPlayerId = event.target.id;
+    if(config.autoPlay){
+      const nextId = parseInt(playEndPlayerId) + 1;
+      if(nextId === db.length) {
+        console.log('end reached');
+      } else {
+        console.log('event:',playEndPlayerId, nextId, itemsRef.current)
+        setTimeout(() => {
+          buttonsRef.current[nextId].click();
+        }, 700)
+      }
+    }
+    setCurrentPlayingId(null)
+  }, [config.autoPlay, db.length])
+
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
     setTimeout(() =>{
@@ -342,28 +371,20 @@ function Slide3D(props) {
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
     }, 1000)
-    itemsRef.current.forEach((itemRef, i) => {
+    itemsRef.current.forEach((itemRef) => {
       if(itemRef === null) return;
-      itemRef.addEventListener('play', () => {
-        setCurrentPlayingId(i)
-      })
-      itemRef.addEventListener('pause', () => {
-        setCurrentPlayingId(null)
-      })
-      itemRef.addEventListener('end', () => {
-        setCurrentPlayingId(null)
-      })
+      itemRef.addEventListener('play', onPlay);
+      itemRef.addEventListener('pause', onPause);
+      itemRef.addEventListener('ended', onEnded);
     })
     return () => {
-      videoContaiersRef.current.forEach((videoContainerRef,i) => {
-        console.log('remove animation', videoContainerRef)
-        if(videoContainerRef === null) return;
-        videoContainerRef.style.transform = `none`
-        videoContainerRef.style.transition = ``
-        console.log('removed animation', videoContainerRef)
+      itemsRef.current.forEach((itemRef) => {
+        itemRef.removeEventListener('play', onPlay );
+        itemRef.removeEventListener('pause', onPause );
+        itemRef.removeEventListener('ended', onEnded );
       })
     }
-  }, [ANIMATION_SECONDS, config.radius, db, itemsRef])
+  }, [ANIMATION_SECONDS, config.autoPlay, config.radius, db, itemsRef, onEnded, onPause, onPlay])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -809,7 +830,7 @@ function Slide3D(props) {
                 ref={el => buttonsRef.current[i] = el}
                 onClick={onClickButton}
                 onTransition={onTransition}
-                isPlaying={currentPlayingId === i}
+                isPlaying={currentPlayingId == i}
               >
                 {item.title}
               </Button>
