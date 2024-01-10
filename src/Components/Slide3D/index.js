@@ -2,6 +2,7 @@ import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 import backImage from '../../assets/images/background.jpg'
 import backgroundImage from '../../assets/images/BACK.jpg'
+import vBarImage from '../../assets/images/vBar.png';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ConfigDialog from './Config/ConfigDialog';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
@@ -230,6 +231,12 @@ const CustomPauseIcon = styled(PauseCircleFilledIcon)`
 `
 const BottomDummy = styled.div`
   height: 300px;
+`
+const StyledSpan = styled.span`
+  margin-right: 10px;
+`
+const BarImage = styled.img`
+  height: 20px;
 `
 // const radius = 800; // how big of the radius
 const rotateSpeed = 60; // unit: seconds/360 degrees
@@ -793,6 +800,9 @@ function Slide3D(props) {
                   titleOpacity={config.titleOpacity}
                   titleType={config.titleType}
                 >
+                  <StyledSpan>
+                    <BarImage src={vBarImage} />
+                  </StyledSpan>
                   {item.title}
                 </VideoTitle>
               )}
