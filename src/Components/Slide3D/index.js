@@ -283,6 +283,7 @@ function Slide3D(props) {
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
   const [currentScaledUpId, setCurrentScaledUpId] = React.useState(null);
   const [onTransition, setOnTransition] = React.useState(false);
+  const [underTransition, setUnderTransition] = React.useState(false);
 
   const [configDialogOpen, setConfigDialogOpen] = React.useState(false);
   const [config, setConfig] = React.useState(INITIAL_CONFIG);
@@ -640,6 +641,10 @@ function Slide3D(props) {
   }, [])
 
   const onClickButton = React.useCallback(async (event) => {
+    if(underTransition){
+      return;
+    }
+    setUnderTransition(true);
     const targetId = event.target.id;
     const spinContainer = dragRef.current;
     const videoContainer = videoContaiersRef.current[targetId];
@@ -652,6 +657,7 @@ function Slide3D(props) {
       pauseById(currentPlayer, targetId)
       await scaleDown(videoContainer);
       // await moveFront(spinContainer, targetId, -2);
+      setUnderTransition(false);
       enableAutoRotate();
       return;
     }
@@ -665,6 +671,7 @@ function Slide3D(props) {
     console.log('event: Move first or Next player');
     await moveFront(spinContainer, targetId);
     await scaleUp(videoContainer, targetId);
+    setUnderTransition(false);
     playById(currentPlayer, targetId);
   }, [
     currentScaledUpId, 
@@ -674,7 +681,8 @@ function Slide3D(props) {
     pauseById, 
     playById, 
     scaleDown, 
-    scaleUp
+    scaleUp,
+    underTransition
   ])
 
   const toggleAnimationPaused = React.useCallback(() => {
@@ -839,7 +847,7 @@ function Slide3D(props) {
                 fontSize={config.buttonFontSize}
                 ref={el => buttonsRef.current[i] = el}
                 onClick={onClickButton}
-                onTransition={onTransition}
+                onTransition={underTransition}
                 isPlaying={currentPlayingId == i}
               >
                 {item.title}
