@@ -4,6 +4,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import SetAutoRotate from './SetAutoRotate';
 import SetMoveUpward from './SetMoveUpward';
 import SetScaleOrigin from './SetScaleOrigin';
+import SetVideoScale from './SetVideoScale';
 import SetUseTitleBar from './SetUseTitleBar';
 import SetButtonFontSize from './SetButtonFontSize';
 import SetButtonWidth from './SetButtonWidth';
@@ -23,6 +24,9 @@ function LeftSide(props) {
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetScaleOrigin config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetVideoScale config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetUseTitleBar config={config} updateConfig={updateConfig} />

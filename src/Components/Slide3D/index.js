@@ -241,6 +241,7 @@ const INITIAL_CONFIG = {
   autoRotateInSetting: true,
   moveUpward: 0,
   scaleOrigin: 300,
+  videoScale: 2,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
@@ -571,13 +572,13 @@ function Slide3D(props) {
 
       console.log('event: add scaleUp:', targetId)
       // container.addEventListener('transitionend', resolvePromise);
-      const isAlreadyScaleUp = /scale\(2\)/.test(container.style.transform)
-      console.log('event: ',container.style.transform)
+      const isAlreadyScaleUp = /scale(.*)/.test(container.style.transform)
+      console.log('event: ',container.style.transform, isAlreadyScaleUp, config, config.videoScale)
       if(isAlreadyScaleUp) return;
       container.style.transition = `${ANIMATION_SECONDS}s`;
-      container.style.transform += 'scale(2.0)';
+      container.style.transform += `scale(${config.videoScale})`;
     })
-  }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS])
+  }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS, config])
 
   const scaleDown = React.useCallback((container) => {
     return new Promise((resolve, reject) => {
