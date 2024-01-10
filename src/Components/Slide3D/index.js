@@ -873,6 +873,7 @@ function Slide3D(props) {
           )}
       </ControlContainer>
       <CustomSettingIcon
+        className={CLASS_FOR_POINTER_EVENT_FREE}
         onClick={toggleDialogOpen}
       ></CustomSettingIcon>
       <ConfigDialog
