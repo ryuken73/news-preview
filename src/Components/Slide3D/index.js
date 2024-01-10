@@ -46,7 +46,7 @@ const Container = styled.div`
   transform-style: preserve-3d;
   -webkit-transform: rotateX(-0.1deg) rotateY(0deg);
   transform: rotateX(-0.1deg) rotateY(0deg);
-  transition: transform 0.6s;
+  /* transition: transform 0.6s; */
   width: 100%;
   height: 100%;
   margin-bottom: ${props => props.moveUpward === 0 ? 'auto' : `${props.moveUpward}px`};
