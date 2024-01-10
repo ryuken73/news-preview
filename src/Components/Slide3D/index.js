@@ -525,6 +525,7 @@ function Slide3D(props) {
       //   container.removeEventListener('transitionend', resolvePromise);
       //   resolve(true)
       // }
+      eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         console.log('event: remove moveFront:')
         resolve(true)
@@ -532,14 +533,14 @@ function Slide3D(props) {
       console.log('event: add moveFront:', clickedPlayerId, offset)
       // container.addEventListener('transitionend', resolvePromise);
       setActiveIdState(clickedPlayerId);
-      container.style.transition = `transform ${ANIMATION_SECONDS}s`;
       const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-      if(offset !== 0){
-        container.style.transition = '0.01s';
-      } else {
-        container.style.transition = `${ANIMATION_SECONDS}s`;
-      }
+      // if(offset !== 0){
+      //   container.style.transition = '0.01s';
+      // } else {
+      //   container.style.transition = `${ANIMATION_SECONDS}s`;
+      // }
       const tx = clickedPlayerId * ((360/db.length) * -1) + offset;
+      container.style.transition = `transform ${ANIMATION_SECONDS}s`;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       targetXY.current.y = ty;
       targetXY.current.x = tx;
@@ -556,6 +557,7 @@ function Slide3D(props) {
       //   container.removeEventListener('transitionend', resolvePromise);
       //   resolve(true)
       // }
+      eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         setCurrentScaledUpId(targetId)
         console.log('event: remove scaleUp:', targetId)
@@ -564,6 +566,9 @@ function Slide3D(props) {
 
       console.log('event: add scaleUp:', targetId)
       // container.addEventListener('transitionend', resolvePromise);
+      const isAlreadyScaleUp = /scale\(2\)/.test(container.style.transform)
+      console.log('event: ',container.style.transform)
+      if(isAlreadyScaleUp) return;
       container.style.transition = `${ANIMATION_SECONDS}s`;
       container.style.transform += 'scale(2.0)';
     })
@@ -580,6 +585,7 @@ function Slide3D(props) {
       //   resolve(true)
       // }
       // console.log('event: add scaleDown:')
+      eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         setCurrentScaledUpId(null)
         console.log('event: remove scaleDown:')
@@ -620,7 +626,7 @@ function Slide3D(props) {
       const scaledContainer = videoContaiersRef.current[currentScaledUpId];
       await scaleDown(scaledContainer)
     }
-    console.log('event: Move Front Next player');
+    console.log('event: Move first or Next player');
     await moveFront(spinContainer, targetId);
     await scaleUp(videoContainer, targetId);
     playById(currentPlayer, targetId);
