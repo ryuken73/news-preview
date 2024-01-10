@@ -34,7 +34,6 @@ const TopContainer = styled.div`
   min-height: 100vh;
   background-image: url(${backImage});
   background-size: cover;
-  transform: ${props => `translateY(-${props.moveUpward}px)`};
 `
 const Container = styled.div`
   position: relative;
@@ -49,6 +48,7 @@ const Container = styled.div`
   transition: transform 0.6s;
   width: 100%;
   height: 100%;
+  margin-bottom: ${props => props.moveUpward === 0 ? 'auto' : `${props.moveUpward}px`};
 `
 const ControlContainer = styled.div`
   display: flex;
@@ -86,6 +86,7 @@ const VideoContainer = styled.div`
   outline: 4px rgba(255,255,255,0.6) solid;
   outline-offset: -2px;
   border-radius: 10px;
+  transform-origin: ${props => props.scaleOrigin === 300 ? 'center center':`center ${props.scaleOrigin}px`};
 `
 const Backface = styled.div`
   display: flex;
@@ -239,6 +240,7 @@ const INITIAL_CONFIG = {
   autoRotate: true,
   autoRotateInSetting: true,
   moveUpward: 0,
+  scaleOrigin: 300,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
@@ -729,12 +731,11 @@ function Slide3D(props) {
   }, [applyTransform, parentRef])
 
   return (
-    <TopContainer
-      moveUpward={config.moveUpward}
-    >
+    <TopContainer>
       <Container
         ref={dragRef}
         transitionType="rotate"
+        moveUpward={config.moveUpward}
       > 
         <SpinContainer 
           ref={spinRef}
@@ -748,6 +749,7 @@ function Slide3D(props) {
               key={item.id}
               ref={el => videoContaiersRef.current[i] = el}
               transitionType="scale"
+              scaleOrigin={config.scaleOrigin}
             >
               <Item
                 id={i}

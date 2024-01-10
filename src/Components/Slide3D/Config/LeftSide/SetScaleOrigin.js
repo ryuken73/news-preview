@@ -3,12 +3,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 
-function SetMoveUpward(props) {
+function SetScaleOrigin(props) {
   const { config, updateConfig } = props;
-  const { moveUpward = 0 } = config;
+  const { scaleOrigin = 0 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
-      updateConfig('moveUpward', value);
+      updateConfig('scaleOrigin', value);
     },
     [updateConfig]
   );
@@ -18,18 +18,18 @@ function SetMoveUpward(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Move Upward (px)
+        [ Global ] Scale Origin (0 == top)
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"
-        value={moveUpward}
+        value={scaleOrigin}
         onChange={onChange}
-        min={0}
-        max={600}
+        min={-300}
+        max={300}
         valueLabelDisplay="auto"
       />
     </FormControl>
   );
 }
 
-export default React.memo(SetMoveUpward);
+export default React.memo(SetScaleOrigin);
