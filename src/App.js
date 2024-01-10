@@ -90,11 +90,11 @@ function App() {
           </Slide3D>
         )}
 
-        <ModeSelectBtn
+        {/* <ModeSelectBtn
           onClick={onClickModeSelectBtn}
         >
           Mode
-        </ModeSelectBtn>
+        </ModeSelectBtn> */}
       </Container>
     </div>
   );
