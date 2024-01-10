@@ -59,6 +59,7 @@ const Buttons = styled.div`
   display: ${props => !props.show && 'none'};
   min-width: 100px;
   margin: auto;
+  z-index: 9999;
 `
 const Button = styled.div`
   margin: 10px;
@@ -563,6 +564,7 @@ function Slide3D(props) {
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         console.log('event: remove moveFront:')
+        removeTransition(container)
         resolve(true)
       }, ANIMATION_MILLI_SECONDS)
       console.log('event: add moveFront:', clickedPlayerId, offset)
