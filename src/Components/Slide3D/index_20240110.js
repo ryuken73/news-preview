@@ -267,7 +267,6 @@ function Slide3D(props) {
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
-  const [currentScaledUpId, setCurrentScaledUpId] = React.useState(null);
   const [onTransition, setOnTransition] = React.useState(false);
 
   const [configDialogOpen, setConfigDialogOpen] = React.useState(false);
@@ -280,16 +279,11 @@ function Slide3D(props) {
   const itemsRef = React.useRef([]);
   const buttonsRef = React.useRef([]);
   const timerRef = React.useRef();
-  const eventTimerRef = React.useRef(null);
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
   // console.log(startXY, destXY, targetXY)
   console.log('##', config)
-
-  const ANIMATION_SECONDS = config.animationTime;
-  const ANIMATION_MILLI_SECONDS = config.animationTime * 1000;
-
 
   const toggleDialogOpen = React.useCallback(() => {
     setConfigDialogOpen(configDialogOpen => !configDialogOpen);
@@ -332,7 +326,7 @@ function Slide3D(props) {
         console.log('apply animation', videoContainerRef)
         if(videoContainerRef === null) return;
         videoContainerRef.style.transform = `rotateY(${i * (360/db.length)}deg) translateZ(${config.radius}px)`;
-        videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
+        videoContainerRef.style.transition = `transform ${config.animationTime}s`;
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
     }, 1000)
@@ -357,7 +351,7 @@ function Slide3D(props) {
         console.log('removed animation', videoContainerRef)
       })
     }
-  }, [ANIMATION_SECONDS, config.radius, db, itemsRef])
+  }, [config.animationTime, config.radius, db, itemsRef])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -368,272 +362,139 @@ function Slide3D(props) {
     player?.pause();
   }, [])
 
-  // const restorePlayer = React.useCallback((event) => {
-  //   const container = dragRef.current;
-  //   setActiveIdState(null);
-  //   const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //   const tx = (event.target.id * (360/db.length) * -1);
-  //   container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //   const currentPlayer = event.target;
-  //   const videoContainer = videoContaiersRef.current[event.target.id]
-  //   const resumeAnimation = (e) => {
-  //     setAnimationPaused(false)
-  //     videoContainer.removeEventListener('transitionend', resumeAnimation);
-  //   }
-  //   videoContainer.addEventListener('transitionend', resumeAnimation);
-  //   videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-  //   // setTimeout(() => {
-  //     // setAnimationPaused(false)
-  //     setAutoRotate(true)
-  //     removeTransition(container);
-  //   // }, config.animationTime * 110)
-  //   if(config.seekZeroOnPlayEnd){
-  //     currentPlayer.currentTime = 0;
-  //   }
-  //   currentPlayer.removeEventListener('ended', restorePlayer);
-  //   if(config.autoPlay){
-  //     const currentId = currentPlayer.id;
-  //     if(currentId < db.length - 1){
-  //       const nextId = parseInt(currentId) + 1;
-  //       console.log(currentId, nextId, itemsRef.current)
-  //       setTimeout(() => {
-  //         buttonsRef.current[nextId].click();
-  //       // }, parseInt(config.animationTime*100*1.5))
-  //       }, 700)
-  //     }
-  //   }
-  // }, [config.autoPlay, config.seekZeroOnPlayEnd, db.length, setAutoRotate])
-
-  // const playerHandler = React.useCallback((id) => {
-  //   return () => {
-  //     try {
-  //       const currentPlayer = itemsRef.current[id];
-  //       const videoContainer = videoContaiersRef.current[id];
-  //       const isPaused = currentPlayer?.paused;
-  //       if(isPaused){
-  //         // console.log('playerHandler:', isPaused, id)
-  //         if(currentPlayingId !== null){
-  //           // other player is running
-  //           console.log('other player is now playing. stop first!');
-  //           stopPlayerById(currentPlayingId);
-  //         }
-  //         currentPlayer.addEventListener('ended', restorePlayer, {once: true})
-  //         videoContainer.style.transition = `${ANIMATION_SECONDS}s`;
-  //         videoContainer.style.transform += 'scale(2.0)';
-  //         setAnimationPaused(true)
-  //         void spinRef.current.offsetWidth;
-  //         setAutoRotate(false)
-  //         currentPlayer?.play();
-  //         setCurrentPlayingId(id);
-  //       } else {
-  //         stopPlayerById(id);
-  //         setAnimationPaused(false)
-  //         setAutoRotate(true)
-  //       }
-  //       setOnTransition(false);
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-  //   }
-  // }, [ANIMATION_SECONDS, currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
-
-  // const onClickButton = React.useCallback((event) => {
-  //   if(onTransition){
-  //     return;
-  //   }
-  //   const clickedPlayerId = event.target.id;
-  //   const container = dragRef.current;
-  //   const currentPlayer = itemsRef.current[clickedPlayerId];
-  //   const videoContainer = videoContaiersRef.current[clickedPlayerId]
-  //   const isPaused = currentPlayer?.paused;
-  //   setOnTransition(true);
-
-  //   const transitionEndHandler = (e) => {
-  //     setActiveIdState(clickedPlayerId);
-  //     const transitionType = e.target.getAttribute('transitionType');
-  //     if(transitionType === 'rotate'){
-  //       console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-  //       playerHandler(clickedPlayerId)()
-  //       setAutoRotate(false)
-  //       console.log('remove transitionend (in handler)')
-  //       container.removeEventListener('transitionend', transitionEndHandler)
-  //     }
-  //     if(transitionType === 'scale'){
-  //       console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-  //     }
-  //   }
-
-  //   if(activeIdState === clickedPlayerId && !isPaused){
-  //     console.log('### clicked Same player under playing (add transitionend):', activeIdState, clickedPlayerId)
-  //     setActiveIdState(null);
-  //     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //     const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
-  //     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //     videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-  //     currentPlayer?.pause();
-  //     setAnimationPaused(false)
-  //     setAutoRotate(true)
-  //     removeTransition(container);
-  //     setOnTransition(false);
-  //     container.removeEventListener('transitionend', transitionEndHandler)
-  //     return;
-  //   }
-  //   if(activeIdState === clickedPlayerId && isPaused){
-  //     console.log('### clicked Same player which inactive (add transitionend):', activeIdState, clickedPlayerId)
-  //     container.addEventListener('transitionend', transitionEndHandler);
-  //     const tx = clickedPlayerId * (360/db.length) * -1;
-  //     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //     targetXY.current.y = ty;
-  //     targetXY.current.x = tx;
-  //     return;
-  //   }
-  //   console.log('### clicked new player (add transitionend):', activeIdState, clickedPlayerId)
-  //   setAutoRotate(false)
-  //   container.addEventListener('transitionend', transitionEndHandler);
-  //   container.style.transition = `transform ${ANIMATION_SECONDS}s`;
-  //   const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //   const tx = clickedPlayerId * (360/db.length) * -1;
-  //   container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //   targetXY.current.y = ty;
-  //   targetXY.current.x = tx;
-  //   return ()  => {
-  //     container.removeEventListener('transitionend', transitionEndHandler)
-  //   }
-  // }, [activeIdState, ANIMATION_SECONDS, db.length, onTransition, playerHandler, setAutoRotate])
-
-  // const toggleAnimationPaused = React.useCallback(() => {
-  //   setAnimationPaused(animationPaused => {
-  //     return !animationPaused
-  //   })
-  // }, [])
-
-  const enableAutoRotate = React.useCallback(() => {
-    setAutoRotate(true)
-  }, [setAutoRotate])
-
-  const disableAutoRotate = React.useCallback(() => {
-    setAutoRotate(false)
-  }, [setAutoRotate])
-
-  const moveFront = React.useCallback((container, clickedPlayerId, offset=0) => {
-    return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'rotate') return;
-      //   console.log('event: remove moveFront:', clickedPlayerId)
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
-      eventTimerRef.current = setTimeout(() => {
-        console.log('event: remove moveFront:')
-        resolve(true)
-      }, ANIMATION_MILLI_SECONDS)
-      console.log('event: add moveFront:', clickedPlayerId, offset)
-      // container.addEventListener('transitionend', resolvePromise);
-      setActiveIdState(clickedPlayerId);
-      container.style.transition = `transform ${ANIMATION_SECONDS}s`;
-      const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-      if(offset !== 0){
-        container.style.transition = '0.01s';
-      } else {
-        container.style.transition = `${ANIMATION_SECONDS}s`;
+  const restorePlayer = React.useCallback((event) => {
+    const container = dragRef.current;
+    setActiveIdState(null);
+    const ty = USE_STATIC_TY ? TY : targetXY.current.y;
+    const tx = (event.target.id * (360/db.length) * -1);
+    container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
+    const currentPlayer = event.target;
+    const videoContainer = videoContaiersRef.current[event.target.id]
+    const resumeAnimation = (e) => {
+      setAnimationPaused(false)
+      videoContainer.removeEventListener('transitionend', resumeAnimation);
+    }
+    videoContainer.addEventListener('transitionend', resumeAnimation);
+    videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
+    // setTimeout(() => {
+      // setAnimationPaused(false)
+      setAutoRotate(true)
+      removeTransition(container);
+    // }, config.animationTime * 110)
+    if(config.seekZeroOnPlayEnd){
+      currentPlayer.currentTime = 0;
+    }
+    currentPlayer.removeEventListener('ended', restorePlayer);
+    if(config.autoPlay){
+      const currentId = currentPlayer.id;
+      if(currentId < db.length - 1){
+        const nextId = parseInt(currentId) + 1;
+        console.log(currentId, nextId, itemsRef.current)
+        setTimeout(() => {
+          buttonsRef.current[nextId].click();
+        // }, parseInt(config.animationTime*100*1.5))
+        }, 700)
       }
-      const tx = clickedPlayerId * ((360/db.length) * -1) + offset;
+    }
+  }, [config.autoPlay, config.seekZeroOnPlayEnd, db.length, setAutoRotate])
+
+  const playerHandler = React.useCallback((id) => {
+    return () => {
+      try {
+        const currentPlayer = itemsRef.current[id];
+        const videoContainer = videoContaiersRef.current[id];
+        const isPaused = currentPlayer?.paused;
+        if(isPaused){
+          // console.log('playerHandler:', isPaused, id)
+          if(currentPlayingId !== null){
+            // other player is running
+            console.log('other player is now playing. stop first!');
+            stopPlayerById(currentPlayingId);
+          }
+          currentPlayer.addEventListener('ended', restorePlayer, {once: true})
+          videoContainer.style.transition = `${config.animationTime}s`;
+          videoContainer.style.transform += 'scale(2.0)';
+          setAnimationPaused(true)
+          void spinRef.current.offsetWidth;
+          setAutoRotate(false)
+          currentPlayer?.play();
+          setCurrentPlayingId(id);
+        } else {
+          stopPlayerById(id);
+          setAnimationPaused(false)
+          setAutoRotate(true)
+        }
+        setOnTransition(false);
+      } catch(err) {
+        console.log(err)
+      }
+    }
+  }, [config.animationTime, currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
+
+  const onClickButton = React.useCallback((event) => {
+    if(onTransition){
+      return;
+    }
+    const clickedPlayerId = event.target.id;
+    const container = dragRef.current;
+    const currentPlayer = itemsRef.current[clickedPlayerId];
+    const videoContainer = videoContaiersRef.current[clickedPlayerId]
+    const isPaused = currentPlayer?.paused;
+    setOnTransition(true);
+
+    const transitionEndHandler = (e) => {
+      setActiveIdState(clickedPlayerId);
+      const transitionType = e.target.getAttribute('transitionType');
+      if(transitionType === 'rotate'){
+        console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
+        playerHandler(clickedPlayerId)()
+        setAutoRotate(false)
+        console.log('remove transitionend (in handler)')
+        container.removeEventListener('transitionend', transitionEndHandler)
+      }
+      if(transitionType === 'scale'){
+        console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
+      }
+    }
+
+    if(activeIdState === clickedPlayerId && !isPaused){
+      console.log('### clicked Same player under playing (add transitionend):', activeIdState, clickedPlayerId)
+      setActiveIdState(null);
+      const ty = USE_STATIC_TY ? TY : targetXY.current.y;
+      const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
+      container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
+      videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
+      currentPlayer?.pause();
+      setAnimationPaused(false)
+      setAutoRotate(true)
+      removeTransition(container);
+      setOnTransition(false);
+      container.removeEventListener('transitionend', transitionEndHandler)
+      return;
+    }
+    if(activeIdState === clickedPlayerId && isPaused){
+      console.log('### clicked Same player which inactive (add transitionend):', activeIdState, clickedPlayerId)
+      container.addEventListener('transitionend', transitionEndHandler);
+      const tx = clickedPlayerId * (360/db.length) * -1;
+      const ty = USE_STATIC_TY ? TY : targetXY.current.y;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
       targetXY.current.y = ty;
       targetXY.current.x = tx;
-    })
-  }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS, db.length])
-
-  const scaleUp = React.useCallback((container, targetId) => {
-    return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'scale') return;
-      //   setCurrentScaledUpId(targetId)
-      //   console.log('event: remove scaleUp:', targetId)
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
-      eventTimerRef.current = setTimeout(() => {
-        setCurrentScaledUpId(targetId)
-        console.log('event: remove scaleUp:', targetId)
-        resolve(true)
-      }, ANIMATION_MILLI_SECONDS);
-
-      console.log('event: add scaleUp:', targetId)
-      // container.addEventListener('transitionend', resolvePromise);
-      container.style.transition = `${ANIMATION_SECONDS}s`;
-      container.style.transform += 'scale(2.0)';
-    })
-  }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS])
-
-  const scaleDown = React.useCallback((container) => {
-    return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'scale') return;
-      //   setCurrentScaledUpId(null)
-      //   console.log('event: remove scaleDown:')
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
-      // console.log('event: add scaleDown:')
-      eventTimerRef.current = setTimeout(() => {
-        setCurrentScaledUpId(null)
-        console.log('event: remove scaleDown:')
-        resolve(true)
-      }, ANIMATION_MILLI_SECONDS)
-      // container.addEventListener('transitionend', resolvePromise);
-      container.style.transition = `${ANIMATION_SECONDS}s`;
-      container.style.transform = container.style.transform.replace(/scale(.*)/, '');
-    })
-  }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS])
-
-  const playById = React.useCallback((player, targetId) => {
-    player?.play();
-  }, [])
-
-  const pauseById = React.useCallback((player, targetId) => {
-    player?.pause();
-  }, [])
-
-  const onClickButton = React.useCallback(async (event) => {
-    const targetId = event.target.id;
-    const spinContainer = dragRef.current;
-    const videoContainer = videoContaiersRef.current[targetId];
-    const currentPlayer = itemsRef.current[targetId];
-    disableAutoRotate()
-    const clickedWhenOtherScaledUp = currentScaledUpId !== null;
-    const clickedScaledElement = clickedWhenOtherScaledUp && currentScaledUpId === targetId;
-    if(clickedScaledElement){
-      console.log('event: Force Quit: clicked already Scaled Up element');
-      await scaleDown(videoContainer);
-      // await moveFront(spinContainer, targetId, -2);
-      pauseById(currentPlayer, targetId)
-      enableAutoRotate();
       return;
     }
-    if(clickedWhenOtherScaledUp){
-      console.log('event: Normal Next: other ScaledUp exists');
-      const scaledContainer = videoContaiersRef.current[currentScaledUpId];
-      await scaleDown(scaledContainer)
+    console.log('### clicked new player (add transitionend):', activeIdState, clickedPlayerId)
+    setAutoRotate(false)
+    container.addEventListener('transitionend', transitionEndHandler);
+    container.style.transition = `transform ${config.animationTime}s`;
+    const ty = USE_STATIC_TY ? TY : targetXY.current.y;
+    const tx = clickedPlayerId * (360/db.length) * -1;
+    container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
+    targetXY.current.y = ty;
+    targetXY.current.x = tx;
+    return ()  => {
+      container.removeEventListener('transitionend', transitionEndHandler)
     }
-    console.log('event: Move Front Next player');
-    await moveFront(spinContainer, targetId);
-    await scaleUp(videoContainer, targetId);
-    playById(currentPlayer, targetId);
-  }, [
-    currentScaledUpId, 
-    enableAutoRotate,
-    disableAutoRotate, 
-    moveFront, 
-    pauseById, 
-    playById, 
-    scaleDown, 
-    scaleUp
-  ])
+  }, [activeIdState, config.animationTime, db.length, onTransition, playerHandler, setAutoRotate])
 
   const toggleAnimationPaused = React.useCallback(() => {
     setAnimationPaused(animationPaused => {
