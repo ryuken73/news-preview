@@ -20,7 +20,7 @@ function SetUseTitleBar(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Show Video Title Bar (on the Right Side)
+        [ Video Title Bar ] Show (on the Right Side)
       </FormLabel>
       <RadioGroup
         row

@@ -21,7 +21,7 @@ function SetAutoRotate(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Enable Auto Rotate
+        [ Global ] Enable Auto Rotate
       </FormLabel>
       <RadioGroup
         row

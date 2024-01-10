@@ -28,11 +28,13 @@ const TopContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 200%;
   perspective: 4000px;
   overflow: hidden;
   min-height: 100vh;
   background-image: url(${backImage});
   background-size: cover;
+  transform: ${props => `translateY(-${props.moveUpward}px)`};
 `
 const Container = styled.div`
   position: relative;
@@ -236,6 +238,7 @@ const INITIAL_CONFIG = {
   radius: 600,
   autoRotate: true,
   autoRotateInSetting: true,
+  moveUpward: 0,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
@@ -726,7 +729,9 @@ function Slide3D(props) {
   }, [applyTransform, parentRef])
 
   return (
-    <TopContainer>
+    <TopContainer
+      moveUpward={config.moveUpward}
+    >
       <Container
         ref={dragRef}
         transitionType="rotate"

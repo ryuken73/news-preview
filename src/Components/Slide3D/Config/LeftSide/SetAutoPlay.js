@@ -20,7 +20,7 @@ function SetAutoPlay(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Enable Auto Next
+        [ Video ] Enable Auto Next
       </FormLabel>
       <RadioGroup
         row

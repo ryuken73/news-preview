@@ -3,12 +3,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 
-function SetButtonWidth(props) {
+function SetMoveUpward(props) {
   const { config, updateConfig } = props;
-  const { buttonWidth = 200 } = config;
+  const { moveUpward = 0 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
-      updateConfig('buttonWidth', value);
+      updateConfig('moveUpward', value);
     },
     [updateConfig]
   );
@@ -18,19 +18,18 @@ function SetButtonWidth(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Width
+        [ Global ] Move Upward (px)
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"
-        value={buttonWidth}
+        value={moveUpward}
         onChange={onChange}
-        min={150}
-        max={400}
-        step={10}
+        min={0}
+        max={300}
         valueLabelDisplay="auto"
       />
     </FormControl>
   );
 }
 
-export default React.memo(SetButtonWidth);
+export default React.memo(SetMoveUpward);

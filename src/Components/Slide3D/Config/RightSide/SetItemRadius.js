@@ -18,7 +18,7 @@ function SetItemRadius(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Set Rotate Radius
+        [ Global ] Rotate Radius
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

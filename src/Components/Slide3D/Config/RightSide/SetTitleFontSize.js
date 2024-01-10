@@ -18,7 +18,7 @@ function SetTitleFontSize(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Set Title Font Size
+        [ Title ] Font Size
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

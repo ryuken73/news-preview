@@ -20,7 +20,7 @@ function SetTitleType(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Select Title Type 
+        [ Title ] Type 
       </FormLabel>
       <RadioGroup
         row

@@ -20,7 +20,7 @@ function SetSeekZero(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        Rewind Video at The End of Clip
+        [ Video ] Rewind at The End of Clip
       </FormLabel>
       <RadioGroup
         row
