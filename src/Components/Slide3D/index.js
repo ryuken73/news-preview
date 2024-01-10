@@ -32,6 +32,7 @@ const TopContainer = styled.div`
   overflow: hidden;
   min-height: 100vh;
   background-image: url(${backImage});
+  background-size: cover;
 `
 const Container = styled.div`
   position: relative;
@@ -80,7 +81,7 @@ const VideoContainer = styled.div`
   left: 0;
   top: 0;
   transform-style: preserve-3d;
-  outline: 2px rgba(255,255,255,1) solid;
+  outline: 4px rgba(255,255,255,0.6) solid;
   outline-offset: -2px;
   border-radius: 10px;
 `
