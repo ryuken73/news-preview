@@ -232,8 +232,8 @@ const BottomDummy = styled.div`
 `
 // const radius = 800; // how big of the radius
 const rotateSpeed = 60; // unit: seconds/360 degrees
-const imgWidth = 600; // width of images (unit: px)
-const imgHeight = 350; // height of images (unit: px)
+const imgWidth = 640; // width of images (unit: px)
+const imgHeight = 360; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
 const INITIAL_CONFIG = {
   radius: 600,
