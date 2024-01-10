@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
+import backImage from '../../assets/images/background.jpg'
 import backgroundImage from '../../assets/images/BACK.jpg'
 import SettingsIcon from '@mui/icons-material/Settings';
 import ConfigDialog from './Config/ConfigDialog';
@@ -30,6 +31,7 @@ const TopContainer = styled.div`
   perspective: 4000px;
   overflow: hidden;
   min-height: 100vh;
+  background-image: url(${backImage});
 `
 const Container = styled.div`
   position: relative;
@@ -78,6 +80,9 @@ const VideoContainer = styled.div`
   left: 0;
   top: 0;
   transform-style: preserve-3d;
+  outline: 2px rgba(255,255,255,1) solid;
+  outline-offset: -2px;
+  border-radius: 10px;
 `
 const Backface = styled.div`
   display: flex;
@@ -102,8 +107,9 @@ const VideoTitle = styled.div`
   position: absolute;
   top: 0px;
   background: white;
-  color: black;
+  color: #595959;
   opacity: 1;
+  letter-spacing: -1px;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
   font-weight: ${props => props.titleFontWeight || 100};
   opacity: ${props => props.titleOpacity === undefined ? 0.7 : props.titleOpacity};
@@ -184,12 +190,12 @@ const Ground = styled.div`
   left: 50%;
   -webkit-transform: translate(-50%, -50%) rotateX(90deg);
   transform: translate(-50%, -50%) rotateX(90deg);
-  background: -webkit-radial-gradient(
+  /* background: -webkit-radial-gradient(
     center center,
     farthest-side,
     #9993,
     transparent
-  );
+  ); */
 `
 const CustomSettingIcon = styled(SettingsIcon)`
   position: absolute;
@@ -216,6 +222,9 @@ const CustomPauseIcon = styled(PauseCircleFilledIcon)`
   margin: 5px;
   z-index: 9999;
   opacity: 0.2;
+`
+const BottomDummy = styled.div`
+  height: 300px;
 `
 // const radius = 800; // how big of the radius
 const rotateSpeed = 60; // unit: seconds/360 degrees
