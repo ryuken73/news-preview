@@ -615,15 +615,17 @@ function Slide3D(props) {
     const clickedScaledElement = clickedWhenOtherScaledUp && currentScaledUpId === targetId;
     if(clickedScaledElement){
       console.log('event: Force Quit: clicked already Scaled Up element');
+      pauseById(currentPlayer, targetId)
       await scaleDown(videoContainer);
       // await moveFront(spinContainer, targetId, -2);
-      pauseById(currentPlayer, targetId)
       enableAutoRotate();
       return;
     }
     if(clickedWhenOtherScaledUp){
       console.log('event: Normal Next: other ScaledUp exists');
       const scaledContainer = videoContaiersRef.current[currentScaledUpId];
+      const scaledPlayer = itemsRef.current[currentScaledUpId];
+      pauseById(scaledPlayer, currentScaledUpId);
       await scaleDown(scaledContainer)
     }
     console.log('event: Move first or Next player');
