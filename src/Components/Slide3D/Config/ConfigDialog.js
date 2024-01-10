@@ -25,12 +25,20 @@ const CustomDialog = styled(Dialog)`
 const Container = styled.div`
   display: flex;
 `
+const StyledSpan = styled.button`
+  cursor: pointer;
+  margin-left: 10px;
+
+`
 const ConfigDialog = props => {
   console.log(props)
   const { 
     configDialogOpen, 
     toggleDialogOpen ,
     config, 
+    setConfig,
+    saveToLocalStorage,
+    defaultConfig,
     updateConfig,
   } = props;
 
@@ -38,9 +46,21 @@ const ConfigDialog = props => {
     toggleDialogOpen();
   }, [toggleDialogOpen]);
 
+  const setConfigDefault = React.useCallback(() => {
+    setConfig(defaultConfig);
+    saveToLocalStorage(defaultConfig);
+  }, [defaultConfig, saveToLocalStorage, setConfig])
+
   return (
       <CustomDialog open={configDialogOpen} onClose={handleYes}>
-        <DialogTitle id="alert-dialog-title">Change Config</DialogTitle>
+        <DialogTitle>
+          Change Config
+          <StyledSpan
+            onClick={setConfigDefault}
+          >
+            Set Default
+          </StyledSpan>
+        </DialogTitle>
         <Container>
           <LeftSide config={config} updateConfig={updateConfig} />
           <Divider orientation="vertical" FlexItem />

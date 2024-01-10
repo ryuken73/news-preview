@@ -239,12 +239,12 @@ const INITIAL_CONFIG = {
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
-  autoPlay: true,
+  autoPlay: false,
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
-  titleFontSize: 20,
+  titleFontSize: 25,
   titleFontWeight: 500,
-  titleOpacity: 0.7,
+  titleOpacity: 1,
   animationTime: 0.6
 }
 
@@ -298,7 +298,7 @@ function Slide3D(props) {
       saveToLocalStorage(newConfig);
       return newConfig;
     })
-  }, [])
+  }, [saveToLocalStorage])
 
   const setAutoRotate = React.useCallback((autoRotate) => {
     if(!config.autoRotateInSetting){
@@ -685,7 +685,10 @@ function Slide3D(props) {
         configDialogOpen={configDialogOpen}
         toggleDialogOpen={toggleDialogOpen}
         config={config}
+        setConfig={setConfig}
         updateConfig={updateConfig}
+        saveToLocalStorage={saveToLocalStorage}
+        defaultConfig={INITIAL_CONFIG}
       ></ConfigDialog>
     </TopContainer>
   )
