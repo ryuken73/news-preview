@@ -388,6 +388,7 @@ function Slide3D(props) {
     })
     return () => {
       itemsRef.current.forEach((itemRef) => {
+        if(itemRef === null) return;
         itemRef.removeEventListener('play', onPlay );
         itemRef.removeEventListener('pause', onPause );
         itemRef.removeEventListener('ended', onEnded );
