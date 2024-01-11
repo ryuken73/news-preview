@@ -5,12 +5,13 @@ import SetAutoRotate from './SetAutoRotate';
 import SetMoveUpward from './SetMoveUpward';
 import SetScaleOrigin from './SetScaleOrigin';
 import SetVideoScale from './SetVideoScale';
-import SetUseTitleBar from './SetUseTitleBar';
-import SetButtonFontSize from './SetButtonFontSize';
-import SetButtonWidth from './SetButtonWidth';
-import SetSeekZero from './SetSeekZero';
-import SetAutoPlay from './SetAutoPlay';
+import SetItemRadius from './SetItemRadius';
+import SetAnimationTime from './SetAnimationTime';
 
+import SetTitleType from './SetTitleType';
+import SetTitleFontSize from './SetTitleFontSize';
+import SetTitleFontWeight from './SetTitleFontWeight';
+import SetTitleOpacity from './SetTitleOpacity';
 function LeftSide(props) {
   const {config, updateConfig} = props;
   return (
@@ -29,20 +30,24 @@ function LeftSide(props) {
         <SetVideoScale config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetUseTitleBar config={config} updateConfig={updateConfig} />
+        <SetItemRadius config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetButtonFontSize config={config} updateConfig={updateConfig} />
+        <SetAnimationTime config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetButtonWidth config={config} updateConfig={updateConfig} />
+        <SetTitleType config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetSeekZero config={config} updateConfig={updateConfig} />
+        <SetTitleFontSize config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetAutoPlay config={config} updateConfig={updateConfig} />
+        <SetTitleFontWeight config={config} updateConfig={updateConfig} />
       </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetTitleOpacity config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+
     </DialogContent>
   );
 }
