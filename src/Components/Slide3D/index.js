@@ -251,6 +251,7 @@ const INITIAL_CONFIG = {
   moveUpward: 0,
   scaleOrigin: 300,
   videoScale: 2,
+  idleVideoWidth: 640,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
@@ -781,8 +782,8 @@ function Slide3D(props) {
           ref={spinRef}
           autoRotate={config.autoRotate}
           animationPaused={animationPaused}
-          width={imgWidth} 
-          height={imgHeight}
+          width={config.idleVideoWidth} 
+          height={config.idleVideoWidth * (9 / 16)}
         >
           {db.map((item, i) => (
             <VideoContainer
