@@ -252,6 +252,7 @@ const INITIAL_CONFIG = {
   scaleOrigin: 300,
   videoScale: 2,
   idleVideoWidth: 640,
+  greyForDoneItem: true,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,
@@ -659,6 +660,9 @@ function Slide3D(props) {
     if(clickedScaledElement){
       console.log('event: Force Quit: clicked already Scaled Up element');
       pauseById(currentPlayer, targetId)
+      if(config.greyForDoneItem){
+        currentPlayer.style.filter = 'grayscale(1) brightness(50%)';
+      }
       await scaleDown(videoContainer);
       // await moveFront(spinContainer, targetId, -2);
       setUnderTransition(false);
@@ -670,13 +674,19 @@ function Slide3D(props) {
       const scaledContainer = videoContaiersRef.current[currentScaledUpId];
       const scaledPlayer = itemsRef.current[currentScaledUpId];
       pauseById(scaledPlayer, currentScaledUpId);
+      if(config.greyForDoneItem){
+        scaledPlayer.style.filter = 'grayscale(1) brightness(50%)';
+      }
       await scaleDown(scaledContainer)
     }
     console.log('event: Move first or Next player');
     await moveFront(spinContainer, targetId);
+    playById(currentPlayer, targetId);
+    if(config.greyForDoneItem){
+      currentPlayer.style.filter = '';
+    }
     await scaleUp(videoContainer, targetId);
     setUnderTransition(false);
-    playById(currentPlayer, targetId);
   }, [
     currentScaledUpId, 
     enableAutoRotate,
@@ -686,7 +696,8 @@ function Slide3D(props) {
     playById, 
     scaleDown, 
     scaleUp,
-    underTransition
+    underTransition,
+    config
   ])
 
   const toggleAnimationPaused = React.useCallback(() => {
