@@ -86,8 +86,8 @@ const VideoContainer = styled.div`
   left: 0;
   top: 0;
   transform-style: preserve-3d;
-  outline: 4px rgba(255,255,255,0.6) solid;
-  outline-offset: -2px;
+  /* outline: 4px rgba(255,255,255,0.6) solid; */
+  /* outline-offset: -2px; */
   border-radius: 10px;
   transform-origin: ${props => props.scaleOrigin === 300 ? 'center center':`center ${props.scaleOrigin}px`};
 `
@@ -180,6 +180,8 @@ const Item = styled.video`
   -webkit-box-shadow: 0 0 1px #fff;
   box-shadow: 0 0 1px #fff;
   box-sizing: border-box;
+  outline: 4px rgba(255,255,255,0.6) solid;
+  outline-offset: -2px;
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
   &:hover {
