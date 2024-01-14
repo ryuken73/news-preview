@@ -247,7 +247,7 @@ const Ground = styled.div`
 `
 const CustomRefreshIcon = styled(RefreshIcon)`
   position: absolute;
-  bottom: -50px;
+  bottom: -100px;
   right: 100px;
   margin: 10px;
   z-index: 9999;
@@ -255,7 +255,7 @@ const CustomRefreshIcon = styled(RefreshIcon)`
 `
 const CustomSettingIcon = styled(SettingsIcon)`
   position: absolute;
-  bottom: -50px;
+  bottom: -100px;
   right: 30px;
   margin: 10px;
   z-index: 9999;
@@ -975,10 +975,12 @@ function Slide3D(props) {
               </Button>
             ))}
             <CustomRefreshIcon
+              fontSize='large'
               className={CLASS_FOR_POINTER_EVENT_FREE}
               onClick={reloadPage}
             ></CustomRefreshIcon>
             <CustomSettingIcon
+              fontSize='large'
               className={CLASS_FOR_POINTER_EVENT_FREE}
               onClick={toggleDialogOpen}
             ></CustomSettingIcon>
