@@ -3,12 +3,24 @@ import styled, {keyframes, css} from 'styled-components';
 import backImage from '../../assets/images/background.jpg'
 import backgroundImage from '../../assets/images/BACK.jpg'
 import vBarImage from '../../assets/images/vBar.png';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ConfigDialog from './Config/ConfigDialog';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
+
+const spinRandom = keyframes`
+  from {
+    -webkit-transform: rotateY(0deg) rotateX(${Math.random() * -18}deg) rotateZ(${Math.random() * -18}deg);
+    transform: rotateY(0deg) rotateX(${Math.random() * -18}deg) rotateZ(${Math.random() * -18}deg);
+  }
+  to {
+    -webkit-transform: rotateY(-360deg) rotateX(${Math.random() * -18}deg) rotateZ(${Math.random() * -180}deg);
+    transform: rotateY(-360deg) rotateX(${Math.random() * -18}deg) rotateZ(${Math.random() * -18}deg);
+  }
+`
 const spin = keyframes`
   from {
     -webkit-transform: rotateY(0deg);
@@ -60,6 +72,7 @@ const Buttons = styled.div`
   min-width: 100px;
   margin: auto;
   z-index: 9999;
+  position: relative;
 `
 const Button = styled.div`
   margin: 10px;
@@ -230,13 +243,21 @@ const Ground = styled.div`
     transparent
   ); */
 `
-const CustomSettingIcon = styled(SettingsIcon)`
+const CustomRefreshIcon = styled(RefreshIcon)`
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: -50px;
+  right: 100px;
   margin: 10px;
   z-index: 9999;
-  opacity: 0.2;
+  opacity: 0.1;
+`
+const CustomSettingIcon = styled(SettingsIcon)`
+  position: absolute;
+  bottom: -50px;
+  right: 30px;
+  margin: 10px;
+  z-index: 9999;
+  opacity: 0.1;
 `
 const CustomPlayIcon = styled(PlayCircleFilledIcon)`
   display: ${props => !props.show && 'none !important'};
@@ -338,6 +359,10 @@ function Slide3D(props) {
 
   const toggleDialogOpen = React.useCallback(() => {
     setConfigDialogOpen(configDialogOpen => !configDialogOpen);
+  }, [])
+
+  const reloadPage = React.useCallback(() => {
+    window.location.reload();
   }, [])
 
   const updateConfig = React.useCallback((key, value) => {
@@ -914,6 +939,14 @@ function Slide3D(props) {
                 {item.title}
               </Button>
             ))}
+            <CustomRefreshIcon
+              className={CLASS_FOR_POINTER_EVENT_FREE}
+              onClick={reloadPage}
+            ></CustomRefreshIcon>
+            <CustomSettingIcon
+              className={CLASS_FOR_POINTER_EVENT_FREE}
+              onClick={toggleDialogOpen}
+            ></CustomSettingIcon>
             {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
             <Button>{onTransition ? 'T':'F'}</Button> */}
           </Buttons>
@@ -933,10 +966,6 @@ function Slide3D(props) {
             ></CustomPauseIcon>
           )}
       </ControlContainer>
-      <CustomSettingIcon
-        className={CLASS_FOR_POINTER_EVENT_FREE}
-        onClick={toggleDialogOpen}
-      ></CustomSettingIcon>
       <ConfigDialog
         configDialogOpen={configDialogOpen}
         toggleDialogOpen={toggleDialogOpen}
