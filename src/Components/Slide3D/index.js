@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 import backImage from '../../assets/images/background.jpg'
@@ -9,7 +10,6 @@ import ConfigDialog from './Config/ConfigDialog';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import useLocalStorage from '../../hooks/useLocalStorage';
-
 
 const spinRandom = keyframes`
   from {
@@ -90,6 +90,7 @@ const SpinContainer = styled(Container)`
   height: ${props => `${props.height}px`};
   ${props => props.autoRotate && spinStyle};
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
+  filter: brightness(0.2);
   /* margin-bottom: 100px; */
 `
 const VideoContainer = styled.div`
@@ -155,6 +156,7 @@ const TitleContainer = styled.div`
   color: white;
   opacity: 1;
   width: 100%;
+  z-index: ${props => props.zIndex};
 `
 const TransparentTitle = styled.div`
   margin-top: 5px;
@@ -297,6 +299,7 @@ const INITIAL_CONFIG = {
   autoRotateInSetting: true,
   moveUpward: 0,
   scaleOrigin: 300,
+  startWithStacked: true,
   videoScale: 2,
   idleVideoWidth: 640,
   greyForDoneItem: true,
@@ -323,6 +326,7 @@ const removeTransition = element => {
 const USE_STATIC_TY = false;
 const TY = 10;
 const ANIMATION_SECONDS = 0.6;
+const PAUSE_INITIAL_ANIMATION = false;
 
 function Slide3D(props) {
   const {db, parentRef} = props;
@@ -355,7 +359,6 @@ function Slide3D(props) {
 
   const ANIMATION_SECONDS = config.animationTime;
   const ANIMATION_MILLI_SECONDS = config.animationTime * 1000;
-
 
   const toggleDialogOpen = React.useCallback(() => {
     setConfigDialogOpen(configDialogOpen => !configDialogOpen);
@@ -423,9 +426,14 @@ function Slide3D(props) {
     setCurrentPlayingId(null)
   }, [config.autoPlay, db.length])
 
-  React.useEffect(() => {
-    console.log('db.length=', db.length, videoContaiersRef.current);
-    setTimeout(() =>{
+  const runInitialAnimation = React.useCallback(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('event: end')
+        resolve(true)
+      }, ANIMATION_MILLI_SECONDS + 800)
+      console.log('event: start')
+      spinRef.current.style.filter = 'none';
       videoContaiersRef.current.forEach((videoContainerRef,i) => {
         console.log('apply animation', videoContainerRef)
         if(videoContainerRef === null) return;
@@ -433,8 +441,18 @@ function Slide3D(props) {
         videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
-      itemsRef.current.forEach((itemRef, i) => {
-      })
+    })
+  }, [ANIMATION_SECONDS, ANIMATION_MILLI_SECONDS])
+
+  React.useEffect(() => {
+    console.log('db.length=', db.length, videoContaiersRef.current);
+    setTimeout(() =>{
+      console.log('apply animation', config.startWithStacked)
+      if(config.startWithStacked) {
+        setAutoRotate(false);
+        return;
+      }
+      runInitialAnimation();
     }, 1000)
     itemsRef.current.forEach((itemRef, i) => {
       if(itemRef === null) return;
@@ -456,7 +474,7 @@ function Slide3D(props) {
         itemRef.removeEventListener('ended', onEnded );
       })
     }
-  }, [ANIMATION_SECONDS, config.autoPlay, config.radius, db, itemsRef, onEnded, onPause, onPlay])
+  }, [config.autoPlay, config.startWithStacked, config.radius, db, itemsRef, onEnded, onPause, onPlay, runInitialAnimation])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -712,6 +730,7 @@ function Slide3D(props) {
     setUnderTransition(true);
     const targetId = event.target.id;
     const spinContainer = dragRef.current;
+    const spinElement = spinRef.current;
     const videoContainer = videoContaiersRef.current[targetId];
     const currentPlayer = itemsRef.current[targetId];
     disableAutoRotate()
@@ -738,6 +757,12 @@ function Slide3D(props) {
         scaledPlayer.style.filter = 'grayscale(1) brightness(50%)';
       }
       await scaleDown(scaledContainer)
+    }
+    const spinRefStyle = window.getComputedStyle(spinRef.current);
+    console.log('xx', spinRefStyle.filter)
+    const isFirstClick = /brightness\(/.test(spinRefStyle.filter);
+    if(config.startWithStacked && targetId === '0' && isFirstClick) {
+      await runInitialAnimation();
     }
     console.log('event: Move first or Next player');
     await moveFront(spinContainer, targetId);
@@ -894,14 +919,18 @@ function Slide3D(props) {
                   titleOpacity={config.titleOpacity}
                   titleType={config.titleType}
                 >
-                  <StyledSpan>
-                    <BarImage src={vBarImage} />
-                  </StyledSpan>
+                  {config.titleType === 'fullWidth' && (
+                    <StyledSpan>
+                      <BarImage src={vBarImage} />
+                    </StyledSpan>
+                  )}
                   {item.title}
                 </VideoTitle>
               )}
               {config.titleType === 'transparent' && (
-                <TitleContainer>
+                <TitleContainer
+                  zIndex={(i*-1) + 100}
+                >
                   <TransparentTitle
                     ref={el => videoTitleRef.current[i] = el}
                     titleFontSize={config.titleFontSize}

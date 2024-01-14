@@ -7,6 +7,7 @@ import SetScaleOrigin from './SetScaleOrigin';
 import SetVideoScale from './SetVideoScale';
 import SetItemRadius from './SetItemRadius';
 import SetAnimationTime from './SetAnimationTime';
+import SetStartWithStacked from './SetStartWithStacked';
 
 import SetTitleType from './SetTitleType';
 import SetTitleFontSize from './SetTitleFontSize';
@@ -34,6 +35,9 @@ function LeftSide(props) {
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetAnimationTime config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetStartWithStacked config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetTitleType config={config} updateConfig={updateConfig} />
