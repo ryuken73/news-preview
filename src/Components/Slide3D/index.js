@@ -163,6 +163,30 @@ const LogoText = styled.div`
   font-size: 100px;
   font-weight: bold;
 `
+const ItemMirror = styled.video`
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: absolute;
+  backface-visibility: hidden;
+  object-fit: cover;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  line-height: 200px;
+  font-size: 50px;
+  text-align: center;
+  -webkit-box-shadow: 0 0 1px #fff;
+  box-shadow: 0 0 1px #fff;
+  box-sizing: border-box;
+  /* outline: 4px rgba(255,255,255,0.6) solid; */
+  /* outline-offset: -2px; */
+  /* transform: translateY(350px) scale(1, -1); */
+  transform: ${props => `translateY(${props.gap}px) scale(1, -1)`};
+  mask-image: linear-gradient(transparent, transparent, #0007); 
+  z-index: -100;
+`
 const Item = styled.video`
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
@@ -182,13 +206,13 @@ const Item = styled.video`
   box-sizing: border-box;
   outline: 4px rgba(255,255,255,0.6) solid;
   outline-offset: -2px;
-  -webkit-box-reflect: below 10px
-    linear-gradient(transparent, transparent, #0005);
+  /* -webkit-box-reflect: below 10px
+    linear-gradient(transparent, transparent, #0005); */
   &:hover {
     -webkit-box-shadow: 0 0 15px #fffd;
     box-shadow: 0 0 15px #fffd;
-    -webkit-box-reflect: below 10px
-      linear-gradient(transparent, transparent, #0007);
+    /* -webkit-box-reflect: below 10px
+      linear-gradient(transparent, transparent, #0007); */
   }
 `
 const Ground = styled.div`
@@ -298,6 +322,7 @@ function Slide3D(props) {
   const videoContaiersRef = React.useRef([])
   const videoTitleRef = React.useRef([]);
   const itemsRef = React.useRef([]);
+  const itemMirrorsRef = React.useRef([]);
   const buttonsRef = React.useRef([]);
   const timerRef = React.useRef();
   const eventTimerRef = React.useRef(null);
@@ -383,12 +408,20 @@ function Slide3D(props) {
         videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
+      itemsRef.current.forEach((itemRef, i) => {
+      })
     }, 1000)
-    itemsRef.current.forEach((itemRef) => {
+    itemsRef.current.forEach((itemRef, i) => {
       if(itemRef === null) return;
       itemRef.addEventListener('play', onPlay);
       itemRef.addEventListener('pause', onPause);
       itemRef.addEventListener('ended', onEnded);
+      itemRef.addEventListener('canplay', () => {
+        const mediaStream = itemRef.captureStream(0);
+        itemMirrorsRef.current[i].srcObject = mediaStream;
+        itemMirrorsRef.current[i].play();
+        console.log(itemMirrorsRef.current[i], mediaStream)
+      });
     })
     return () => {
       itemsRef.current.forEach((itemRef) => {
@@ -784,6 +817,9 @@ function Slide3D(props) {
     }
   }, [applyTransform, parentRef])
 
+  const idleVideoHeight = config.idleVideoWidth * (9/16);
+  const reflectionGap = idleVideoHeight + 10;
+
   return (
     <TopContainer>
       <Container
@@ -796,7 +832,7 @@ function Slide3D(props) {
           autoRotate={config.autoRotate}
           animationPaused={animationPaused}
           width={config.idleVideoWidth} 
-          height={config.idleVideoWidth * (9 / 16)}
+          height={idleVideoHeight}
         >
           {db.map((item, i) => (
             <VideoContainer
@@ -806,6 +842,7 @@ function Slide3D(props) {
               scaleOrigin={config.scaleOrigin}
             >
               <Item
+                crossOrigin="anonymous"
                 id={i}
                 // className={CLASS_FOR_POINTER_EVENT_FREE}
                 // onClick={playerHandler(i)}
@@ -817,6 +854,13 @@ function Slide3D(props) {
                 radius={config.radius}
               >
               </Item>
+              <ItemMirror
+                playsinline 
+                autoplay 
+                id={i}
+                ref={el => itemMirrorsRef.current[i] = el}
+                gap={reflectionGap}
+              ></ItemMirror>
               {config.titleType !== 'transparent' && (
                 <VideoTitle
                   ref={el => videoTitleRef.current[i] = el}
