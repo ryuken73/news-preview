@@ -444,6 +444,24 @@ function Slide3D(props) {
     })
   }, [ANIMATION_SECONDS, ANIMATION_MILLI_SECONDS])
 
+  const unFoldPlayer = React.useCallback(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('event: end')
+        resolve(true)
+      }, ANIMATION_MILLI_SECONDS + 800)
+      console.log('event: start')
+      spinRef.current.style.filter = 'brightness(0.2)';
+      videoContaiersRef.current.forEach((videoContainerRef,i) => {
+        console.log('remove animation', videoContainerRef)
+        if(videoContainerRef === null) return;
+        videoContainerRef.style.transform = `none`;
+        videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
+        videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
+      })
+    })
+  })
+
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
     setTimeout(() =>{
@@ -984,6 +1002,10 @@ function Slide3D(props) {
               className={CLASS_FOR_POINTER_EVENT_FREE}
               onClick={toggleDialogOpen}
             ></CustomSettingIcon>
+          <Button 
+            style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
+            onClick={unFoldPlayer}
+          >Unfold</Button>
             {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
             <Button>{onTransition ? 'T':'F'}</Button> */}
           </Buttons>

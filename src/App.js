@@ -25,13 +25,18 @@ const ModeSelectBtn = styled.div`
 `
 const DEFAULT_DB = [
   {id: 9, title: '한파', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
+
   // {id: 8, title: '겨울', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'},
+
   {id: 7, title: '원석진', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'},
   {id: 6, title: '무장', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'},
+
   // {id: 4, title: 'AA', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'},
+
   {id: 1, title: '진단 고지명', src: 'http://10.10.104.246/media/20240102/1704157250308_1692093041554_0815%20%EC%A1%B0%EB%8F%99%EC%B0%ACPT%2002_%EA%B9%80%ED%95%9C%EA%B8%B8.mp4'},
   {id: 2, title: '대장암 초기 진단', src: 'http://10.10.104.246/media/20240102/1704157250307_1692093041552_0815%20%EC%A1%B0%EB%8F%99%EC%B0%ACPT%2001_%EA%B9%80%ED%95%9C%EA%B8%B8.mp4'},
   {id: 3, title: '이재명 피습', src: 'http://10.10.104.246/media/20240102/1704157250308_1692093041555_0815%20%EC%A1%B0%EB%8F%99%EC%B0%ACPT%2003_%EA%B9%80%ED%95%9C%EA%B8%B8%20%EC%88%98%EC%A0%95.mp4'},
+
   // {id: 5, title: 'BB', src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'}
 ]
 
