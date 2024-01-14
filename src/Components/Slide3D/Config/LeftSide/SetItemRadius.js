@@ -4,13 +4,14 @@ import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
 
 function SetItemRadius(props) {
-  const { config, updateConfig } = props;
+  const { config, updateConfig, runInitialAnimation } = props;
   const { radius = 600 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
       updateConfig('radius', value);
+      runInitialAnimation()
     },
-    [updateConfig]
+    [runInitialAnimation, updateConfig]
   );
   return (
     <FormControl>

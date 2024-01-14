@@ -40,6 +40,7 @@ const ConfigDialog = props => {
     saveToLocalStorage,
     defaultConfig,
     updateConfig,
+    runInitialAnimation
   } = props;
 
   const handleYes = React.useCallback(() => {
@@ -62,7 +63,7 @@ const ConfigDialog = props => {
           </StyledSpan>
         </DialogTitle>
         <Container>
-          <LeftSide config={config} updateConfig={updateConfig} />
+          <LeftSide config={config} updateConfig={updateConfig} runInitialAnimation={runInitialAnimation} />
           <Divider orientation="vertical" FlexItem />
           <RightSide config={config} updateConfig={updateConfig} />
         </Container>

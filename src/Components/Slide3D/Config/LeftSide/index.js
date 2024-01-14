@@ -14,7 +14,7 @@ import SetTitleFontSize from './SetTitleFontSize';
 import SetTitleFontWeight from './SetTitleFontWeight';
 import SetTitleOpacity from './SetTitleOpacity';
 function LeftSide(props) {
-  const {config, updateConfig} = props;
+  const {config, updateConfig, runInitialAnimation} = props;
   return (
     // eslint-disable-next-line react/jsx-filename-extension
     <DialogContent>
@@ -31,7 +31,7 @@ function LeftSide(props) {
         <SetVideoScale config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetItemRadius config={config} updateConfig={updateConfig} />
+        <SetItemRadius config={config} updateConfig={updateConfig} runInitialAnimation={runInitialAnimation} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetAnimationTime config={config} updateConfig={updateConfig} />

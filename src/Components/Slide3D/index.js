@@ -442,7 +442,7 @@ function Slide3D(props) {
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
     })
-  }, [ANIMATION_SECONDS, ANIMATION_MILLI_SECONDS])
+  }, [ANIMATION_SECONDS, ANIMATION_MILLI_SECONDS, db, config.radius])
 
   const unFoldPlayer = React.useCallback(() => {
     return new Promise((resolve, reject) => {
@@ -498,7 +498,17 @@ function Slide3D(props) {
         itemRef.removeEventListener('ended', onEnded );
       })
     }
-  }, [config.autoPlay, config.startWithStacked, config.radius, db, itemsRef, onEnded, onPause, onPlay, runInitialAnimation])
+  }, [
+    config.autoPlay, 
+    config.startWithStacked, 
+    config.radius, 
+    db, 
+    itemsRef, 
+    onEnded, 
+    onPause, 
+    onPlay, 
+    runInitialAnimation
+  ])
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -1033,6 +1043,7 @@ function Slide3D(props) {
         updateConfig={updateConfig}
         saveToLocalStorage={saveToLocalStorage}
         defaultConfig={INITIAL_CONFIG}
+        runInitialAnimation={runInitialAnimation}
       ></ConfigDialog>
     </TopContainer>
   )
