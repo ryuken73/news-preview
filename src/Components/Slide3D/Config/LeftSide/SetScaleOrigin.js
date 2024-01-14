@@ -18,7 +18,7 @@ function SetScaleOrigin(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Scale Origin (0 == top)
+        [ Global ] Scale Origin (0 == top) : {scaleOrigin}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

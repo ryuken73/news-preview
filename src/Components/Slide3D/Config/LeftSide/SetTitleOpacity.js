@@ -18,7 +18,7 @@ function SetTitleOpacity(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title ] Opacity
+        [ Title ] Opacity : {titleOpacity}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

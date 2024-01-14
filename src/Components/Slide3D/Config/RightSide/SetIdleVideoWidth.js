@@ -18,7 +18,7 @@ function SetIdleVideoWidth(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video ] Idle Video Width
+        [ Video ] Idle Video Width : {idleVideoWidth}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

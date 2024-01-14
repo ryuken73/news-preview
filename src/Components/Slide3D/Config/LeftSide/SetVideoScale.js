@@ -18,7 +18,7 @@ function SetVideoScale(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Video Scale (default = 2)
+        [ Global ] Video Scale (default = 2) : {videoScale}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

@@ -18,7 +18,7 @@ function SetButtonFontSize(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Font Size
+        [ Video Title Bar ] Font Size : {buttonFontSize}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

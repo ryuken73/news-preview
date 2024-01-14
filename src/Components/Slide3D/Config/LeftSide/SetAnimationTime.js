@@ -18,7 +18,7 @@ function SetAnimationTime(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Animation Time (seconds)
+        [ Global ] Animation Time (seconds) : {animationTime}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

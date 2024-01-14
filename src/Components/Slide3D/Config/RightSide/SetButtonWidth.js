@@ -18,7 +18,7 @@ function SetButtonWidth(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Width
+        [ Video Title Bar ] Width : {buttonWidth}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

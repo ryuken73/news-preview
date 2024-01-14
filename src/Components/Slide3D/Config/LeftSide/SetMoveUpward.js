@@ -18,7 +18,7 @@ function SetMoveUpward(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Move Upward (px)
+        [ Global ] Move Upward (px) : {moveUpward}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"
