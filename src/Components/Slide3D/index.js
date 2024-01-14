@@ -462,7 +462,13 @@ function Slide3D(props) {
       itemRef.addEventListener('canplay', () => {
         const mediaStream = itemRef.captureStream(0);
         itemMirrorsRef.current[i].srcObject = mediaStream;
-        itemMirrorsRef.current[i].play();
+        itemMirrorsRef.current[i].play()
+        .then(() => {
+          console.log('auto play done');
+        })
+        .catch((err) => {
+          console.log('play error:', err)
+        })
         console.log(itemMirrorsRef.current[i], mediaStream)
       });
     })
