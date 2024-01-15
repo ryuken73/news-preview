@@ -444,6 +444,7 @@ function Slide3D(props) {
         videoContainerRef.style.transition = `transform ${ANIMATION_SECONDS}s`;
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
+      resetFilterFromAllPlayer();
     })
   }, [config.stackOpacity])
 
@@ -761,10 +762,17 @@ function Slide3D(props) {
     player?.pause();
   }, [])
 
+  const resetFilterFromAllPlayer = React.useCallback(() => {
+    itemsRef.current.forEach((player) => {
+      player.style.filter = '';
+    })
+  }, [])
+
   const setStandby = React.useCallback(() => {
     dragRef.current.style.transition = 'transform 1s';
     // dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
     dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
+    resetFilterFromAllPlayer();
   }, [config.degreeOfLast])
 
   const onClickButton = React.useCallback(async (event) => {
@@ -1033,7 +1041,7 @@ function Slide3D(props) {
               <Button 
                 style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
                 onClick={unFoldPlayer}
-              >Unfold</Button>
+              >Standby</Button>
             ):(
               <Button 
                 className={CLASS_FOR_POINTER_EVENT_FREE} 
