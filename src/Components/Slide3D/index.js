@@ -217,8 +217,11 @@ const Item = styled.video`
   line-height: 200px;
   font-size: 50px;
   text-align: center;
-  -webkit-box-shadow: 0 0 1px #fff;
-  box-shadow: 0 0 1px #fff;
+  -webkit-box-shadow: ${props => props.isActive ? '0 0 2px #fffd': '0 0 1px #fff'};
+  box-shadow: ${props => props.isActive ? '0 0 2px #fffd': '0 0 1px #fff'};
+  /* box-shadow: 0 0 1px #fff; */
+  /* -webkit-box-shadow: 0 0 15px #fffd; */
+  /* box-shadow: 0 0 15px #fffd; */
   box-sizing: border-box;
   outline: 4px rgba(255,255,255,0.6) solid;
   outline-offset: -2px;
@@ -798,7 +801,7 @@ function Slide3D(props) {
       console.log('event: Force Quit: clicked already Scaled Up element');
       pauseById(currentPlayer, targetId)
       if(config.greyForDoneItem){
-        currentPlayer.style.filter = 'grayscale(1) brightness(50%)';
+        currentPlayer.style.filter = 'grayscale(1) brightness(30%)';
       }
       await scaleDown(videoContainer);
       // await moveFront(spinContainer, targetId, -2);
@@ -818,7 +821,7 @@ function Slide3D(props) {
       const scaledPlayer = itemsRef.current[currentScaledUpId];
       pauseById(scaledPlayer, currentScaledUpId);
       if(config.greyForDoneItem){
-        scaledPlayer.style.filter = 'grayscale(1) brightness(50%)';
+        scaledPlayer.style.filter = 'grayscale(1) brightness(30%)';
       }
       await scaleDown(scaledContainer)
     }
@@ -967,6 +970,7 @@ function Slide3D(props) {
                 itemIndex={i}
                 itemLength={db.length}
                 radius={config.radius}
+                isActive={i === parseInt(activeIdState)}
               >
               </Item>
               <ItemMirror
