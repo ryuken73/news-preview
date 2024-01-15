@@ -7,6 +7,7 @@ import vBarImage from '../../assets/images/vBar.png';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ConfigDialog from './Config/ConfigDialog';
+import SetRotationSpeed from './Config/SetRotationSpeed';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -34,7 +35,7 @@ const spin = keyframes`
 `
 const spinStyle = css`
   animation-name: ${spin};
-  animation-duration: 60s;
+  /* animation-duration: 60s; */
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 `
@@ -90,6 +91,7 @@ const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
   height: ${props => `${props.height}px`};
   ${props => props.autoRotate && spinStyle};
+  animation-duration: ${props => `${props.rotationTime}s`};
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
   filter: ${props => `brightness(${props.stackOpacity})`};
   /* filter: brightness(0.2); */
@@ -941,6 +943,7 @@ function Slide3D(props) {
           animationPaused={animationPaused}
           width={config.idleVideoWidth} 
           height={idleVideoHeight}
+          rotationTime={config.rotationTime}
         >
           {db.map((item, i) => (
             <VideoContainer
@@ -1013,6 +1016,11 @@ function Slide3D(props) {
       </Container>
       <ControlContainer width={config.buttonWidth}>
           <Buttons show={config.useTitleBar}>
+            <SetRotationSpeed
+              className={CLASS_FOR_POINTER_EVENT_FREE} 
+              updateConfig={updateConfig}
+              config={config}
+            ></SetRotationSpeed>
             {db.map((item, i) => (
               <Button 
                 key={item.id} 
