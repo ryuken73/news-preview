@@ -90,7 +90,8 @@ const SpinContainer = styled(Container)`
   height: ${props => `${props.height}px`};
   ${props => props.autoRotate && spinStyle};
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
-  filter: brightness(0.2);
+  filter: ${props => `brightness(${props.stackOpacity})`};
+  /* filter: brightness(0.2); */
   /* margin-bottom: 100px; */
 `
 const VideoContainer = styled.div`
@@ -300,6 +301,7 @@ const INITIAL_CONFIG = {
   moveUpward: 0,
   scaleOrigin: 300,
   startWithStacked: true,
+  stackOpacity: 1,
   degreeOfLast: 10,
   videoScale: 2,
   idleVideoWidth: 640,
@@ -450,10 +452,11 @@ function Slide3D(props) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         console.log('event: end')
+        setAutoRotate(false);
         resolve(true)
       }, ANIMATION_MILLI_SECONDS + 800)
       console.log('event: start')
-      spinRef.current.style.filter = 'brightness(0.2)';
+      spinRef.current.style.filter = `brightness(${config.stackOpacity})`;
       videoContaiersRef.current.forEach((videoContainerRef,i) => {
         console.log('remove animation', videoContainerRef)
         if(videoContainerRef === null) return;
@@ -462,7 +465,7 @@ function Slide3D(props) {
         videoContainerRef.style.transitionDelay = `${(db.length - i)/4}s`
       })
     })
-  })
+  }, [config.stackOpacity])
 
   React.useEffect(() => {
     console.log('db.length=', db.length, videoContaiersRef.current);
@@ -940,6 +943,7 @@ function Slide3D(props) {
       > 
         <SpinContainer 
           ref={spinRef}
+          stackOpacity={config.stackOpacity}
           autoRotate={config.autoRotate}
           animationPaused={animationPaused}
           width={config.idleVideoWidth} 
