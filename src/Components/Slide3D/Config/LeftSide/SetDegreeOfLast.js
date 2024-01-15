@@ -18,7 +18,7 @@ function SetDegreeOfLast(props) {
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Degree After Last Item : {degreeOfLast}
+        [ Global ] Degree for Standby  : {degreeOfLast}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

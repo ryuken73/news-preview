@@ -782,6 +782,12 @@ function Slide3D(props) {
     player?.pause();
   }, [])
 
+  const setStandby = React.useCallback(() => {
+    dragRef.current.style.transition = 'transform 1s';
+    // dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
+    dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
+  }, [config.degreeOfLast])
+
   const onClickButton = React.useCallback(async (event) => {
     if(underTransition){
       return;
@@ -807,9 +813,7 @@ function Slide3D(props) {
       enableAutoRotate();
       const isLastItem = parseInt(targetId) === db.length - 1;
       if(isLastItem){
-        const dragRefTransformStr = dragRef.current.style.transform;
-        dragRef.current.style.transition = 'transform 1s';
-        dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
+        setStandby();
       }
       return;
     }
@@ -846,6 +850,7 @@ function Slide3D(props) {
     playById, 
     scaleDown, 
     scaleUp,
+    setStandby,
     underTransition,
     config
   ])
@@ -1045,11 +1050,17 @@ function Slide3D(props) {
               className={CLASS_FOR_POINTER_EVENT_FREE}
               onClick={toggleDialogOpen}
             ></CustomSettingIcon>
-            {config.startWithStacked && (
+            {config.startWithStacked ? (
               <Button 
                 style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
                 onClick={unFoldPlayer}
               >Unfold</Button>
+            ):(
+              <Button 
+                className={CLASS_FOR_POINTER_EVENT_FREE} 
+                style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
+                onClick={setStandby}
+              >Standby</Button>
             )}
             {mirrorErr && (
               <Button 
