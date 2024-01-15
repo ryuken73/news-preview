@@ -775,6 +775,9 @@ function Slide3D(props) {
     // dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
     dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
     resetFilterFromAllPlayer();
+    setTimeout(() => {
+      dragRef.current.style.transition = 'none';
+    }, 1000);
   }, [config.degreeOfLast])
 
   const onClickButton = React.useCallback(async (event) => {
