@@ -15,8 +15,8 @@ function SetButtonWidth(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
-        id="demo-row-radio-buttons-group-label"
+        sx={{ color: 'lightgoldenrodyellow' }}
+        id="demo-row-ru-buttons-group-label"
       >
         [ Video Title Bar ] Width : {buttonWidth}
       </FormLabel>

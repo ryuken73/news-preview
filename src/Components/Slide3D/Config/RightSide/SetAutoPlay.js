@@ -17,7 +17,7 @@ function SetAutoPlay(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
         [ Video ] Enable Auto Next

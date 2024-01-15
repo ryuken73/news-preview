@@ -15,7 +15,7 @@ function SetButtonFontSize(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
         [ Video Title Bar ] Font Size : {buttonFontSize}

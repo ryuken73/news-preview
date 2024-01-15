@@ -17,10 +17,10 @@ function SetVideoGreyWhenDone(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video ] Grey For Done Video
+        [ Video ] Grey After Ending 
       </FormLabel>
       <RadioGroup
         row

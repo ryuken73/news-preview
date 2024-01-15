@@ -17,7 +17,7 @@ function SetSeekZero(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
         [ Video ] Rewind at The End of Clip

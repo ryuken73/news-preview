@@ -15,10 +15,10 @@ function SetTitleFontWeight(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title ] Font Weight : {titleFontWeight}
+        [ Title List ] Font Weight : {titleFontWeight}
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

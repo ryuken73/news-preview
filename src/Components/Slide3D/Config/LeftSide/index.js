@@ -25,10 +25,10 @@ function LeftSide(props) {
         <SetMoveUpward config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetScaleOrigin config={config} updateConfig={updateConfig} />
+        <SetVideoScale config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
-        <SetVideoScale config={config} updateConfig={updateConfig} />
+        <SetScaleOrigin config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetItemRadius config={config} updateConfig={updateConfig} runInitialAnimation={runInitialAnimation} />
@@ -39,6 +39,7 @@ function LeftSide(props) {
       <DialogContentText sx={{ color: 'white' }}>
         <SetStartWithStacked config={config} updateConfig={updateConfig} />
       </DialogContentText>
+      <p></p>
       <DialogContentText sx={{ color: 'white' }}>
         <SetTitleType config={config} updateConfig={updateConfig} />
       </DialogContentText>

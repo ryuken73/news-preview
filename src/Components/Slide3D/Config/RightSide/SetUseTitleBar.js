@@ -17,7 +17,7 @@ function SetUseTitleBar(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
         [ Video Title Bar ] Show (on the Right Side)

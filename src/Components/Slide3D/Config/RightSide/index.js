@@ -23,6 +23,7 @@ function RightSide(props) {
       <DialogContentText sx={{ color: 'white' }}>
         <SetButtonWidth config={config} updateConfig={updateConfig} />
       </DialogContentText>
+      <p></p>
       <DialogContentText sx={{ color: 'white' }}>
         <SetSeekZero config={config} updateConfig={updateConfig} />
       </DialogContentText>

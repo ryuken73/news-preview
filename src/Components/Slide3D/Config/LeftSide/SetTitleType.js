@@ -17,10 +17,10 @@ function SetTitleType(props) {
   return (
     <FormControl>
       <FormLabel
-        sx={{ color: 'yellow' }}
+        sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title ] Type 
+        [ Title List ] Type 
       </FormLabel>
       <RadioGroup
         row
