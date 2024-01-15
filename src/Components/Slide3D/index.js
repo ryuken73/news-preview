@@ -338,6 +338,7 @@ function Slide3D(props) {
   const [currentScaledUpId, setCurrentScaledUpId] = React.useState(null);
   const [onTransition, setOnTransition] = React.useState(false);
   const [underTransition, setUnderTransition] = React.useState(false);
+  const [mirrorErr, setMirrorErr] = React.useState(false);
 
   const [configDialogOpen, setConfigDialogOpen] = React.useState(false);
   const [config, setConfig] = React.useState(INITIAL_CONFIG);
@@ -486,6 +487,7 @@ function Slide3D(props) {
         })
         .catch((err) => {
           console.log('play error:', err)
+          setMirrorErr(true);
         })
         console.log(itemMirrorsRef.current[i], mediaStream)
       });
@@ -509,6 +511,24 @@ function Slide3D(props) {
     onPlay, 
     runInitialAnimation
   ])
+
+  const mirrorPlayer = React.useCallback(() => {
+    setMirrorErr(false);
+    itemsRef.current.forEach((itemRef, i) => {
+      if(itemRef === null) return;
+      const mediaStream = itemRef.captureStream(0);
+      itemMirrorsRef.current[i].srcObject = mediaStream;
+      itemMirrorsRef.current[i].play()
+      .then(() => {
+        console.log('auto play done');
+      })
+      .catch((err) => {
+        console.log('play error:', err)
+        setMirrorErr(true);
+      })
+      console.log(itemMirrorsRef.current[i], mediaStream)
+    });
+  }, []);
 
   console.log('current playing Id = ', currentPlayingId)
 
@@ -1016,6 +1036,14 @@ function Slide3D(props) {
             style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
             onClick={unFoldPlayer}
           >Unfold</Button>
+          {mirrorErr && (
+            <Button 
+              style={{color: 'red', opacity:1, fontSize: '15px'}}
+              onClick={mirrorPlayer}
+            >
+              Turn On Reflect All
+            </Button>
+          )}
             {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
             <Button>{onTransition ? 'T':'F'}</Button> */}
           </Buttons>
