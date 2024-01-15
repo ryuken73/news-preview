@@ -8,6 +8,7 @@ import SetVideoScale from './SetVideoScale';
 import SetItemRadius from './SetItemRadius';
 import SetAnimationTime from './SetAnimationTime';
 import SetStartWithStacked from './SetStartWithStacked';
+import SetDegreeOfLast from './SetDegreeOfLast';
 
 import SetTitleType from './SetTitleType';
 import SetTitleFontSize from './SetTitleFontSize';
@@ -38,6 +39,9 @@ function LeftSide(props) {
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetStartWithStacked config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetDegreeOfLast config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <p></p>
       <DialogContentText sx={{ color: 'white' }}>

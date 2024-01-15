@@ -300,6 +300,7 @@ const INITIAL_CONFIG = {
   moveUpward: 0,
   scaleOrigin: 300,
   startWithStacked: true,
+  degreeOfLast: 10,
   videoScale: 2,
   idleVideoWidth: 640,
   greyForDoneItem: true,
@@ -804,7 +805,7 @@ function Slide3D(props) {
       if(isLastItem){
         const dragRefTransformStr = dragRef.current.style.transform;
         dragRef.current.style.transition = 'transform 1s';
-        dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, 'rotateX(-10deg)');
+        dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
       }
       return;
     }
@@ -1038,18 +1039,20 @@ function Slide3D(props) {
               className={CLASS_FOR_POINTER_EVENT_FREE}
               onClick={toggleDialogOpen}
             ></CustomSettingIcon>
-          <Button 
-            style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
-            onClick={unFoldPlayer}
-          >Unfold</Button>
-          {mirrorErr && (
-            <Button 
-              style={{color: 'red', opacity:1, fontSize: '15px'}}
-              onClick={mirrorPlayer}
-            >
-              Turn On Reflect All
-            </Button>
-          )}
+            {config.startWithStacked && (
+              <Button 
+                style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
+                onClick={unFoldPlayer}
+              >Unfold</Button>
+            )}
+            {mirrorErr && (
+              <Button 
+                style={{color: 'red', opacity:1, fontSize: '15px'}}
+                onClick={mirrorPlayer}
+              >
+                Turn On Reflect All
+              </Button>
+            )}
             {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
             <Button>{onTransition ? 'T':'F'}</Button> */}
           </Buttons>
