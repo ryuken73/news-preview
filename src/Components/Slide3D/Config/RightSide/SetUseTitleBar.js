@@ -4,6 +4,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {useTitleBar:defaultValue} = defaultConfig;
 
 function SetUseTitleBar(props) {
   const { config, updateConfig } = props;
@@ -14,13 +18,16 @@ function SetUseTitleBar(props) {
     },
     [updateConfig]
   );
+  const currentVaue = useTitleBar;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Show (on the Right Side)
+        [ Video Title Bar ] Show (on the Right Side) :
+        <CustomSpan isSame={isSame}>{currentVaue.toString()}</CustomSpan> ({defaultValue.toString()})
       </FormLabel>
       <RadioGroup
         row

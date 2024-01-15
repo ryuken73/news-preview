@@ -4,6 +4,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {autoPlay:defaultValue} = defaultConfig;
 
 function SetAutoPlay(props) {
   const { config, updateConfig } = props;
@@ -14,13 +18,16 @@ function SetAutoPlay(props) {
     },
     [updateConfig]
   );
+  const currentVaue = autoPlay;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video ] Enable Auto Next
+        [ Video ] Enable Auto Next :
+        <CustomSpan isSame={isSame}>{currentVaue.toString()}</CustomSpan> ({defaultValue.toString()})
       </FormLabel>
       <RadioGroup
         row

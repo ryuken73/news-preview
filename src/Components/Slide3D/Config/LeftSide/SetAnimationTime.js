@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {animationTime:animationDefault} = defaultConfig;
 
 function SetAnimationTime(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,15 @@ function SetAnimationTime(props) {
     },
     [updateConfig]
   );
+  const isSame = animationDefault === animationTime;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Animation Time (seconds) : {animationTime}
+        [ Global ] Animation Time (seconds) : 
+        <CustomSpan isSame={isSame}>{animationTime}</CustomSpan> ({animationDefault})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

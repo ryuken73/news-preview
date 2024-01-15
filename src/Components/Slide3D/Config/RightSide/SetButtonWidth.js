@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {buttonWidth:defaultValue} = defaultConfig;
 
 function SetButtonWidth(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,16 @@ function SetButtonWidth(props) {
     },
     [updateConfig]
   );
+  const currentVaue = buttonWidth;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-ru-buttons-group-label"
       >
-        [ Video Title Bar ] Width : {buttonWidth}
+        [ Video Title Bar ] Width : 
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {idleVideoWidth:defaultValue} = defaultConfig;
 
 function SetIdleVideoWidth(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,16 @@ function SetIdleVideoWidth(props) {
     },
     [updateConfig]
   );
+  const currentVaue = idleVideoWidth;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video ] Idle Video Width : {idleVideoWidth}
+        [ Video ] Idle Video Width : 
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

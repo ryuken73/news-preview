@@ -4,6 +4,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {seekZeroOnPlayEnd:defaultValue} = defaultConfig;
 
 function SetSeekZero(props) {
   const { config, updateConfig } = props;
@@ -14,13 +18,16 @@ function SetSeekZero(props) {
     },
     [updateConfig]
   );
+  const currentVaue = seekZeroOnPlayEnd;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightblue' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video ] Rewind at The End of Clip
+        [ Video ] Rewind at The End of Clip :
+        <CustomSpan isSame={isSame}>{currentVaue.toString()}</CustomSpan> ({defaultValue.toString()})
       </FormLabel>
       <RadioGroup
         row

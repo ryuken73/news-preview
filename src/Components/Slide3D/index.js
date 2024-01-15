@@ -10,6 +10,7 @@ import ConfigDialog from './Config/ConfigDialog';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import defaultConfig from './Config/defaultConfig';
 
 const spinRandom = keyframes`
   from {
@@ -295,29 +296,7 @@ const rotateSpeed = 60; // unit: seconds/360 degrees
 const imgWidth = 640; // width of images (unit: px)
 const imgHeight = 360; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
-const INITIAL_CONFIG = {
-  radius: 600,
-  autoRotate: true,
-  autoRotateInSetting: true,
-  moveUpward: 0,
-  scaleOrigin: 300,
-  startWithStacked: true,
-  stackOpacity: 1,
-  degreeOfLast: 10,
-  videoScale: 2,
-  idleVideoWidth: 640,
-  greyForDoneItem: true,
-  useTitleBar: true,
-  buttonFontSize: 30,
-  buttonWidth: 200,
-  autoPlay: false,
-  seekZeroOnPlayEnd: false,
-  titleType: 'fullWidth',
-  titleFontSize: 25,
-  titleFontWeight: 500,
-  titleOpacity: 1,
-  animationTime: 0.6
-}
+const INITIAL_CONFIG = defaultConfig; 
 
 const makePlayerFront = (element, degree) => {
   element.style.transform = `rotateX(0deg) rotateY(${degree * -1}deg)`

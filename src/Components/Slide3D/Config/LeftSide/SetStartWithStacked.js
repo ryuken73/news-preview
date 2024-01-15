@@ -5,6 +5,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {startWithStacked:defaultStartWithStacked} = defaultConfig;
+const {stackOpacity:defaultStackOpacity} = defaultConfig;
 
 function SetAutoRotate(props) {
   const { config, updateConfig } = props;
@@ -21,14 +26,18 @@ function SetAutoRotate(props) {
     },
     [updateConfig]
   );
-
+  const currentStartWithStacked = startWithStacked;
+  const currentStackOpacity = stackOpacity;
+  const isSameStacked = defaultStartWithStacked === startWithStacked;
+  const isSameOpacity = defaultStackOpacity === stackOpacity;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Start With Video Stacked
+        [ Global ] Start With Video Stacked :
+        <CustomSpan isSame={isSameStacked}>{currentStartWithStacked.toString()}</CustomSpan> ({defaultStartWithStacked.toString()})
       </FormLabel>
       <RadioGroup
         row
@@ -46,7 +55,8 @@ function SetAutoRotate(props) {
             sx={{ color: 'yellow' }}
             id="demo-row-radio-buttons-group-label"
           >
-            [ ----- ] Initial Opacity  : {stackOpacity}
+            [ ----- ] Initial Opacity  : 
+            <CustomSpan isSame={isSameOpacity}>{currentStackOpacity}</CustomSpan> ({defaultStackOpacity})
           </FormLabel>
           <Slider
             aria-label="swipeThreshold"

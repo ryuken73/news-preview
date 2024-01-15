@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {degreeOfLast:degreeOfLastDefault} = defaultConfig;
 
 function SetDegreeOfLast(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,15 @@ function SetDegreeOfLast(props) {
     },
     [updateConfig]
   );
+  const isSame = degreeOfLast === degreeOfLastDefault;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Degree for Standby  : {degreeOfLast}
+        [ Global ] Degree for Standby  : 
+        <CustomSpan isSame={isSame}>{degreeOfLast}</CustomSpan> ({degreeOfLastDefault})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

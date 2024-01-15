@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {titleOpacity:defaultValue} = defaultConfig;
 
 function SetTitleOpacity(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,16 @@ function SetTitleOpacity(props) {
     },
     [updateConfig]
   );
+  const currentVaue = titleOpacity;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Opacity : {titleOpacity}
+        [ Title List ] Opacity : 
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

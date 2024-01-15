@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {radius:defaultValue} = defaultConfig;
 
 function SetItemRadius(props) {
   const { config, updateConfig, runInitialAnimation } = props;
@@ -13,13 +17,16 @@ function SetItemRadius(props) {
     },
     [runInitialAnimation, updateConfig]
   );
+  const currentVaue = radius;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Rotate Radius : {radius}
+        [ Global ] Rotate Radius : 
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

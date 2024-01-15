@@ -4,6 +4,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {autoRotate:autoRotateDefault} = defaultConfig;
 
 function SetAutoRotate(props) {
   const { config, updateConfig } = props;
@@ -15,13 +19,15 @@ function SetAutoRotate(props) {
     },
     [updateConfig]
   );
+  const isSame = autoRotate === autoRotateDefault;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'yellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Global ] Enable Auto Rotate
+        [ Global ] Enable Auto Rotate :
+        <CustomSpan isSame={isSame}>{autoRotate.toString()}</CustomSpan> ({autoRotateDefault.toString()})
       </FormLabel>
       <RadioGroup
         row

@@ -2,6 +2,10 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Slider from '@mui/material/Slider';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {buttonFontSize:defaultValue} = defaultConfig;
 
 function SetButtonFontSize(props) {
   const { config, updateConfig } = props;
@@ -12,13 +16,16 @@ function SetButtonFontSize(props) {
     },
     [updateConfig]
   );
+  const currentVaue = buttonFontSize;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Font Size : {buttonFontSize}
+        [ Video Title Bar ] Font Size : 
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider
         aria-label="swipeThreshold"

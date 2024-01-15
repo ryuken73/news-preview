@@ -4,6 +4,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import defaultConfig from '../defaultConfig';
+import CustomSpan from '../CustomSpan';
+
+const {titleType:defaultValue} = defaultConfig;
 
 function SetTitleType(props) {
   const { config, updateConfig } = props;
@@ -14,13 +18,16 @@ function SetTitleType(props) {
     },
     [updateConfig]
   );
+  const currentVaue = titleType;
+  const isSame = defaultValue === currentVaue;
   return (
     <FormControl>
       <FormLabel
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Type 
+        [ Title List ] Type :
+        <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <RadioGroup
         row
