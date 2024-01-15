@@ -800,6 +800,12 @@ function Slide3D(props) {
       // await moveFront(spinContainer, targetId, -2);
       setUnderTransition(false);
       enableAutoRotate();
+      const isLastItem = parseInt(targetId) === db.length - 1;
+      if(isLastItem){
+        const dragRefTransformStr = dragRef.current.style.transform;
+        dragRef.current.style.transition = 'transform 1s';
+        dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, 'rotateX(-10deg)');
+      }
       return;
     }
     if(clickedWhenOtherScaledUp){
