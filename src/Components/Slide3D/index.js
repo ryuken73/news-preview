@@ -217,8 +217,8 @@ const Item = styled.video`
   line-height: 200px;
   font-size: 50px;
   text-align: center;
-  -webkit-box-shadow: ${props => props.isActive ? '0 0 2px #fffd': '0 0 1px #fff'};
-  box-shadow: ${props => props.isActive ? '0 0 2px #fffd': '0 0 1px #fff'};
+  -webkit-box-shadow: ${props => props.isActive ? '0 0 2px #fff': '0 0 1px #fff'};
+  box-shadow: ${props => props.isActive ? '0 0 2px #fff': '0 0 1px #fff'};
   /* box-shadow: 0 0 1px #fff; */
   /* -webkit-box-shadow: 0 0 15px #fffd; */
   /* box-shadow: 0 0 15px #fffd; */
@@ -227,12 +227,10 @@ const Item = styled.video`
   outline-offset: -2px;
   /* -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005); */
-  &:hover {
+  /* &:hover {
     -webkit-box-shadow: 0 0 15px #fffd;
     box-shadow: 0 0 15px #fffd;
-    /* -webkit-box-reflect: below 10px
-      linear-gradient(transparent, transparent, #0007); */
-  }
+  } */
 `
 const Ground = styled.div`
   width: ${props => `${props.width}px`};
