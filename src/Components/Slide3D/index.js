@@ -132,7 +132,8 @@ const VideoTitle = styled.div`
   position: absolute;
   top: 0px;
   background: white;
-  color: #595959;
+  /* color: #595959; */
+  color: black;
   opacity: 1;
   letter-spacing: -1px;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
