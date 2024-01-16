@@ -13,7 +13,7 @@ const {stackOpacity:defaultStackOpacity} = defaultConfig;
 
 function SetAutoRotate(props) {
   const { config, updateConfig } = props;
-  const { startWithStacked = true, stackOpacity = 1 } = config;
+  const { startWithStacked = false, stackOpacity = 1 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
       updateConfig('startWithStacked', value === 'yes');

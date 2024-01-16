@@ -337,6 +337,7 @@ function Slide3D(props) {
   const buttonsRef = React.useRef([]);
   const timerRef = React.useRef();
   const eventTimerRef = React.useRef(null);
+  const initAnimationRef = React.useRef(null);
   const startXY = React.useRef({x:0, y:0});
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
@@ -366,21 +367,22 @@ function Slide3D(props) {
   }, [saveToLocalStorage])
 
   const setAutoRotate = React.useCallback((autoRotate) => {
-    if(!config.autoRotateInSetting){
+    // if(!config.autoRotateInSetting){
       // if autoRotate is disable by setting, skip action
-      return;
-    }
-    console.log('### enable autoRotate')
+      // return;
+    // }
+    console.log('### set autoRotate:', autoRotate)
     setConfig(config => {
       return {
         ...config,
         autoRotate
       }
     })
-  }, [config.autoRotateInSetting])
+  }, [])
 
   // initialize config from localStorage
   React.useEffect(() => {
+    console.log('load from localStorage to config:', storedValue)
     setConfig(storedValue)
   }, [storedValue])
 
@@ -451,10 +453,12 @@ function Slide3D(props) {
   }, [config.stackOpacity])
 
   React.useEffect(() => {
-    console.log('db.length=', db.length, videoContaiersRef.current);
-    setTimeout(() =>{
+    console.log('db.length=', db.length, config.startWithStacked);
+    clearTimeout(initAnimationRef.current);
+    initAnimationRef.current = setTimeout(() =>{
       console.log('apply animation', config.startWithStacked)
       if(config.startWithStacked) {
+        console.log('startWithStacked enabled! stop autoRotate')
         setAutoRotate(false);
         return;
       }

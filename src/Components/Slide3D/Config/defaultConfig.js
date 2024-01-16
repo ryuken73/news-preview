@@ -4,7 +4,7 @@ const defaultConfig = {
   autoRotateInSetting: true,
   moveUpward: 0,
   scaleOrigin: 300,
-  startWithStacked: true,
+  startWithStacked: false,
   stackOpacity: 1,
   degreeOfLast: 10,
   videoScale: 2,
