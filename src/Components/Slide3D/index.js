@@ -68,6 +68,7 @@ const Container = styled.div`
 const ControlContainer = styled.div`
   display: flex;
   width: ${props => `${props.width}px`};
+  z-index: 10;
 `
 const Buttons = styled.div`
   display: ${props => !props.show && 'none'};
@@ -885,8 +886,12 @@ function Slide3D(props) {
       startXY.current.x = e.clientX;
       startXY.current.y = e.clientY;
       parentRef.current.onpointermove = (e) => {
-        const moveElement = document.elementFromPoint(e.clientX, e.clientY);
-        const ignoreEvent = moveElement.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        const moveElement = document.elementsFromPoint(e.clientX, e.clientY);
+        console.log(e.clientX, e.clientY, moveElement)
+        // const ignoreEvent = moveElement.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        const ignoreEvent = moveElement.some((element) => {
+          return element.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        })
         if(ignoreEvent) {
           return;
         }
@@ -904,9 +909,13 @@ function Slide3D(props) {
         startXY.current.y = nY;
       }
       parentRef.current.onpointerup = (e) => {
-        const upElement = document.elementFromPoint(e.clientX, e.clientY);
+        const upElement = document.elementsFromPoint(e.clientX, e.clientY);
         console.log('upElement:', upElement)
-        const ignoreEvent = upElement.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        console.log(e.clientX, e.clientY, upElement)
+        // const ignoreEvent = upElement.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        const ignoreEvent = upElement.some((element) => {
+          return element.classList.contains(CLASS_FOR_POINTER_EVENT_FREE);
+        })
         if(ignoreEvent) {
           parentRef.current.onpointermove = parentRef.current.onpointerup = null
           return;
@@ -1022,8 +1031,14 @@ function Slide3D(props) {
         </SpinContainer>
         <Ground width={config.radius*3} height={config.radius*3}></Ground>
       </Container>
-      <ControlContainer width={config.buttonWidth}>
-          <Buttons show={config.useTitleBar}>
+      <ControlContainer
+        className={CLASS_FOR_POINTER_EVENT_FREE}
+        width={config.buttonWidth}
+      >
+          <Buttons
+            className={CLASS_FOR_POINTER_EVENT_FREE}
+            show={config.useTitleBar}
+          >
             <SetRotationSpeed
               className={CLASS_FOR_POINTER_EVENT_FREE} 
               updateConfig={updateConfig}
@@ -1067,6 +1082,7 @@ function Slide3D(props) {
             )}
             {mirrorErr && (
               <Button 
+                className={CLASS_FOR_POINTER_EVENT_FREE}
                 style={{color: 'red', opacity:1, fontSize: '15px'}}
                 onClick={mirrorPlayer}
               >
