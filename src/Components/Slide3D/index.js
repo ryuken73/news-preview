@@ -58,8 +58,10 @@ const Container = styled.div`
   margin: auto;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-transform: rotateX(-0.1deg) rotateY(0deg);
-  transform: rotateX(-0.1deg) rotateY(0deg);
+  /* -webkit-transform: rotateX(-0.1deg) rotateY(0deg);
+  transform: rotateX(-0.1deg) rotateY(0deg); */
+  -webkit-transform: rotateX(0deg) rotateY(0deg);
+  transform: rotateX(0deg) rotateY(0deg);
   /* transition: transform 0.6s; */
   width: 100%;
   height: 100%;
@@ -154,12 +156,19 @@ const VideoTitle = styled.div`
   border-bottom-right-radius: ${props => props.titleType === 'center' && '10px'};
   left: ${props => props.titleType === 'center' && '50%'};
   transform: ${props => props.titleType === 'center' && 'translate(-50%, 0)'};
+  /* background: linear-gradient(115.7deg, rgb(3, 79, 135) 6.2%, rgb(0, 184, 214) 112.9%); */
+  /* background: linear-gradient(219.3deg, rgb(149, 0, 199) 4.7%, rgb(130, 0, 226) 22.9%, rgb(95, 0, 199) 43.2%, rgb(70, 0, 199) 63.9%, rgb(5, 0, 199) 85.1%, rgb(0, 95, 199) 106.8%); */
+  /* background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%); */
+  /* background: radial-gradient(circle at 74.2% 50.9%, rgb(14, 72, 222) 5.2%, rgb(3, 22, 65) 75.3%); */
+  /* background: linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(0, 143, 213) 93.4%); */
+  /* background: radial-gradient(circle at 85.4% 50.8%, rgb(14, 72, 222) 0%, rgb(3, 22, 65) 74.2%); */
+  /* color: white; */
 `
 const TitleContainer = styled.div`
   position: absolute;
   top: 0px;
-  background: transparent;
-  color: white;
+  /* background: transparent;
+  color: white; */
   opacity: 1;
   width: 100%;
   z-index: ${props => props.zIndex};
@@ -228,8 +237,9 @@ const Item = styled.video`
   /* -webkit-box-shadow: 0 0 15px #fffd; */
   /* box-shadow: 0 0 15px #fffd; */
   box-sizing: border-box;
-  outline: 4px rgba(255,255,255,0.6) solid;
-  outline-offset: -2px;
+  outline: 2px rgba(255,255,255,0.6) solid;
+  /* outline-offset: -2px; */
+
   /* -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005); */
   /* &:hover {
