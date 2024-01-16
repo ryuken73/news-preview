@@ -24,7 +24,7 @@ function SetTitleOpacity(props) {
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Opacity : 
+        [ Title Header ] Opacity : 
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider

@@ -26,7 +26,7 @@ function SetUseTitleBar(props) {
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Show (on the Right Side) :
+        [ Title List ] Show (on the Right Side) :
         <CustomSpan isSame={isSame}>{currentVaue.toString()}</CustomSpan> ({defaultValue.toString()})
       </FormLabel>
       <RadioGroup

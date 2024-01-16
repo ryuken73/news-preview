@@ -24,7 +24,7 @@ function SetTitleFontWeight(props) {
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Font Weight : 
+        [ Title Header ] Font Weight : 
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider

@@ -24,7 +24,7 @@ function SetButtonFontSize(props) {
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Video Title Bar ] Font Size : 
+        [ Title List ] Font Size : 
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider

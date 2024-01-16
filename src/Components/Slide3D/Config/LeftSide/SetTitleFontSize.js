@@ -24,7 +24,7 @@ function SetTitleFontSize(props) {
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Font Size : 
+        [ Title Header ] Font Size : 
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider

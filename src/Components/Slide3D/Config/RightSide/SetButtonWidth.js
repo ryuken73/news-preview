@@ -24,7 +24,7 @@ function SetButtonWidth(props) {
         sx={{ color: 'lightgoldenrodyellow' }}
         id="demo-row-ru-buttons-group-label"
       >
-        [ Video Title Bar ] Width : 
+        [ Title List ] Width : 
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <Slider

@@ -26,7 +26,7 @@ function SetTitleType(props) {
         sx={{ color: 'white' }}
         id="demo-row-radio-buttons-group-label"
       >
-        [ Title List ] Type :
+        [ Title Header ] Type :
         <CustomSpan isSame={isSame}>{currentVaue}</CustomSpan> ({defaultValue})
       </FormLabel>
       <RadioGroup
