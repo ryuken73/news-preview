@@ -367,10 +367,10 @@ function Slide3D(props) {
   }, [saveToLocalStorage])
 
   const setAutoRotate = React.useCallback((autoRotate) => {
-    // if(!config.autoRotateInSetting){
+    if(!config.autoRotateInSetting){
       // if autoRotate is disable by setting, skip action
-      // return;
-    // }
+      return;
+    }
     console.log('### set autoRotate:', autoRotate)
     setConfig(config => {
       return {
