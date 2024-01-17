@@ -788,12 +788,22 @@ function Slide3D(props) {
       player.style.filter = '';
     })
   }, [])
+  const setGrayFilterToAllPlayer = React.useCallback(() => {
+    itemsRef.current.forEach((player) => {
+      player.style.filter = 'grayscale(1) brightness(30%)';
+    })
+  }, [])
 
-  const setStandby = React.useCallback(() => {
+  const setStandby = React.useCallback((options) => {
+    const {setAllPlayerGray} = options;
     dragRef.current.style.transition = 'transform 1s';
     // dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
     dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
-    resetFilterFromAllPlayer();
+    if(setAllPlayerGray){
+      setGrayFilterToAllPlayer();
+    } else {
+      resetFilterFromAllPlayer();
+    }
     setTimeout(() => {
       dragRef.current.style.transition = 'none';
     }, 1000);
@@ -824,7 +834,7 @@ function Slide3D(props) {
       enableAutoRotate();
       const isLastItem = parseInt(targetId) === db.length - 1;
       if(isLastItem){
-        setStandby();
+        setStandby({setAllPlayerGray: true});
       }
       return;
     }
