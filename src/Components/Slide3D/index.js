@@ -133,6 +133,7 @@ const Backface = styled.div`
 `
 const titleStyles = [
   'white',
+  'linear-gradient(90deg, rgb(10, 12, 70), rgb(50, 50, 90))',
   'linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(0, 60, 80) 93.4%)',
   'linear-gradient(109.6deg, rgb(20, 30, 48) 11.2%, rgb(36, 59, 85) 91.1%)',
   'linear-gradient(109.6deg, rgba(0, 0, 0, 0.93) 11.2%, rgb(63, 61, 61) 78.9%)',
@@ -834,7 +835,7 @@ function Slide3D(props) {
       enableAutoRotate();
       const isLastItem = parseInt(targetId) === db.length - 1;
       if(isLastItem){
-        setStandby({setAllPlayerGray: true});
+        setStandby({setAllPlayerGray: config.greyForDoneAll})
       }
       return;
     }

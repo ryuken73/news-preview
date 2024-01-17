@@ -10,6 +10,7 @@ const defaultConfig = {
   videoScale: 2,
   idleVideoWidth: 640,
   greyForDoneItem: true,
+  greyForDoneAll: false,
   useTitleBar: true,
   buttonFontSize: 30,
   buttonWidth: 200,

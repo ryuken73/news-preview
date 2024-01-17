@@ -8,6 +8,7 @@ import SetSeekZero from './SetSeekZero';
 import SetAutoPlay from './SetAutoPlay';
 import SetIdleVideoWidth from './SetIdleVideoWidth';
 import SetVideoGreyWhenDone from './SetVideoGreyWhenDone';
+import SetVideoGreyWhenAllDone from './SetVideoGreyWhenAllDone';
 
 function RightSide(props) {
   const {config, updateConfig} = props;
@@ -35,6 +36,9 @@ function RightSide(props) {
       </DialogContentText>
       <DialogContentText sx={{ color: 'white' }}>
         <SetIdleVideoWidth config={config} updateConfig={updateConfig} />
+      </DialogContentText>
+      <DialogContentText sx={{ color: 'white' }}>
+        <SetVideoGreyWhenAllDone config={config} updateConfig={updateConfig} />
       </DialogContentText>
       <p></p>
     </DialogContent>
