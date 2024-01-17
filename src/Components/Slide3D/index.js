@@ -80,10 +80,13 @@ const Buttons = styled.div`
   position: relative;
 `
 const Button = styled.div`
-  margin: 10px;
-  margin-top: 20px;
+  padding: 10px;
+  /* padding-top: 15px; */
+  /* margin: 10px;
+  margin-top: 20px; */
+
   opacity: ${props => props.onTransition && '0.1'};
-  color: ${props => props.isPlaying ? 'yellow' : 'darkslategrey'};
+  color: ${props => props.isPlaying ? 'yellow' : props.isNextItem ? '#272543' : 'darkslategrey'};
   font-size: ${props => `${props.fontSize}px`};
   font-weight: ${props => props.isPlaying ? 200 : 200};
   /* transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'}; */
@@ -1079,6 +1082,7 @@ function Slide3D(props) {
                 onClick={onClickButton}
                 onTransition={underTransition}
                 isPlaying={currentPlayingId == i}
+                isNextItem={parseInt(activeIdState)+1 == i}
               >
                 {item.title}
               </Button>
@@ -1095,13 +1099,22 @@ function Slide3D(props) {
             ></CustomSettingIcon>
             {config.startWithStacked ? (
               <Button 
-                style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
+                style={{
+                  color: 'grey', 
+                  opacity:0.2, 
+                  fontSize: '20px',
+                }}
                 onClick={unFoldPlayer}
               >Standby</Button>
             ):(
               <Button 
                 className={CLASS_FOR_POINTER_EVENT_FREE} 
-                style={{color: 'grey', opacity:0.2, fontSize: '20px'}}
+                style={{
+                  color: 'grey', 
+                  opacity:0.2, 
+                  fontSize: '20px',
+                  marginTop: '20px'
+                }}
                 onClick={setStandby}
               >Standby</Button>
             )}

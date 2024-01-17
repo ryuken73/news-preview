@@ -13,7 +13,11 @@ function SetRotationSpeed(props) {
   );
   const currentVaue = rotationTime;
   return (
-    <FormControl sx={{width: '60%', opacity: 0.2}}>
+    <FormControl sx={{
+      width: '60%', 
+      opacity: 0.2, 
+      marginBottom:"30px"
+    }}>
       <Slider
         aria-label="swipeThreshold"
         value={currentVaue}
