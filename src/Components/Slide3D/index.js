@@ -131,12 +131,22 @@ const Backface = styled.div`
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
 `
+const titleStyles = [
+  'white',
+  'linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(0, 60, 80) 93.4%)',
+  'linear-gradient(109.6deg, rgb(20, 30, 48) 11.2%, rgb(36, 59, 85) 91.1%)',
+  'linear-gradient(109.6deg, rgba(0, 0, 0, 0.93) 11.2%, rgb(63, 61, 61) 78.9%)',
+  'linear-gradient(175deg, rgb(2, 0, 97) 15%, rgb(2, 80, 219) 158.5%)',
+  'radial-gradient(circle at 85.4% 50.8%, rgb(14, 72, 222) 0%, rgb(3, 22, 65) 74.2%)',
+  'linear-gradient(115.7deg, rgb(3, 79, 135) 6.2%, rgb(0, 184, 214) 112.9%)',
+]
 const VideoTitle = styled.div`
   position: absolute;
   top: 0px;
-  background: white;
+  /* background: white; */
   /* color: #595959; */
-  color: black;
+  background: ${props => titleStyles[props.titleStyle-1]};
+  color: ${props => props.titleStyle === "1" ? 'black':'white'};
   opacity: 1;
   letter-spacing: -1px;
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
@@ -156,13 +166,6 @@ const VideoTitle = styled.div`
   border-bottom-right-radius: ${props => props.titleType === 'center' && '10px'};
   left: ${props => props.titleType === 'center' && '50%'};
   transform: ${props => props.titleType === 'center' && 'translate(-50%, 0)'};
-  /* background: linear-gradient(115.7deg, rgb(3, 79, 135) 6.2%, rgb(0, 184, 214) 112.9%); */
-  /* background: linear-gradient(219.3deg, rgb(149, 0, 199) 4.7%, rgb(130, 0, 226) 22.9%, rgb(95, 0, 199) 43.2%, rgb(70, 0, 199) 63.9%, rgb(5, 0, 199) 85.1%, rgb(0, 95, 199) 106.8%); */
-  /* background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%); */
-  /* background: radial-gradient(circle at 74.2% 50.9%, rgb(14, 72, 222) 5.2%, rgb(3, 22, 65) 75.3%); */
-  /* background: linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(0, 143, 213) 93.4%); */
-  /* background: radial-gradient(circle at 85.4% 50.8%, rgb(14, 72, 222) 0%, rgb(3, 22, 65) 74.2%); */
-  /* color: white; */
 `
 const TitleContainer = styled.div`
   position: absolute;
@@ -1007,6 +1010,7 @@ function Slide3D(props) {
                   titleFontWeight={config.titleFontWeight}
                   titleOpacity={config.titleOpacity}
                   titleType={config.titleType}
+                  titleStyle={config.titleStyle}
                 >
                   {config.titleType === 'fullWidth' && (
                     <StyledSpan>
