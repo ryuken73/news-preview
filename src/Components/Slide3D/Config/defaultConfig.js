@@ -17,7 +17,7 @@ const defaultConfig = {
   autoPlay: false,
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
-  titleStyle: '1',
+  titleStyle: '2',
   titleFontSize: 25,
   titleFontWeight: 500,
   titleOpacity: 1,
