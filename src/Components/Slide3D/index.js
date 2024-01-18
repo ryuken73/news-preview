@@ -35,7 +35,6 @@ const spin = keyframes`
 `
 const spinStyle = css`
   animation-name: ${spin};
-  /* animation-duration: 60s; */
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 `
@@ -58,11 +57,8 @@ const Container = styled.div`
   margin: auto;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  /* -webkit-transform: rotateX(-0.1deg) rotateY(0deg);
-  transform: rotateX(-0.1deg) rotateY(0deg); */
   -webkit-transform: rotateX(0deg) rotateY(0deg);
   transform: rotateX(0deg) rotateY(0deg);
-  /* transition: transform 0.6s; */
   width: 100%;
   height: 100%;
   margin-bottom: ${props => props.moveUpward === 0 ? 'auto' : `${props.moveUpward}px`};
@@ -81,15 +77,10 @@ const Buttons = styled.div`
 `
 const Button = styled.div`
   padding: 10px;
-  /* padding-top: 15px; */
-  /* margin: 10px;
-  margin-top: 20px; */
-
   opacity: ${props => props.onTransition && '0.1'};
   color: ${props => props.isPlaying ? 'yellow' : props.isNextItem ? '#272543' : 'darkslategrey'};
   font-size: ${props => `${props.fontSize}px`};
   font-weight: ${props => props.isPlaying ? 200 : 200};
-  /* transform: ${props => props.isPlaying && 'translateX(-3px) scale(1.5)'}; */
   transition: all 0.3s;
   word-break: keep-all;
 `
@@ -100,8 +91,6 @@ const SpinContainer = styled(Container)`
   animation-duration: ${props => `${props.rotationTime}s`};
   animation-play-state: ${props => props.animationPaused ? 'paused':'running'};
   filter: ${props => `brightness(${props.stackOpacity})`};
-  /* filter: brightness(0.2); */
-  /* margin-bottom: 100px; */
 `
 const VideoContainer = styled.div`
   width: 100%;
@@ -110,8 +99,6 @@ const VideoContainer = styled.div`
   left: 0;
   top: 0;
   transform-style: preserve-3d;
-  /* outline: 4px rgba(255,255,255,0.6) solid; */
-  /* outline-offset: -2px; */
   border-radius: 10px;
   transform-origin: ${props => props.scaleOrigin === 300 ? 'center center':`center ${props.scaleOrigin}px`};
 `
@@ -122,15 +109,12 @@ const Backface = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  /* background: black; */
   background-image: url(${backgroundImage});
   background-size: cover;
   opacity: 1;
   border-radius: 10px;
   backface-visibility: hidden;
   transform: rotateY( 180deg );
-  /* -webkit-box-shadow: 0 0 8px #fff; */
-  /* box-shadow: 0 0 8px #fff; */
   -webkit-box-reflect: below 10px
     linear-gradient(transparent, transparent, #0005);
 `
@@ -147,8 +131,6 @@ const titleStyles = [
 const VideoTitle = styled.div`
   position: absolute;
   top: 0px;
-  /* background: white; */
-  /* color: #595959; */
   background: ${props => titleStyles[props.titleStyle-1]};
   color: ${props => props.titleStyle === "1" ? 'black':'white'};
   opacity: 1;
@@ -174,8 +156,6 @@ const VideoTitle = styled.div`
 const TitleContainer = styled.div`
   position: absolute;
   top: 0px;
-  /* background: transparent;
-  color: white; */
   opacity: 1;
   width: 100%;
   z-index: ${props => props.zIndex};
@@ -217,9 +197,6 @@ const ItemMirror = styled.video`
   -webkit-box-shadow: 0 0 1px #fff;
   box-shadow: 0 0 1px #fff;
   box-sizing: border-box;
-  /* outline: 4px rgba(255,255,255,0.6) solid; */
-  /* outline-offset: -2px; */
-  /* transform: translateY(350px) scale(1, -1); */
   transform: ${props => `translateY(${props.gap}px) scale(1, -1)`};
   mask-image: linear-gradient(transparent, transparent, #0007); 
   z-index: -100;
@@ -240,19 +217,8 @@ const Item = styled.video`
   text-align: center;
   -webkit-box-shadow: ${props => props.isActive ? '0 0 2px #fff': '0 0 1px #fff'};
   box-shadow: ${props => props.isActive ? '0 0 2px #fff': '0 0 1px #fff'};
-  /* box-shadow: 0 0 1px #fff; */
-  /* -webkit-box-shadow: 0 0 15px #fffd; */
-  /* box-shadow: 0 0 15px #fffd; */
   box-sizing: border-box;
   outline: 2px rgba(255,255,255,0.6) solid;
-  /* outline-offset: -2px; */
-
-  /* -webkit-box-reflect: below 10px
-    linear-gradient(transparent, transparent, #0005); */
-  /* &:hover {
-    -webkit-box-shadow: 0 0 15px #fffd;
-    box-shadow: 0 0 15px #fffd;
-  } */
 `
 const Ground = styled.div`
   width: ${props => `${props.width}px`};
@@ -262,12 +228,6 @@ const Ground = styled.div`
   left: 50%;
   -webkit-transform: translate(-50%, -50%) rotateX(90deg);
   transform: translate(-50%, -50%) rotateX(90deg);
-  /* background: -webkit-radial-gradient(
-    center center,
-    farthest-side,
-    #9993,
-    transparent
-  ); */
 `
 const CustomRefreshIcon = styled(RefreshIcon)`
   position: absolute;
@@ -313,9 +273,6 @@ const BarImage = styled.img`
   height: 20px;
 `
 // const radius = 800; // how big of the radius
-const rotateSpeed = 60; // unit: seconds/360 degrees
-const imgWidth = 640; // width of images (unit: px)
-const imgHeight = 360; // height of images (unit: px)
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
 const INITIAL_CONFIG = defaultConfig; 
 
@@ -329,18 +286,14 @@ const removeTransition = element => {
 // const AUTO_PLAY = true;
 const USE_STATIC_TY = false;
 const TY = 10;
-const ANIMATION_SECONDS = 0.6;
-const PAUSE_INITIAL_ANIMATION = false;
 
 function Slide3D(props) {
   const {db, parentRef} = props;
-  // const [autoRotateCurrent, setAutoRotateCurrent] = React.useState(true);
   const [storedValue, saveToLocalStorage] = useLocalStorage('slide3D', INITIAL_CONFIG);
   const [animationPaused, setAnimationPaused] = React.useState(false);
   const [activeIdState, setActiveIdState] = React.useState(null);
   const [currentPlayingId, setCurrentPlayingId] = React.useState(null);
   const [currentScaledUpId, setCurrentScaledUpId] = React.useState(null);
-  const [onTransition, setOnTransition] = React.useState(false);
   const [underTransition, setUnderTransition] = React.useState(false);
   const [mirrorErr, setMirrorErr] = React.useState(false);
 
@@ -549,146 +502,6 @@ function Slide3D(props) {
     player?.pause();
   }, [])
 
-  // const restorePlayer = React.useCallback((event) => {
-  //   const container = dragRef.current;
-  //   setActiveIdState(null);
-  //   const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //   const tx = (event.target.id * (360/db.length) * -1);
-  //   container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //   const currentPlayer = event.target;
-  //   const videoContainer = videoContaiersRef.current[event.target.id]
-  //   const resumeAnimation = (e) => {
-  //     setAnimationPaused(false)
-  //     videoContainer.removeEventListener('transitionend', resumeAnimation);
-  //   }
-  //   videoContainer.addEventListener('transitionend', resumeAnimation);
-  //   videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-  //   // setTimeout(() => {
-  //     // setAnimationPaused(false)
-  //     setAutoRotate(true)
-  //     removeTransition(container);
-  //   // }, config.animationTime * 110)
-  //   if(config.seekZeroOnPlayEnd){
-  //     currentPlayer.currentTime = 0;
-  //   }
-  //   currentPlayer.removeEventListener('ended', restorePlayer);
-  //   if(config.autoPlay){
-  //     const currentId = currentPlayer.id;
-  //     if(currentId < db.length - 1){
-  //       const nextId = parseInt(currentId) + 1;
-  //       console.log(currentId, nextId, itemsRef.current)
-  //       setTimeout(() => {
-  //         buttonsRef.current[nextId].click();
-  //       // }, parseInt(config.animationTime*100*1.5))
-  //       }, 700)
-  //     }
-  //   }
-  // }, [config.autoPlay, config.seekZeroOnPlayEnd, db.length, setAutoRotate])
-
-  // const playerHandler = React.useCallback((id) => {
-  //   return () => {
-  //     try {
-  //       const currentPlayer = itemsRef.current[id];
-  //       const videoContainer = videoContaiersRef.current[id];
-  //       const isPaused = currentPlayer?.paused;
-  //       if(isPaused){
-  //         // console.log('playerHandler:', isPaused, id)
-  //         if(currentPlayingId !== null){
-  //           // other player is running
-  //           console.log('other player is now playing. stop first!');
-  //           stopPlayerById(currentPlayingId);
-  //         }
-  //         currentPlayer.addEventListener('ended', restorePlayer, {once: true})
-  //         videoContainer.style.transition = `${ANIMATION_SECONDS}s`;
-  //         videoContainer.style.transform += 'scale(2.0)';
-  //         setAnimationPaused(true)
-  //         void spinRef.current.offsetWidth;
-  //         setAutoRotate(false)
-  //         currentPlayer?.play();
-  //         setCurrentPlayingId(id);
-  //       } else {
-  //         stopPlayerById(id);
-  //         setAnimationPaused(false)
-  //         setAutoRotate(true)
-  //       }
-  //       setOnTransition(false);
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-  //   }
-  // }, [ANIMATION_SECONDS, currentPlayingId, restorePlayer, setAutoRotate, stopPlayerById])
-
-  // const onClickButton = React.useCallback((event) => {
-  //   if(onTransition){
-  //     return;
-  //   }
-  //   const clickedPlayerId = event.target.id;
-  //   const container = dragRef.current;
-  //   const currentPlayer = itemsRef.current[clickedPlayerId];
-  //   const videoContainer = videoContaiersRef.current[clickedPlayerId]
-  //   const isPaused = currentPlayer?.paused;
-  //   setOnTransition(true);
-
-  //   const transitionEndHandler = (e) => {
-  //     setActiveIdState(clickedPlayerId);
-  //     const transitionType = e.target.getAttribute('transitionType');
-  //     if(transitionType === 'rotate'){
-  //       console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-  //       playerHandler(clickedPlayerId)()
-  //       setAutoRotate(false)
-  //       console.log('remove transitionend (in handler)')
-  //       container.removeEventListener('transitionend', transitionEndHandler)
-  //     }
-  //     if(transitionType === 'scale'){
-  //       console.log('transitionEnd:', e.target.tagName, e.target.getAttribute('transitionType'));
-  //     }
-  //   }
-
-  //   if(activeIdState === clickedPlayerId && !isPaused){
-  //     console.log('### clicked Same player under playing (add transitionend):', activeIdState, clickedPlayerId)
-  //     setActiveIdState(null);
-  //     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //     const tx = (clickedPlayerId * (360/db.length) * -1) - 5;
-  //     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //     videoContainer.style.transform = videoContainer.style.transform.replace(/scale(.*)/, '');
-  //     currentPlayer?.pause();
-  //     setAnimationPaused(false)
-  //     setAutoRotate(true)
-  //     removeTransition(container);
-  //     setOnTransition(false);
-  //     container.removeEventListener('transitionend', transitionEndHandler)
-  //     return;
-  //   }
-  //   if(activeIdState === clickedPlayerId && isPaused){
-  //     console.log('### clicked Same player which inactive (add transitionend):', activeIdState, clickedPlayerId)
-  //     container.addEventListener('transitionend', transitionEndHandler);
-  //     const tx = clickedPlayerId * (360/db.length) * -1;
-  //     const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //     container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //     targetXY.current.y = ty;
-  //     targetXY.current.x = tx;
-  //     return;
-  //   }
-  //   console.log('### clicked new player (add transitionend):', activeIdState, clickedPlayerId)
-  //   setAutoRotate(false)
-  //   container.addEventListener('transitionend', transitionEndHandler);
-  //   container.style.transition = `transform ${ANIMATION_SECONDS}s`;
-  //   const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-  //   const tx = clickedPlayerId * (360/db.length) * -1;
-  //   container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
-  //   targetXY.current.y = ty;
-  //   targetXY.current.x = tx;
-  //   return ()  => {
-  //     container.removeEventListener('transitionend', transitionEndHandler)
-  //   }
-  // }, [activeIdState, ANIMATION_SECONDS, db.length, onTransition, playerHandler, setAutoRotate])
-
-  // const toggleAnimationPaused = React.useCallback(() => {
-  //   setAnimationPaused(animationPaused => {
-  //     return !animationPaused
-  //   })
-  // }, [])
-
   const enableAutoRotate = React.useCallback(() => {
     setAutoRotate(true)
   }, [setAutoRotate])
@@ -699,13 +512,6 @@ function Slide3D(props) {
 
   const moveFront = React.useCallback((container, clickedPlayerId, offset=0) => {
     return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'rotate') return;
-      //   console.log('event: remove moveFront:', clickedPlayerId)
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         console.log('event: remove moveFront:')
@@ -716,11 +522,6 @@ function Slide3D(props) {
       // container.addEventListener('transitionend', resolvePromise);
       setActiveIdState(clickedPlayerId);
       const ty = USE_STATIC_TY ? TY : targetXY.current.y;
-      // if(offset !== 0){
-      //   container.style.transition = '0.01s';
-      // } else {
-      //   container.style.transition = `${ANIMATION_SECONDS}s`;
-      // }
       const tx = clickedPlayerId * ((360/db.length) * -1) + offset;
       container.style.transition = `transform ${ANIMATION_SECONDS}s`;
       container.style.transform = `rotateX(${-ty}deg) rotateY(${tx}deg)`;
@@ -731,14 +532,6 @@ function Slide3D(props) {
 
   const scaleUp = React.useCallback((container, targetId) => {
     return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'scale') return;
-      //   setCurrentScaledUpId(targetId)
-      //   console.log('event: remove scaleUp:', targetId)
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         setCurrentScaledUpId(targetId)
@@ -758,15 +551,6 @@ function Slide3D(props) {
 
   const scaleDown = React.useCallback((container) => {
     return new Promise((resolve, reject) => {
-      // const resolvePromise = (event) => {
-      //   const transitionType = event.target.getAttribute('transitionType');
-      //   if(transitionType !== 'scale') return;
-      //   setCurrentScaledUpId(null)
-      //   console.log('event: remove scaleDown:')
-      //   container.removeEventListener('transitionend', resolvePromise);
-      //   resolve(true)
-      // }
-      // console.log('event: add scaleDown:')
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         setCurrentScaledUpId(null)
@@ -801,7 +585,6 @@ function Slide3D(props) {
   const setStandby = React.useCallback((options) => {
     const {setAllPlayerGray} = options;
     dragRef.current.style.transition = 'transform 1s';
-    // dragRef.current.style.transform = dragRefTransformStr.replace(/rotateX\(.*?\)/, `rotateX(${config.degreeOfLast * -1}deg)`);
     dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
     if(setAllPlayerGray){
       setGrayFilterToAllPlayer();
@@ -999,9 +782,6 @@ function Slide3D(props) {
               <Item
                 crossOrigin="anonymous"
                 id={i}
-                // className={CLASS_FOR_POINTER_EVENT_FREE}
-                // onClick={playerHandler(i)}
-                // onClick={onClickButton}
                 src={item.src}
                 ref={el => itemsRef.current[i] = el}
                 itemIndex={i}
@@ -1050,9 +830,6 @@ function Slide3D(props) {
                 </TitleContainer>
               )}
               <Backface>
-                {/* <LogContainer>
-                  <LogoText>SBS</LogoText>
-                </LogContainer> */}
               </Backface>
             </VideoContainer>
           ))}
@@ -1127,8 +904,6 @@ function Slide3D(props) {
                 Turn On Reflect All
               </Button>
             )}
-            {/* <Button onClick={toggleAnimationPaused}>{animationPaused ? "Resume Rotate" : "Pause Rotate"}</Button>
-            <Button>{onTransition ? 'T':'F'}</Button> */}
           </Buttons>
           {currentPlayingId === null ? (
             <CustomPlayIcon
