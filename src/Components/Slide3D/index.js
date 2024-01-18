@@ -361,7 +361,7 @@ function Slide3D(props) {
   const destXY = React.useRef({x:0, y:0});
   const targetXY = React.useRef({x:0, y:0});
   // console.log(startXY, destXY, targetXY)
-  console.log('##', config)
+  console.log('##', config, db)
 
   const ANIMATION_SECONDS = config.animationTime;
   const ANIMATION_MILLI_SECONDS = config.animationTime * 1000;
