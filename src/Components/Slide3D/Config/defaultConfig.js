@@ -22,6 +22,7 @@ const defaultConfig = {
   titleFontWeight: 500,
   titleOpacity: 1,
   animationTime: 0.5,
-  rotationTime: 60
+  rotationTime: 60,
+  rotationTimeLast: 8
 }
 export default defaultConfig
