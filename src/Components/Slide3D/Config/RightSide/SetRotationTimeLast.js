@@ -9,7 +9,7 @@ const {rotationTimeLast:defaultValue} = defaultConfig;
 
 function SetLotationTimeLast(props) {
   const { config, updateConfig } = props;
-  const { rotationTimeLast = 8 } = config;
+  const { rotationTimeLast = 15 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
       updateConfig('rotationTimeLast', value);

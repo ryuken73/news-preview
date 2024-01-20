@@ -23,6 +23,6 @@ const defaultConfig = {
   titleOpacity: 1,
   animationTime: 0.5,
   rotationTime: 60,
-  rotationTimeLast: 8
+  rotationTimeLast: 15
 }
 export default defaultConfig
