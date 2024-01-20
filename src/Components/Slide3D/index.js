@@ -6,6 +6,8 @@ import backgroundImage from '../../assets/images/BACK.jpg'
 import vBarImage from '../../assets/images/vBar.png';
 import RightSide from './RightSide';
 import ConfigDialog from './Config/ConfigDialog';
+import SnowBackground from './SnowBackground';
+import RainBackground from './RainBackground';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import defaultConfig from './Config/defaultConfig';
 
@@ -707,6 +709,8 @@ function Slide3D(props) {
 
   return (
     <TopContainer>
+      {/* <SnowBackground></SnowBackground>
+      <RainBackground></RainBackground> */}
       <Container
         ref={dragRef}
         transitionType="rotate"
