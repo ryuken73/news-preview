@@ -4,12 +4,8 @@ import styled, {keyframes, css} from 'styled-components';
 import backImage from '../../assets/images/background.jpg'
 import backgroundImage from '../../assets/images/BACK.jpg'
 import vBarImage from '../../assets/images/vBar.png';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import SettingsIcon from '@mui/icons-material/Settings';
+import RightSide from './RightSide';
 import ConfigDialog from './Config/ConfigDialog';
-import SetRotationSpeed from './Config/SetRotationSpeed';
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
-import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import defaultConfig from './Config/defaultConfig';
 
@@ -62,27 +58,6 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   margin-bottom: ${props => props.moveUpward === 0 ? 'auto' : `${props.moveUpward}px`};
-`
-const ControlContainer = styled.div`
-  display: flex;
-  width: ${props => `${props.width}px`};
-  z-index: 10;
-`
-const Buttons = styled.div`
-  display: ${props => !props.show && 'none'};
-  min-width: 100px;
-  margin: auto;
-  z-index: 9999;
-  position: relative;
-`
-const Button = styled.div`
-  padding: 10px;
-  opacity: ${props => props.onTransition && '0.1'};
-  color: ${props => props.isPlaying ? 'yellow' : props.isNextItem ? '#272543' : 'darkslategrey'};
-  font-size: ${props => `${props.fontSize}px`};
-  font-weight: ${props => props.isPlaying ? 200 : 200};
-  transition: all 0.3s;
-  word-break: keep-all;
 `
 const SpinContainer = styled(Container)`
   width: ${props => `${props.width}px`};
@@ -229,40 +204,6 @@ const Ground = styled.div`
   -webkit-transform: translate(-50%, -50%) rotateX(90deg);
   transform: translate(-50%, -50%) rotateX(90deg);
 `
-const CustomRefreshIcon = styled(RefreshIcon)`
-  position: absolute;
-  bottom: -100px;
-  right: 100px;
-  margin: 10px;
-  z-index: 9999;
-  opacity: 0.1;
-`
-const CustomSettingIcon = styled(SettingsIcon)`
-  position: absolute;
-  bottom: -100px;
-  right: 30px;
-  margin: 10px;
-  z-index: 9999;
-  opacity: 0.1;
-`
-const CustomPlayIcon = styled(PlayCircleFilledIcon)`
-  display: ${props => !props.show && 'none !important'};
-  position: absolute;
-  bottom: 40%;
-  right: 10px;
-  margin: 5px;
-  z-index: 9999;
-  opacity: 0.2;
-`
-const CustomPauseIcon = styled(PauseCircleFilledIcon)`
-  display: ${props => !props.show && 'none !important'};
-  position: absolute;
-  bottom: 40%;
-  right: 10px;
-  margin: 5px;
-  z-index: 9999;
-  opacity: 0.2;
-`
 const BottomDummy = styled.div`
   height: 300px;
 `
@@ -323,9 +264,6 @@ function Slide3D(props) {
     setConfigDialogOpen(configDialogOpen => !configDialogOpen);
   }, [])
 
-  const reloadPage = React.useCallback(() => {
-    window.location.reload();
-  }, [])
 
   const updateConfig = React.useCallback((key, value) => {
     setConfig(config => {
@@ -845,91 +783,24 @@ function Slide3D(props) {
         </SpinContainer>
         <Ground width={config.radius*3} height={config.radius*3}></Ground>
       </Container>
-      <ControlContainer
-        className={CLASS_FOR_POINTER_EVENT_FREE}
-        width={config.buttonWidth}
-      >
-          <Buttons
-            className={CLASS_FOR_POINTER_EVENT_FREE}
-            show={config.useTitleBar}
-          >
-            <SetRotationSpeed
-              className={CLASS_FOR_POINTER_EVENT_FREE} 
-              updateConfig={updateConfig}
-              config={config}
-            ></SetRotationSpeed>
-            {db.map((item, i) => (
-              <Button 
-                key={item.id} 
-                id={i} 
-                className={CLASS_FOR_POINTER_EVENT_FREE} 
-                fontSize={config.buttonFontSize}
-                ref={el => buttonsRef.current[i] = el}
-                onClick={onClickButton}
-                onTransition={underTransition}
-                isPlaying={currentPlayingId == i}
-                isNextItem={parseInt(activeIdState)+1 == i}
-              >
-                {item.title}
-              </Button>
-            ))}
-            <CustomRefreshIcon
-              fontSize='large'
-              className={CLASS_FOR_POINTER_EVENT_FREE}
-              onClick={reloadPage}
-            ></CustomRefreshIcon>
-            <CustomSettingIcon
-              fontSize='large'
-              className={CLASS_FOR_POINTER_EVENT_FREE}
-              onClick={toggleDialogOpen}
-            ></CustomSettingIcon>
-            {config.startWithStacked ? (
-              <Button 
-                style={{
-                  color: 'grey', 
-                  opacity:0.2, 
-                  fontSize: '20px',
-                }}
-                onClick={unFoldPlayer}
-              >Standby</Button>
-            ):(
-              <Button 
-                className={CLASS_FOR_POINTER_EVENT_FREE} 
-                style={{
-                  color: 'grey', 
-                  opacity:0.2, 
-                  fontSize: '20px',
-                  marginTop: '20px'
-                }}
-                onClick={setStandby}
-              >Standby</Button>
-            )}
-            {mirrorErr && (
-              <Button 
-                className={CLASS_FOR_POINTER_EVENT_FREE}
-                style={{color: 'red', opacity:1, fontSize: '15px'}}
-                onClick={mirrorPlayer}
-              >
-                Turn On Reflect All
-              </Button>
-            )}
-          </Buttons>
-          {currentPlayingId === null ? (
-            <CustomPlayIcon
-              fontSize="large"
-              onClick={startPlayFromFirst}
-              show={!config.useTitleBar}
-              className={CLASS_FOR_POINTER_EVENT_FREE}
-            ></CustomPlayIcon>
-           ):( 
-            <CustomPauseIcon
-              fontSize="large"
-              show={!config.useTitleBar}
-              onClick={stopPlayerCurrent}
-              className={CLASS_FOR_POINTER_EVENT_FREE}
-            ></CustomPauseIcon>
-          )}
-      </ControlContainer>
+      <RightSide
+        db={db}
+        config={config}
+        mirrorErr={mirrorErr}
+        underTransition={underTransition}
+        currentPlayingId={currentPlayingId}
+        activeIdState={activeIdState}
+        buttonsRef={buttonsRef}
+        updateConfig={updateConfig}
+        onClickButton={onClickButton}
+        toggleDialogOpen={toggleDialogOpen}
+        unFoldPlayer={unFoldPlayer}
+        setStandby={setStandby}
+        mirrorPlayer={mirrorPlayer}
+        startPlayFromFirst={startPlayFromFirst}
+        stopPlayerCurrent={stopPlayerCurrent}
+
+      ></RightSide>
       <ConfigDialog
         configDialogOpen={configDialogOpen}
         toggleDialogOpen={toggleDialogOpen}
