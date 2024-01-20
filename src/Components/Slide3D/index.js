@@ -431,7 +431,8 @@ function Slide3D(props) {
     });
   }, []);
 
-  console.log('current playing Id = ', currentPlayingId)
+  console.log('current Playing Id = ', currentPlayingId)
+  console.log('current Active Id = ', activeIdState)
 
   const stopPlayerById = React.useCallback((playerId) => {
     const player = itemsRef.current[playerId];
@@ -492,6 +493,7 @@ function Slide3D(props) {
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
         setCurrentScaledUpId(null)
+        setActiveIdState(null)
         console.log('event: remove scaleDown:')
         resolve(true)
       }, ANIMATION_MILLI_SECONDS)

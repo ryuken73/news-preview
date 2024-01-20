@@ -27,6 +27,12 @@ const Button = styled.div`
   transition: all 0.3s;
   word-break: keep-all;
 `
+const StandbyButton = styled(Button)`
+  visibility: ${props => props.disabled && 'hidden'};
+  opacity: ${props => props.disabled ? '0':'0.5'};
+  font-size: 20px;
+  margin-top: 20px;
+`
 const CustomRefreshIcon = styled(RefreshIcon)`
   position: absolute;
   bottom: -100px;
@@ -81,6 +87,8 @@ const RightSide = (props) => {
     startPlayFromFirst,
     stopPlayerCurrent
   } = props;
+  const standbyBtnDisabled = activeIdState !== null;
+  console.log('standby disabled:', standbyBtnDisabled, activeIdState)
   const reloadPage = React.useCallback(() => {
     window.location.reload();
   }, [])
@@ -131,18 +139,14 @@ const RightSide = (props) => {
                 fontSize: '20px',
               }}
               onClick={unFoldPlayer}
+              disabled={activeIdState !== null}
             >Standby</Button>
           ):(
-            <Button 
+            <StandbyButton 
               className={CLASS_FOR_POINTER_EVENT_FREE} 
-              style={{
-                color: 'grey', 
-                opacity:0.2, 
-                fontSize: '20px',
-                marginTop: '20px'
-              }}
               onClick={setStandby}
-            >Standby</Button>
+              disabled={standbyBtnDisabled}
+            >Standby</StandbyButton>
           )}
           {mirrorErr && (
             <Button 
