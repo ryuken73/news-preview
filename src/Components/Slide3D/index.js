@@ -267,13 +267,15 @@ function Slide3D(props) {
   }, [])
 
 
-  const updateConfig = React.useCallback((key, value) => {
+  const updateConfig = React.useCallback((key, value, saveLocal=true) => {
     setConfig(config => {
       const newConfig = {
         ...config,
         [key]: value
       }
-      saveToLocalStorage(newConfig);
+      if(saveLocal){
+        saveToLocalStorage(newConfig);
+      }
       return newConfig;
     })
   }, [saveToLocalStorage])
@@ -529,7 +531,8 @@ function Slide3D(props) {
   const setStandby = React.useCallback((options) => {
     const {isLast=false, setAllPlayerGray} = options;
     if(!isLast){
-      updateConfig('rotationTime', config.rotationTime);
+      const applyLocalStroage = false;
+      updateConfig('rotationTime', config.rotationTime, applyLocalStroage);
     }
     dragRef.current.style.transition = 'transform 1s';
     dragRef.current.style.transform = `rotateX(${config.degreeOfLast * -1}deg) rotateY(-480deg)`;
@@ -568,7 +571,8 @@ function Slide3D(props) {
       enableAutoRotate();
       const isLastItem = parseInt(targetId) === db.length - 1;
       if(isLastItem){
-        updateConfig('rotationTime', config.rotationTimeLast);
+        const applyLocalStroage = false;
+        updateConfig('rotationTime', config.rotationTimeLast, applyLocalStroage);
         setStandby({
           isLast: true,
           setAllPlayerGray: config.greyForDoneAll
