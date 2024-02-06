@@ -9,7 +9,7 @@ const {titleFontSize:defaultValue} = defaultConfig;
 
 function SetTitleFontSize(props) {
   const { config, updateConfig } = props;
-  const { titleFontSize = 10 } = config;
+  const { titleFontSize = 30 } = config;
   const onChange = React.useCallback((event) => {
       const { value } = event.target;
       updateConfig('titleFontSize', value);

@@ -115,7 +115,7 @@ const VideoTitle = styled.div`
   font-size: ${props => `${props.titleFontSize}px` || '20px'};
   font-weight: ${props => props.titleFontWeight || 100};
   opacity: ${props => props.titleOpacity === undefined ? 0.7 : props.titleOpacity};
-  padding: 5px;
+  padding: 4px;
   box-sizing: border-box;
   backface-visibility: hidden;
   width: ${props => props.titleType === 'fullWidth' ? '100%' : 'auto'};
@@ -129,6 +129,8 @@ const VideoTitle = styled.div`
   border-bottom-right-radius: ${props => props.titleType === 'center' && '10px'};
   left: ${props => props.titleType === 'center' && '50%'};
   transform: ${props => props.titleType === 'center' && 'translate(-50%, 0)'};
+  display: flex;
+  align-items: center;
 `
 const TitleContainer = styled.div`
   position: absolute;
@@ -209,11 +211,14 @@ const Ground = styled.div`
 const BottomDummy = styled.div`
   height: 300px;
 `
-const StyledSpan = styled.span`
+const Title = styled.div``
+const StyledSpan = styled.div`
   margin-right: 10px;
 `
 const BarImage = styled.img`
-  height: 20px;
+  /* margin-right: 10px; */
+  margin-right: ${props => `${2*(props.titleFontSize/10 - 1) + 7}px`};
+  height: ${props => `${props.titleFontSize * 0.8}px`};
 `
 // const radius = 800; // how big of the radius
 const CLASS_FOR_POINTER_EVENT_FREE = 'buttonClass';
@@ -764,11 +769,13 @@ function Slide3D(props) {
                   titleStyle={config.titleStyle}
                 >
                   {config.titleType === 'fullWidth' && (
-                    <StyledSpan>
-                      <BarImage src={vBarImage} />
-                    </StyledSpan>
+                    // <StyledSpan>
+                      <BarImage titleFontSize={config.titleFontSize} src={vBarImage} />
+                    // </StyledSpan>
                   )}
-                  {item.title}
+                  <Title>
+                    {item.title}
+                  </Title>
                 </VideoTitle>
               )}
               {config.titleType === 'transparent' && (

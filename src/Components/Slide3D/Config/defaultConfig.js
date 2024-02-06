@@ -18,7 +18,7 @@ const defaultConfig = {
   seekZeroOnPlayEnd: false,
   titleType: 'fullWidth',
   titleStyle: '2',
-  titleFontSize: 25,
+  titleFontSize: 30,
   titleFontWeight: 500,
   titleOpacity: 1,
   animationTime: 0.5,
