@@ -718,8 +718,8 @@ function Slide3D(props) {
 
   return (
     <TopContainer>
-      {/* <SnowBackground></SnowBackground>
-      <RainBackground></RainBackground> */}
+      {/* <SnowBackground></SnowBackground> */}
+      {/* <RainBackground></RainBackground> */}
       <Container
         ref={dragRef}
         transitionType="rotate"

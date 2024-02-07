@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import LeftSide from './LeftSide';
 import RightSide from './RightSide';
+import version from '../../../version';
 
 const CustomDialog = styled(Dialog)`
   z-index: 25000 !important;
@@ -28,7 +29,11 @@ const Container = styled.div`
 const StyledSpan = styled.button`
   cursor: pointer;
   margin-left: 10px;
-
+`
+const Version = styled.span`
+  margin-left: 10px;
+  font-size: 15px;
+  opacity: 0.6;
 `
 const ConfigDialog = props => {
   console.log(props)
@@ -61,6 +66,9 @@ const ConfigDialog = props => {
           >
             Set Default
           </StyledSpan>
+          <Version>
+            [version: {version}]
+          </Version>
         </DialogTitle>
         <Container>
           <LeftSide config={config} updateConfig={updateConfig} runInitialAnimation={runInitialAnimation} />
