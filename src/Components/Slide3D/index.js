@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
-import backImage from '../../assets/images/background.jpg'
-import backgroundImage from '../../assets/images/BACK.jpg'
+import backImage from '../../assets/images/background.jpg';
+import backgroundImage from '../../assets/images/BACK.jpg';
+import audio1 from '../../assets/audio/drip.mp3';
+import audio2 from '../../assets/audio/drop.mp3';
+import audio3 from '../../assets/audio/spray.mp3';
 import vBarImage from '../../assets/images/vBar.png';
 import RightSide from './RightSide';
 import ConfigDialog from './Config/ConfigDialog';
@@ -494,10 +497,11 @@ function Slide3D(props) {
       if(isAlreadyScaleUp) return;
       container.style.transition = `${ANIMATION_SECONDS}s`;
       container.style.transform += `scale(${config.videoScale})`;
+      new Audio(audio2).play();
     })
   }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS, config])
 
-  const scaleDown = React.useCallback((container) => {
+  const scaleDown = React.useCallback((container, isLastItem) => {
     return new Promise((resolve, reject) => {
       eventTimerRef.current = null;
       eventTimerRef.current = setTimeout(() => {
@@ -507,6 +511,7 @@ function Slide3D(props) {
         resolve(true)
       }, ANIMATION_MILLI_SECONDS)
       // container.addEventListener('transitionend', resolvePromise);
+      isLastItem && new Audio(audio3).play();
       container.style.transition = `${ANIMATION_SECONDS}s`;
       container.style.transform = container.style.transform.replace(/scale(.*)/, '');
     })
@@ -570,11 +575,12 @@ function Slide3D(props) {
       if(config.greyForDoneItem){
         currentPlayer.style.filter = 'grayscale(1) brightness(30%)';
       }
-      await scaleDown(videoContainer);
+      const isLastItem = parseInt(targetId) === db.length - 1;
+      await scaleDown(videoContainer, isLastItem);
       // await moveFront(spinContainer, targetId, -2);
       setUnderTransition(false);
       enableAutoRotate();
-      const isLastItem = parseInt(targetId) === db.length - 1;
+      // const isLastItem = parseInt(targetId) === db.length - 1;
       if(isLastItem){
         const applyLocalStroage = false;
         updateConfig('rotationTime', config.rotationTimeLast, applyLocalStroage);
@@ -585,6 +591,7 @@ function Slide3D(props) {
       }
       return;
     }
+    new Audio(audio1).play();
     if(clickedWhenOtherScaledUp){
       console.log('event: Normal Next: other ScaledUp exists');
       const scaledContainer = videoContaiersRef.current[currentScaledUpId];
@@ -750,6 +757,7 @@ function Slide3D(props) {
                 itemLength={db.length}
                 radius={config.radius}
                 isActive={i === parseInt(activeIdState)}
+                muted
               >
               </Item>
               <ItemMirror
@@ -758,6 +766,7 @@ function Slide3D(props) {
                 id={i}
                 ref={el => itemMirrorsRef.current[i] = el}
                 gap={reflectionGap}
+                muted
               ></ItemMirror>
               {config.titleType !== 'transparent' && (
                 <VideoTitle
