@@ -3,9 +3,9 @@ import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 import backImage from '../../assets/images/background.jpg';
 import backgroundImage from '../../assets/images/BACK.jpg';
-import audio1 from '../../assets/audio/drip.mp3';
-import audio2 from '../../assets/audio/drop.mp3';
-import audio3 from '../../assets/audio/spray.mp3';
+import audioTouch from '../../assets/audio/touch.mp3';
+import audioScaleUp from '../../assets/audio/scaleUp.mp3';
+import audioScaleDown from '../../assets/audio/scaleDown.mp3';
 import vBarImage from '../../assets/images/vBar.png';
 import RightSide from './RightSide';
 import ConfigDialog from './Config/ConfigDialog';
@@ -497,7 +497,7 @@ function Slide3D(props) {
       if(isAlreadyScaleUp) return;
       container.style.transition = `${ANIMATION_SECONDS}s`;
       container.style.transform += `scale(${config.videoScale})`;
-      new Audio(audio2).play();
+      new Audio(audioScaleUp).play();
     })
   }, [ANIMATION_MILLI_SECONDS, ANIMATION_SECONDS, config])
 
@@ -511,7 +511,7 @@ function Slide3D(props) {
         resolve(true)
       }, ANIMATION_MILLI_SECONDS)
       // container.addEventListener('transitionend', resolvePromise);
-      isLastItem && new Audio(audio3).play();
+      isLastItem && new Audio(audioScaleDown).play();
       container.style.transition = `${ANIMATION_SECONDS}s`;
       container.style.transform = container.style.transform.replace(/scale(.*)/, '');
     })
@@ -591,7 +591,7 @@ function Slide3D(props) {
       }
       return;
     }
-    new Audio(audio1).play();
+    new Audio(audioTouch).play();
     if(clickedWhenOtherScaledUp){
       console.log('event: Normal Next: other ScaledUp exists');
       const scaledContainer = videoContaiersRef.current[currentScaledUpId];
