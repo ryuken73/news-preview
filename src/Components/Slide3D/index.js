@@ -758,6 +758,7 @@ function Slide3D(props) {
                 radius={config.radius}
                 isActive={i === parseInt(activeIdState)}
                 muted
+                preload="auto"
               >
               </Item>
               <ItemMirror
